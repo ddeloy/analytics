@@ -1,0 +1,321 @@
+<!-- Include for scorecard pricing tab -->
+<!-- In page style to override global defaults -->
+<style>
+.icon-kpi-table-status {
+	color: #999999;
+}
+.nav-tabs.secondary > li.active > a, .nav-tabs.secondary > li.active > a:hover, .nav-tabs.secondary > li.active > a:focus {
+	color: #666666;
+	font-weight: 400;
+	cursor: default;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-bottom-color: transparent;
+}
+</style>
+<subtabs>
+<subpane title="Overview">
+<div ng-controller="PricePerfDualController">
+  <div class="row">
+    <div class="col-md-12"> <span class="pull-right" data-placement="top" title="Pricing" data-content="This chart shows whether the seller's price is above, below, or close to average (price competiveness) and how much that price varies from average (price volatility)." data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/><small class="text-muted" style="position:relative;right:5px;">About this Chart</small></span> </div>
+  </div>
+  <div class="row" style="margin-bottom:10px;">
+    <div class="col-md-3 container-fluid"> <!-- <span style="font-size:16px;font-weight:600;">12-Month Price Performance</span> --> </div>
+  </div>
+  <div id="container-priceperf-dual" style="min-width: 70%; height: 400px; margin: 0 auto"></div>
+</div>
+<br/>
+<div class="row">
+  <div class="col-md-6 p-left-15">
+    <p><span class="text-muted">For the past 12 months</span><br/>
+      {{queryService.sc.pricingMsg12m}} </p>
+  </div>
+  <div class="col-md-6 p-left-15">
+    <p><span class="text-muted">For the past 30 days</span><br/>
+      {{queryService.sc.pricingMsg30d}} </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div style="border-top:1px solid black;position:relative;left:0px;margin-bottom:10px;"></div>
+  </div>
+</div>
+</subpane>
+<subpane ng-if="showPriceVol" title="Price Volatility"> 
+  
+  <!-- Help popover -->
+  <div class="row">
+    <div class="col-md-12"> <span class="pull-right" data-placement="top" title="Price Volatility" data-content="Price volatility is the degree to which the seller’s product price varies within that time period." data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/><small class="text-muted" style="position:relative;right:5px;">About this KPI</small></span> </div>
+  </div>
+  <table width="100%" border="1"  bordercolor="#E4E4E4">
+    <tr style="height:40px;">
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.scores.seller_month_price_volatility_score}}</td>
+      <td class="kpi-table-hdr-value-range" align="center"><span>{{queryService.sc.info.scs.status.seller_month_price_volatility}}</span> <span ng-if="queryService.sc.info.scs.status.seller_month_price_volatility=='Excellent'"><i class="fa fa-trophy icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.seller_month_price_volatility=='Good'"><i class="fa fa-bookmark icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.seller_month_price_volatility=='Fair'"><i class="fa fa-adjust icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.seller_month_price_volatility=='Poor'"><i class="fa fa-flag icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.seller_month_price_volatility=='Terrible'"><i class="fa fa-warning icon-kpi-table-status"/></span></td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.kpis.seller_month_price_volatility}}%</td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.targets.seller_month_price_volatility}}%</td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.cavg.kpis.seller_month_price_volatility}}%</td>
+      <td class="kpi-table-hdr-value-weighting" align="center">{{queryService.sc.info.scs.weights.seller_month_price_volatility}}</td>
+    </tr>
+    <tr style="height:20px;" bgcolor="#4a7295">
+      <td class="kpi-table-hdr-descrip" width="17%" align="center" >KPI Score</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center">Score Range</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center" >Supplier Performance</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center">Target</td>
+      <td class="kpi-table-hdr-descrip" width="16%" align="center">Category Average</td>
+      <td class="kpi-table-hdr-descrip" width="16%" align="center">Weighting</td>
+    </tr>
+  </table>
+  <br/>
+  <div ng-controller="ScorecardPerfTrendControllerDual" ng-init="init('#container-pricing-volatility-trend', '#button-pricing-volatility')" >
+    <div class="row" style="margin-bottom:10px;">
+      <div class="col-md-4 container-fluid"> <!-- <span style="font-size:16px;font-weight:600;">12-Month Price Volatility Trend</span> --></div>
+      <div class="col-md-8 container-fluid">
+        <div class="pull-right">
+          <input type="checkbox" checked class="autocompare" id="button-pricing-volatility"/>
+          <span style="padding-right:20px;padding-left:10px;" class="text-muted"><small>Show performance average for category</small></span> </div>
+      </div>
+    </div>
+    <div class="row container-fluid">
+      <div class="col-md-12 container-fluid">
+        <div id="container-pricing-volatility-trend" style="min-width: 70%; height: 275px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+  <!-- End performance trend --> 
+  <br/>
+  
+  <!-- Spend chart -->
+  <div class="row container-fluid">
+    <div class="col-md-12 container-fluid">
+      <div ng-controller="ScorecardSpendTrendController" ng-init="init('#container-pricing-volatility-spend-trend')" style="position:relative;bottom:57px;z-index:">
+        <div id="container-pricing-volatility-spend-trend" style="min-width:70%; height: 125px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+  <!-- End spend chart --> 
+  
+  <!-- Show Comparison Charts --> 
+  <!-- Begin Supplier Comparison: Pricing Tab: Price Volatility --> 
+  <!-- ************************************** --> 
+  <!-- Heading -->
+  <div class="row">
+    <div class="col-md-12 container-fluid">
+      <div style="font-size:16px;font-weight:600;margin-bottom:10px;margin-left:30px;"> Supplier Comparison </div>
+    </div>
+  </div>
+  <!--Controller - in on-finish-chart directive -->
+  <div class="row" ng-controller="PricingVolatilityComparisonController" style="position:relative;left:30px;"> 
+    <!-- Left side of bar chart: 12 month data -->
+    <div class="col-md-6 container-fluid"> 
+      <!-- 12 month header -->
+      <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">Price Volatility Performance Ranking (12 Months)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp12m.seller_month_price_volatility.length}}</span></span></div>
+      <br style="clear:both;"/>
+      <!-- Surrounding div to apply scroll hide if no data -->
+      <div ng-hide="!queryService.sc.info.cmp12m.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+        <div id="container-pricingtab-volatility-12"></div>
+        <!-- Bar chart --> 
+      </div>
+      <!-- Display if no data -->
+      <div ng-show="!queryService.sc.info.cmp12m.score" class="container-fluid text-danger">No Data</div>
+      <!-- Hidden data table using Highcharts data module to render chart from tabular data --> 
+      <!-- If desired - we could have toggle display as table or chart -->
+      <table id="datatable-pricingtab-volatility-12" class="table-sparkline" style="display:none;">
+        <tbody class="tbody-sparkline">
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-repeat="data in queryService.sc.info.cmp12m.seller_month_price_volatility" on-finish-chart="callHighchartPriceVolatilityRendering12()"><!-- directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+            <td>{{data.kpi}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End left column --> 
+    
+    <!-- Right side of bar chart: 30 day data -->
+    <div class="col-md-6 container-fluid"> 
+      <!-- 30 day header -->
+      <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">Price Volatility Performance Ranking (30 Days)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp30d.seller_month_price_volatility.length}}</span></span></div>
+      <br style="clear:both;"/>
+      <!-- Surrounding div to apply scroll -->
+      <div ng-hide="!queryService.sc.info.cmp30d.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+        <div id="container-pricingtab-volatility-30"></div>
+        <!-- Bar chart --> 
+      </div>
+      <!-- Display if no data -->
+      <div ng-show="!queryService.sc.info.cmp30d.score" class="container-fluid text-danger">No Data</div>
+      <!-- Hidden data table -->
+      <table id="datatable-pricingtab-volatility-30" class="table-sparkline" style="display:none;">
+        <tbody class="tbody-sparkline">
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-repeat="data in queryService.sc.info.cmp30d.seller_month_price_volatility" on-finish-chart="callHighchartPriceVolatilityRendering30()"><!-- Directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+            <td>{{data.kpi}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End right column --> 
+    
+  </div>
+  <!-- End Row --> 
+  <!-- ************************************ --> 
+  <!-- End Price Volatility-Supplier Comparison: Pricing Tab --> 
+  <br/>
+  <br/>
+</subpane>
+<subpane ng-if="showPriceCompete" title="Price Competitiveness"> 
+  <!-- Price Competitiveness --> 
+  <!-- KPI Metrics table --> 
+  <!-- Help popover -->
+  <div class="row">
+    <div class="col-md-12"> <span class="pull-right" data-placement="top" title="Price Competitiveness" data-content="Price competitiveness indicates whether the seller’s price is above, below, or close to the average price for all suppliers." data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/><small class="text-muted" style="position:relative;right:5px;">About this KPI</small></span> </div>
+  </div>
+  <table width="100%" border="1"  bordercolor="#E4E4E4">
+    <tr style="height:40px;">
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.scores.price_competitiveness_score}}</td>
+      <td class="kpi-table-hdr-value-range" align="center"><span>{{queryService.sc.info.scs.status.price_competitiveness}}</span> <span ng-if="queryService.sc.info.scs.status.price_competitiveness=='Excellent'"><i class="fa fa-trophy icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.price_competitiveness=='Good'"><i class="fa fa-bookmark icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.price_competitiveness=='Fair'"><i class="fa fa-adjust icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.price_competitiveness=='Poor'"><i class="fa fa-flag icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.price_competitiveness=='Terrible'"><i class="fa fa-warning icon-kpi-table-status"/></span></td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.kpis.price_competitiveness}}%</td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.targets.price_competitiveness}}%</td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.cavg.kpis.price_competitiveness}}%</td>
+      <td class="kpi-table-hdr-value-weighting" align="center">{{queryService.sc.info.scs.weights.price_competitiveness}}</td>
+    </tr>
+    <tr style="height:20px;" bgcolor="#4a7295">
+      <td class="kpi-table-hdr-descrip" width="17%" align="center" >KPI Score</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center">Score Range</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center" >Supplier Performance</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center">Target</td>
+      <td class="kpi-table-hdr-descrip" width="16%" align="center">Category Average</td>
+      <td class="kpi-table-hdr-descrip" width="16%" align="center">Weighting</td>
+    </tr>
+  </table>
+  <br/>
+  <div ng-controller="ScorecardPerfTrendControllerDual" ng-init="init('#container-pricing-competitiveness-trend', '#button-pricing-competitiveness')" >
+    <div class="row" style="margin-bottom:10px;">
+      <div class="col-md-4 container-fluid"><!-- <span style="font-size:16px;font-weight:600;">12-Month Price Competitiveness Trend</span> --> </div>
+      <div class="col-md-8 container-fluid">
+        <div class="pull-right">
+          <input type="checkbox" checked class="autocompare" id="button-pricing-competitiveness"/>
+          <span style="padding-right:20px;padding-left:10px;" class="text-muted"><small>Show performance average for category</small></span> </div>
+      </div>
+    </div>
+    <div class="row container-fluid">
+      <div class="col-md-12 container-fluid">
+        <div id="container-pricing-competitiveness-trend" style="min-width: 70%; height: 275px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+  <!-- End performance trend --> 
+  <br/>
+  
+  <!-- Spend chart -->
+  <div class="row container-fluid">
+    <div class="col-md-12 container-fluid">
+      <div ng-controller="ScorecardSpendTrendController" ng-init="init('#container-pricing-competitiveness-spend-trend')" style="position:relative;bottom:57px;z-index:">
+        <div id="container-pricing-competitiveness-spend-trend" style="min-width:70%; height: 125px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+  <!-- End spend chart --> 
+  <!-- Show Comparison Charts --> 
+  <!-- Begin Supplier Comparison: Pricing Tab: Price Competitiveness --> 
+  <!-- ************************************** --> 
+  <!-- Heading -->
+  <div class="row">
+    <div class="col-md-12 container-fluid">
+      <div style="font-size:16px;font-weight:600;margin-bottom:10px;margin-left:30px;"> Supplier Comparison </div>
+    </div>
+  </div>
+  <!--Controller - in on-finish-chart directive -->
+  <div class="row" ng-controller="PricingCompetitivenessComparisonController" style="position:relative;left:30px;"> 
+    <!-- Left side of bar chart: 12 month data -->
+    <div class="col-md-6 container-fluid"> 
+      <!-- 12 month header -->
+      <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">Price Competitiveness Performance Ranking (12 Months)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp12m.price_competitiveness.length}}</span></span></div>
+      <br style="clear:both;"/>
+      <!-- Surrounding div to apply scroll hide if no data -->
+      <div ng-hide="!queryService.sc.info.cmp12m.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+        <div id="container-pricingtab-competitiveness-12"></div>
+        <!-- Bar chart --> 
+      </div>
+      <!-- Display if no data -->
+      <div ng-show="!queryService.sc.info.cmp12m.score" class="container-fluid text-danger">No Data</div>
+      <!-- Hidden data table using Highcharts data module to render chart from tabular data --> 
+      <!-- If desired - we could have toggle display as table or chart -->
+      <table id="datatable-pricingtab-competitiveness-12" class="table-sparkline" style="display:none;">
+        <tbody class="tbody-sparkline">
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-repeat="data in queryService.sc.info.cmp12m.price_competitiveness" on-finish-chart="callHighchartPriceCompetitivenessRendering12()"><!-- directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+            <td>{{data.kpi}}</td>
+            <!-- Use ng-bind for faster rendering --> 
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End left column --> 
+    <!-- Right side of bar chart: 30 day data -->
+    <div class="col-md-6 container-fluid"> 
+      <!-- 30 day header -->
+      <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">Price Competitiveness Performance Ranking (30 Days)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp30d.price_competitiveness.length}}</span></span></div>
+      <br style="clear:both;"/>
+      <!-- Surrounding div to apply scroll hide if no data -->
+      <div ng-hide="!queryService.sc.info.cmp30d.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+        <div id="container-pricingtab-competitiveness-30"></div>
+        <!-- Bar chart --> 
+      </div>
+      <!-- Display if no data -->
+      <div ng-show="!queryService.sc.info.cmp30d.score" class="container-fluid text-danger">No Data</div>
+      <!-- Hidden data table -->
+      <table id="datatable-pricingtab-competitiveness-30" class="table-sparkline" style="display:none;">
+        <tbody class="tbody-sparkline">
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-repeat="data in queryService.sc.info.cmp30d.price_competitiveness" on-finish-chart="callHighchartPriceCompetitivenessRendering30()"><!-- Directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+            <td>{{data.kpi}}</td>
+            <!-- Use ng-bind for faster rendering --> 
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End right column --> 
+  </div>
+  <!-- End Row --> 
+  
+  <!-- ************************************ --> 
+  <!-- End Price Competitiveness-Supplier Comparison: Pricing Tab --> 
+  <br/>
+  <br/>
+</subpane>
+</subtabs>

@@ -1,0 +1,208 @@
+<!-- heat map by dc/kpi template - dropdown 3nd selection -->
+<style>
+/* In page style for heat maps - some necessary to override defaults. Will move other classes to main.css */
+.tbl-bootstrap-border-none {
+	border: none !important;
+}
+
+.tbl-heatmap-td {
+	border:1px solid white !important;
+	width:45px !important;
+	height:40px !important;
+}
+.tbl-heatmap-category-td {
+	border:1px solid white !important;
+	width:60px !important;
+	height:40px !important;
+}
+.tbl-heatmap-category-score-td {
+	border:1px solid white !important;
+	width:65px !important;
+	height:40px !important;
+}
+
+.tbl-heatmap-label-score {
+	font-size:13px;
+	padding-top:10px;
+	color:#666666;
+}
+.tbl-heatmap-y-label {
+	width:180px !important;
+	color:#666666 !important;
+	line-height: .8em !important;
+	word-wrap: break-word !important;
+}
+/* Ratings ng-classes for background coloring */
+/* < 1 */
+/* rate-none class for when there are no values for a DC */
+.rate-none {
+	background: #ffffff;
+	color: white;
+	font-size: 18px;
+}
+.rate-none:hover {
+	opacity: .80;
+	cursor: pointer;
+}
+/* < 55 */
+.rate-terrible {
+	background: #cd3333;
+	color: white;
+	font-size: 18px;
+}
+.rate-terrible:hover {
+	opacity: .80;
+	cursor: pointer;
+}
+/* >=55 && < 65 */
+.rate-poor {
+	background: #ffa500;
+	color: white;
+	font-size: 18px;
+}
+.rate-poor:hover {
+	opacity: .60;
+	cursor: pointer;
+}
+/* >=65 && < 75 */
+.rate-fair {
+	background: #ffd600;
+	color: white;
+	font-size: 18px;
+}
+.rate-fair:hover {
+	opacity: .60;
+	cursor: pointer;
+}
+/* >=75 && < 85 */
+.rate-good {
+	background: #a2cd5a;
+	color: white;
+	font-size: 18px;
+}
+.rate-good:hover {
+	opacity: .60;
+	cursor: pointer;
+}
+/* >85 */
+.rate-excellent {
+	background: #388e3c;
+	color: white;
+	font-size: 18px;
+}
+.rate-excellent:hover {
+	opacity: .80;
+	cursor: pointer;
+}
+.icon-ontarget-small {
+	color: #666666;
+}
+.cat-perf-metric-labels {
+	border-top: none !important;
+	border-bottom: 1px solid #dddddd !important;
+	font-size: 13px;
+	color:#655959;
+}
+
+.cat-perf-metric-values {
+	border-top: none !important;
+	font-size: 16px;
+	color: #333333;
+}
+
+/* Text for overview risk charts - use for category header */
+.txtOverviewNav {
+	font-size: 16px;
+	padding-left: 10px;
+	padding-top: 10px;
+}
+
+/* ************ */
+/* Class used in conjunction with jQuery to programatically rotate x axis labels */
+.rotate {
+	padding-left:0px;
+    font-size: 13px;
+	color:#655959;
+	-ms-transform: rotate(-60deg); /* IE 9+ */
+	-webkit-transform: rotate(-60deg); /* Chrome, Safari, Opera */
+	transform: rotate(-60deg);
+	/*line-height:1em;*/
+}
+.relative-td {
+	position:relative;
+	top:20px;
+}
+.relative-div {
+	position:relative;
+	left:15px;
+	top:20px;
+}
+
+/* Latest additions */
+.perf-breakout-subheader {
+	position:relative;
+	bottom:30px;
+	font-weight:bold;
+}
+.div-cat-heatmap-labels {
+	font-size: 13px;
+	color:#655959;
+}
+</style>
+
+<div class="perf-breakout-subheader">Distribution Center Performance by KPI</div>
+<!-- heat map table by dc/kpi template - dropdown 3nd selection -->
+    
+      <table class="table" style="width:auto;position:relative;bottom:20px;">
+      
+        <tr>
+          <td align="center"  class="tbl-bootstrap-border-none"></td>
+          <td align="center"  class="tbl-bootstrap-border-none"><div style="width:65px;" class='rotate'></div><div style="font-size:13px;color:#655959;" align="center"><br/>Score</div></td>
+          <td class="tbl-bootstrap-border-none" style="width:15px;">&nbsp;</td>
+          <td align="left" ng-if="showTotalFillRate"  class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div'>Fill Rate</div><br/><div align="left" style="font-size:13px;" class="fa fa-shopping-basket icon-ontarget-small"></div> </td>
+          <td align="left" ng-if="showOntimePickup"  class="tbl-bootstrap-border-none"> <div style="width:60px;" class='rotate relative-div'>On Time Pick-Up</div><br/><div align="left"  class="fa fa-truck icon-ontarget-small"></div> </td>
+          <td align="left" ng-if="showCancellations"  class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div'>Cancellations</div><br/><div align="left" class="fa fa-ban icon-ontarget-small"></div>  </td>
+          <td align="left" ng-if="showReconciliations"  class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div'>Reconciliation</div><br/><div align="left" class="fa fa-random icon-ontarget-small"></div> </td>
+          <td align="left" ng-if="showResponsiveness"  class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div'>Responsiveness</div><br/><div align="left" class="fa fa-mail-reply icon-ontarget-small"></div> </td>
+          <td align="left" ng-if="showPriceCompete"  class="tbl-bootstrap-border-none"> <div style="width:60px;" class='rotate relative-div'>Price Competitiveness</div><br/><div align="left" class="fa fa-bar-chart icon-ontarget-small"></div> </td>
+          <td align="left" ng-if="showPriceVol"  class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div'>Price Volatility</div><br/><div align="left" class="fa fa-bolt icon-ontarget-small"></div> </td>
+          <td align="left" ng-if="showPercentTarget"  class="tbl-bootstrap-border-none"> <div style="width:60px;" class='rotate relative-div'>On Target</div><br/><div align="left" class="fa fa-bullseye icon-ontarget-small"></div> </td>
+          
+          <!-- Spacing between heatmap and category metrics -->
+          <td style="border-top:none;border-bottom:1px solid #dddddd;width:50px;">&nbsp;</td>
+		  <!-- End spacing between heatmap and category metrics -->
+          
+          <td align="center" class="cat-perf-metric-labels" style="width:60px;"><div style="width:60px;" class="rotate"></div><div style="font-size:13px;color:#655959;" align="right"><br/>Spend($)</div></td>
+          <td align="center" class="cat-perf-metric-labels"><div style="width:120px;" class="rotate"></div><div style="font-size:13px;color:#655959;" align="center"> Performance<br/> Change (YoY)</div></td>
+          
+          
+        </tr>
+        
+        <tr ng-repeat="dckpisummarycategory in queryService.sc.info.dcPerfInfo"><!-- Heatmap data -->
+          <td align="left" class="tbl-bootstrap-border-none tbl-heatmap-y-label">{{dckpisummarycategory.name}}</td>
+          <td align="center"  class="tbl-heatmap-category-score-td" ng-class="{'rate-terrible': dckpisummarycategory.score < '55', 'rate-poor': dckpisummarycategory.score >= '55' && dckpisummarycategory.score < '65', 'rate-fair': dckpisummarycategory.score >= '65' && dckpisummarycategory.score < '75','rate-good': dckpisummarycategory.score >= '75' && dckpisummarycategory.score < '85','rate-excellent': dckpisummarycategory.score >=  '85'}">{{dckpisummarycategory.score}}</td>
+          <td class="tbl-bootstrap-border-none" style="width:15px;">&nbsp;</td>
+          <td ng-if="showTotalFillRate" align="center"    class="tbl-heatmap-category-td" ng-class="{'rate-terrible': dckpisummarycategory.fillrate < '55', 'rate-poor': dckpisummarycategory.fillrate >= '55' && dckpisummarycategory.fillrate < '65', 'rate-fair': dckpisummarycategory.fillrate >= '65' && dckpisummarycategory.fillrate < '75','rate-good': dckpisummarycategory.fillrate >= '75' && dckpisummarycategory.fillrate < '85','rate-excellent': dckpisummarycategory.fillrate >=  '85'}">{{dckpisummarycategory.fillrate}}</td>
+          <td ng-if="showOntimePickup" align="center"     class="tbl-heatmap-category-td" ng-class="{'rate-terrible': dckpisummarycategory.ontime < '55', 'rate-poor': dckpisummarycategory.ontime >= '55' && dckpisummarycategory.ontime < '65', 'rate-fair': dckpisummarycategory.ontime >= '65' && dckpisummarycategory.ontime < '75','rate-good': dckpisummarycategory.ontime >= '75' && dckpisummarycategory.ontime < '85','rate-excellent': dckpisummarycategory.ontime >=  '85'}">{{dckpisummarycategory.ontime}}</td>
+          <td ng-if="showCancellations" align="center"    class="tbl-heatmap-category-td" ng-class="{'rate-terrible': dckpisummarycategory.cancel < '55', 'rate-poor': dckpisummarycategory.cancel >= '55' && dckpisummarycategory.cancel < '65', 'rate-fair': dckpisummarycategory.cancel >= '65' && dckpisummarycategory.cancel < '75','rate-good': dckpisummarycategory.cancel >= '75' && dckpisummarycategory.cancel < '85','rate-excellent': dckpisummarycategory.cancel >=  '85'}">{{dckpisummarycategory.cancel}}</td>
+          <td ng-if="showReconciliations" align="center"  class="tbl-heatmap-category-td" ng-class="{'rate-terrible': dckpisummarycategory.reconcile < '55', 'rate-poor': dckpisummarycategory.reconcile >= '55' && dckpisummarycategory.reconcile < '65', 'rate-fair': dckpisummarycategory.reconcile >= '65' && dckpisummarycategory.reconcile < '75','rate-good': dckpisummarycategory.reconcile >= '75' && dckpisummarycategory.reconcile < '85','rate-excellent': dckpisummarycategory.reconcile >=  '85'}">{{dckpisummarycategory.reconcile}}</td>
+          <td ng-if="showResponsiveness" align="center"   class="tbl-heatmap-category-td" ng-class="{'rate-terrible': dckpisummarycategory.responsive < '55', 'rate-poor': dckpisummarycategory.responsive >= '55' && dckpisummarycategory.responsive < '65', 'rate-fair': dckpisummarycategory.responsive >= '65' && dckpisummarycategory.responsive < '75','rate-good': dckpisummarycategory.responsive >= '75' && dckpisummarycategory.responsive < '85','rate-excellent': dckpisummarycategory.responsive >=  '85'}">{{dckpisummarycategory.responsive}}</td>
+          <td ng-if="showPriceCompete" align="center"     class="tbl-heatmap-category-td" ng-class="{'rate-terrible': dckpisummarycategory.compete < '55', 'rate-poor': dckpisummarycategory.compete >= '55' && dckpisummarycategory.compete < '65', 'rate-fair': dckpisummarycategory.compete >= '65' && dckpisummarycategory.compete < '75','rate-good': dckpisummarycategory.compete >= '75' && dckpisummarycategory.compete < '85','rate-excellent': dckpisummarycategory.compete >=  '85'}">{{dckpisummarycategory.compete}}</td>
+          <td ng-if="showPriceVol" align="center"         class="tbl-heatmap-category-td" ng-class="{'rate-terrible': dckpisummarycategory.volatility < '55', 'rate-poor': dckpisummarycategory.volatility >= '55' && dckpisummarycategory.volatility < '65', 'rate-fair': dckpisummarycategory.volatility >= '65' && dckpisummarycategory.volatility < '75','rate-good': dckpisummarycategory.volatility >= '75' && dckpisummarycategory.volatility < '85','rate-excellent': dckpisummarycategory.volatility >=  '85'}">{{dckpisummarycategory.volatility}}</td>
+          <td ng-if="showPercentTarget" align="center"    class="tbl-heatmap-category-td" ng-class="{'rate-terrible': dckpisummarycategory.target < '55', 'rate-poor': dckpisummarycategory.target >= '55' && dckpisummarycategory.target < '65', 'rate-fair': dckpisummarycategory.target >= '65' && dckpisummarycategory.target < '75','rate-good': dckpisummarycategory.target >= '75' && dckpisummarycategory.target < '85','rate-excellent': dckpisummarycategory.target >=  '85'}">{{dckpisummarycategory.target}}</td>
+          
+          <td class="tbl-bootstrap-border-none">&nbsp;</td>
+          
+          <td align="right" class="cat-perf-metric-values" style="width:60px;">{{dckpisummarycategory.summaryspend | number:0}}</td>
+          <td align="center" class="cat-perf-metric-values" style="width:120px;">{{dckpisummarycategory.summaryperfchange}}</td>
+
+
+        </tr>
+      </table>
+
+<!-- script that progamatically rotates x axis labels -->
+<script>
+$(document).ready(function () {
+    $('.rotate').css('height', $('.rotate').width());
+});
+</script>

@@ -1,0 +1,144 @@
+<!-- Need in page styles to override global modal style -->
+<style>
+.availSuppliers option {
+	background-image: url(images/plus_sm.png);
+	background-repeat: no-repeat;
+	background-position: right;
+	padding: 2px;
+	font-size: 12px;
+}
+.selSuppliers option {
+	background-image: url(images/minus_sm_2.png);
+	background-repeat: no-repeat;
+	background-position: right;
+	padding: 2px;
+	font-size: 12px;
+}
+.modal-dialog {
+	position: fixed;
+	top: 40%;
+	left: 50%;
+	min-width: 600px;
+	max-width: 800px;
+	width: 50%;
+	transform: translateX(-50%) translateY(-50%);
+}
+</style>
+<div class="modal" tabindex="-1" role="dialog" id="itnInfoModal">
+  <div class="modal-dialog" ng-controller="MoveCtrl">
+    <div class="modal-content">
+      <div class="modal-header  bg-primary">
+        <button type="button" class="close" ng-click="$hide()">&times;</button>
+        <h4 class="modal-title text-left" id="messageModalLabel" ng-if="!editWL">Create Saved List</h4>
+        <h4 class="modal-title text-left" id="messageModalLabel" ng-if="editWL">Edit Saved List "{{editWL.name}}"</h4>
+      </div>
+      <div class="modal-body" >
+        <div class="container-fluid"> 
+          
+          <!-- Position alert message -->
+          <div class="row">
+            <div class="col-md-12">
+              <div ng-hide="wlName.trim().length !==0" id="error-no-list-name" class="alert alert-danger danger-alert" style="display:none;"><i class="fa fa-bolt danger-icon-bolt"></i><span class="danger-alert-content">Saved list name cannot be empty</span></div>
+              <div id="error-dupe-list-name" class="alert alert-danger danger-alert" style="display:none;"><i class="fa fa-bolt danger-icon-bolt"></i><span class="danger-alert-content">Duplicate saved list name</span></div>
+              <div ng-hide="selectedsuppliers.length !== 0" id="error-select-suppliers" class="alert alert-danger danger-alert" style="display:none;"><i class="fa fa-bolt danger-icon-bolt"></i><span class="danger-alert-content">Please select suppliers to be added</span></div>
+            </div>
+          </div>
+          <!-- End alert messages -->
+          
+          <div class="row">
+            <div class="col-md-12">
+              <p>Add or remove suppliers from the list using selectors below.</p>
+              <p ng-if="editWL">If you wish to delete this list, click the "Delete" button below. This will remove the list and its contents from the Saved List menu.</p>
+              </p>
+            </div>
+          </div>
+          <br/>
+          <form class="form-inline">
+            <div class="form-group">
+              <label ng-if="editWL" for="editWatchlist">List name:&nbsp;</label>
+              <label ng-if="!editWL" for="editWatchlist">Name this list:&nbsp;</label>
+              <input style="width:300px;" type="text" class="form-control" placeholder="Ex: New Saved List" ng-model="wlName"/>
+            </div>
+          </form>
+          <br/>
+          
+          <!--  <div class="row">
+            <div class="col-md-3" ng-if="editWL">
+              <p align="left"><strong>List Name: &nbsp;</strong></p>
+            </div>
+            <div class="col-md-3" ng-if="!editWL">
+              <p align="left"><strong>Name this list: &nbsp;</strong></p>
+            </div>
+            <div class="col-md-5">
+              <p align="left">
+                <input type="text" class="form-control" placeholder="Ex: New Saved List" ng-model="wlName"/>
+              </p>
+            </div>
+            <div class="col-md-4"></div>
+          </div>
+          <br/>-->
+          <div class="row container-fluid">
+            <div class="col-md-6">
+              <select id="cat-created-saved-list" class="scorecardCategoryFilter nya-selectpicker form-control" ng-init="fetchCategory()" ng-model="SelectedCategories" ng-change="filterSuppliers(SelectedCategories);"  data-live-search="true" data-style="btn-default" data-size="6" data-width="175px" title="Filter by Category" multiple data-selected-text-format="count>1">
+                <option class="optBorder bg-warning" value="deselect">View All</option>
+                <option class="optBorder"  ng-repeat="option in categories" value="{{option}}">{{option}}</option>
+              </select>
+              <button id="deselect-saved-list-cat" class="btn btn-warning hidden">View All</button>
+              <!-- This button is hidden from view --> 
+            </div>
+          </div>
+          <br/>
+          <div class="row container-fluid">
+            <div class="col-md-6">
+              <div style="background:#e5f3ff;padding:5px;border:1px solid #CCCCCC;">All Suppliers</div>
+              <select class="availSuppliers form-control" size="5" multiple ng-model="available" ng-options="client as client.supplierName for client in availablesuppliers" ng-click="moveItem(available[0], availablesuppliers,selectedsuppliers)" style="width: 100%;min-height:200px;">
+              </select>
+            </div>
+            <div class="col-md-6">
+              <div style="background:#e5f3ff;padding:5px;border:1px solid #CCCCCC;">Selected Suppliers</div>
+              <select class="selSuppliers form-control" size="5" multiple ng-model="selected" ng-init="fetchSupplier(true)" ng-options="client as client.supplierName for client in selectedsuppliers" ng-click="moveItem(selected[0], selectedsuppliers,availablesuppliers)" style="width: 100%;min-height:200px;">
+              </select>
+            </div>
+          </div>
+          <div class="row container-fluid">
+            <div class="col-md-12"> <br/>
+              <input id="moveleftall" type="button" class="btn btn-default btn-sm pull-right" value="Remove All Suppliers" ng-click="moveAll(selectedsuppliers,availablesuppliers)" />
+              <input id="moverightall" type="button" class="btn btn-default btn-sm pull-left" value="Add All Suppliers" ng-click="moveAll(availablesuppliers, selectedsuppliers)" />
+              <br style="clear:both;">
+              <br/>
+              <!--div style="font-size:12px;"><strong>Selected Suppliers:</strong> {{selectedsuppliers}}</div--> 
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-1"></div>
+      </div>
+      <div class="modal-footer"> 
+        <!--  <button analytics-on analytics-event="Delete List" analytics-category="Saved Lists" analytics-label="User deleted a saved list" type="button" class="btn btn-danger" ng-if="editWL" ng-click="updateCustomList(true);">Delete List</button> --> 
+        
+        <!-- Modal Confrim -->
+        <button analytics-on analytics-event="Delete List" analytics-category="Saved Lists" analytics-label="User deleted a saved list" ng-controller="ModalConfirmController"  ng-if="editWL" type="button" class="btn btn-danger" ng-click="delete()">Delete List</button>
+        <!-- End Modal Confirm -->
+        
+        <button type="button" class="btn btn-default" ng-click="$hide()">Cancel</button>
+        <button analytics-on analytics-event="Apply Updates" analytics-category="Saved Lists" analytics-label="User created or edited a saved list" id="show-kpi-message-sent" type="button" class="btn btn-primary" ng-click="updateCustomList();">Apply Updates</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$("#cat-created-saved-list").change(function(){
+            $( "#cat-created-saved-list option:selected").each(function(){
+				 $('#deselect-saved-list-cat').click(function() {
+				 $('.disabled').prop('disabled',false);
+   				 $('#cat-created-saved-list').selectpicker('deselectAll');
+				 })
+				
+				if($(this).attr("value")=="deselect"){
+				 $( "#deselect-saved-list-cat" ).trigger( "click" ); // trigger click event on hidden deselect button
+                }
+            });
+        })
+</script>

@@ -1,0 +1,225 @@
+<!-- Original heat map category/kpi template - dropdown 1nd selection -->
+<style>
+/* In page style for heat maps - some necessary to override defaults. Will move other classes to main.css */
+.tbl-bootstrap-border-none {
+	border: none !important;
+}
+.tbl-heatmap-td {
+	border:1px solid white !important;
+	width:45px !important;
+	height:40px !important;
+}
+.tbl-heatmap-category-td {
+	border:1px solid white !important;
+	width:60px !important;
+	height:40px !important;
+}
+.tbl-heatmap-category-score-td {
+	border:1px solid white !important;
+	width:65px !important;
+	height:40px !important;
+}
+
+.tbl-heatmap-label-score {
+	font-size:13px;
+	padding-top:10px;
+	color:#666666;
+}
+.tbl-heatmap-y-label {
+	width:180px !important;
+	color:#666666 !important;
+	line-height: .8em !important;
+	word-wrap: break-word !important;
+}
+/* Ratings ng-classes for background coloring */
+/* < 55 */
+.rate-terrible {
+	background: #cd3333;
+	color: white;
+	font-size: 18px;
+}
+.rate-terrible:hover {
+	opacity: .80;
+	cursor: pointer;
+}
+/* >=55 && < 65 */
+.rate-poor {
+	background: #ffa500;
+	color: white;
+	font-size: 18px;
+}
+.rate-poor:hover {
+	opacity: .60;
+	cursor: pointer;
+}
+/* >=65 && < 75 */
+.rate-fair {
+	background: #ffd600;
+	color: white;
+	font-size: 18px;
+}
+.rate-fair:hover {
+	opacity: .60;
+	cursor: pointer;
+}
+/* >=75 && < 85 */
+.rate-good {
+	background: #a2cd5a;
+	color: white;
+	font-size: 18px;
+}
+.rate-good:hover {
+	opacity: .60;
+	cursor: pointer;
+}
+/* >85 */
+.rate-excellent {
+	background: #388e3c;
+	color: white;
+	font-size: 18px;
+}
+.rate-excellent:hover {
+	opacity: .80;
+	cursor: pointer;
+}
+.icon-ontarget-small {
+	color: #666666;
+}
+.cat-perf-metric-labels {
+	border-top: none !important;
+	border-bottom: 1px solid #dddddd !important;
+	font-size: 13px;
+	color:#655959;
+}
+
+.cat-perf-metric-values {
+	border-top: none !important;
+	font-size: 16px;
+	color: #333333;
+}
+
+/* Text for overview risk charts - use for category header */
+.txtOverviewNav {
+	font-size: 16px;
+	padding-left: 10px;
+	padding-top: 10px;
+}
+/* ************ */
+/* Class used in conjunction with jQuery to programatically rotate x axis labels */
+.rotate {
+	padding-left:0px;
+    font-size: 13px;
+	color:#655959;
+	-ms-transform: rotate(-60deg); /* IE 9+ */
+	-webkit-transform: rotate(-60deg); /* Chrome, Safari, Opera */
+	transform: rotate(-60deg);
+	/*line-height:1em;*/
+}
+.relative-td {
+	position:relative;
+	top:20px;
+}
+
+.relative-div {
+	position:relative;
+	left:15px;
+	top:20px;
+}
+/* Latest additions */
+.perf-breakout-subheader {
+	position:relative;
+	bottom:30px;
+	font-weight:bold;
+}
+.div-cat-heatmap-labels {
+	font-size: 13px;
+	color:#655959;
+}
+/* For fixed header - scroll heatmap */
+/*
+.scrollme >  thead, .scrollme > tbody, .scrollme > tr, .scrollme > td, .scrollme > th {
+	 display: block; 
+}
+
+.scrollme >  tbody {
+      max-height: 247px;
+      overflow-y: auto;
+	  overflow-x:hidden !important;
+			
+}
+
+.scrollme > thead {
+	  position:relative;
+	  top:38px;
+}
+*/
+</style>
+<!-- Table for original heat map - dropdown default selection -->
+<div class="perf-breakout-subheader">Category Performance by KPI</div>
+    
+
+      <table class="table scrollme" style="width:auto;position:relative;bottom:20px;">
+      <thead>
+
+        <tr>
+          <td align="left"  class="tbl-bootstrap-border-none"></td>
+          <td align="center"  class="tbl-bootstrap-border-none"><div style="width:65px;" class='rotate'></div><div class="div-cat-heatmap-labels" align="center"><br/>Score</div></td>
+          <td class="tbl-bootstrap-border-none" style="width:15px;">&nbsp;</td>
+          <td align="left" ng-if="showTotalFillRate"  class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div'>Fill Rate</div><br/><div align="left" style="font-size:13px;" class="fa fa-shopping-basket icon-ontarget-small"></div> </td>
+          <td align="left" ng-if="showOntimePickup"  class="tbl-bootstrap-border-none"> <div style="width:60px;" class='rotate relative-div'>On Time Pick-Up</div><br/><div align="left"  class="fa fa-truck icon-ontarget-small"></div> </td>
+          <td align="left" ng-if="showCancellations"  class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div'>Cancellations</div><br/><div align="left" class="fa fa-ban icon-ontarget-small"></div>  </td>
+          <td align="left" ng-if="showReconciliations"  class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div'>Reconciliation</div><br/><div align="left" class="fa fa-random icon-ontarget-small"></div> </td>
+          <td align="left" ng-if="showResponsiveness"  class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div'>Responsiveness</div><br/><div align="left" class="fa fa-mail-reply icon-ontarget-small"></div> </td>
+          <td align="left" ng-if="showPriceCompete"  class="tbl-bootstrap-border-none"> <div style="width:60px;" class='rotate relative-div'>Price Competitiveness</div><br/><div align="left" class="fa fa-bar-chart icon-ontarget-small"></div> </td>
+          <td align="left" ng-if="showPriceVol"  class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div'>Price Volatility</div><br/><div align="left" class="fa fa-bolt icon-ontarget-small"></div> </td>
+          <td align="left" ng-if="showPercentTarget"  class="tbl-bootstrap-border-none"> <div style="width:60px;" class='rotate relative-div'>On Target</div><br/><div align="left" class="fa fa-bullseye icon-ontarget-small"></div> </td>
+          
+          <!-- Spacing between heatmap and category metrics -->
+          <td style="border-top:none;border-bottom:1px solid #dddddd;width:50px;"></td>
+		  <!-- End spacing between heatmap and category metrics -->
+          
+          <td align="center" class="cat-perf-metric-labels" style="width:60px;"><div style="width:60px;" class="rotate"></div><div class="div-cat-heatmap-labels" align="right"><br/>Spend($)</div></td>
+          <td align="center" class="cat-perf-metric-labels"><div style="width:120px;" class="rotate"></div><div class="div-cat-heatmap-labels" align="center"> Performance <br/>Change (YoY)</div></td>
+          <td align="center" class="cat-perf-metric-labels"><div style="width:80px;" class="rotate"></div><div class="div-cat-heatmap-labels" align="center"><br/>Rank</div></td>
+          <td align="center" class="cat-perf-metric-labels" style="width:80px;"><div style="width:80px;" class="rotate"></div><div class="div-cat-heatmap-labels" align="center">Suppliers in<br/> Category</div></td>
+          
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Heatmap bindings in this row -->
+        <tr ng-repeat="summarycategory in queryService.sc.info.categoryPerfInfo"><!-- Heatmap data -->
+          <td align="left" class="tbl-bootstrap-border-none tbl-heatmap-y-label">{{summarycategory.name}}</td>
+          <td align="center"  class="tbl-heatmap-category-score-td" ng-class="{'rate-terrible': summarycategory.score < '55', 'rate-poor': summarycategory.score >= '55' && summarycategory.score < '65', 'rate-fair': summarycategory.score >= '65' && summarycategory.score < '75','rate-good': summarycategory.score >= '75' && summarycategory.score < '85','rate-excellent': summarycategory.score >=  '85'}">{{summarycategory.score}}</td>
+          <td class="tbl-bootstrap-border-none" style="width:15px;">&nbsp;</td>
+          <td ng-if="showTotalFillRate" align="center"    class="tbl-heatmap-category-td" ng-class="{'rate-terrible': summarycategory.fillrate < '55', 'rate-poor': summarycategory.fillrate >= '55' && summarycategory.fillrate < '65', 'rate-fair': summarycategory.fillrate >= '65' && summarycategory.fillrate < '75','rate-good': summarycategory.fillrate >= '75' && summarycategory.fillrate < '85','rate-excellent': summarycategory.fillrate >=  '85'}">{{summarycategory.fillrate}}</td>
+          <td ng-if="showOntimePickup" align="center"     class="tbl-heatmap-category-td" ng-class="{'rate-terrible': summarycategory.ontime < '55', 'rate-poor': summarycategory.ontime >= '55' && summarycategory.ontime < '65', 'rate-fair': summarycategory.ontime >= '65' && summarycategory.ontime < '75','rate-good': summarycategory.ontime >= '75' && summarycategory.ontime < '85','rate-excellent': summarycategory.ontime >=  '85'}">{{summarycategory.ontime}}</td>
+          <td ng-if="showCancellations" align="center"    class="tbl-heatmap-category-td" ng-class="{'rate-terrible': summarycategory.cancel < '55', 'rate-poor': summarycategory.cancel >= '55' && summarycategory.cancel < '65', 'rate-fair': summarycategory.cancel >= '65' && summarycategory.cancel < '75','rate-good': summarycategory.cancel >= '75' && summarycategory.cancel < '85','rate-excellent': summarycategory.cancel >=  '85'}">{{summarycategory.cancel}}</td>
+          <td ng-if="showReconciliations" align="center"  class="tbl-heatmap-category-td" ng-class="{'rate-terrible': summarycategory.reconcile < '55', 'rate-poor': summarycategory.reconcile >= '55' && summarycategory.reconcile < '65', 'rate-fair': summarycategory.reconcile >= '65' && summarycategory.reconcile < '75','rate-good': summarycategory.reconcile >= '75' && summarycategory.reconcile < '85','rate-excellent': summarycategory.reconcile >=  '85'}">{{summarycategory.reconcile}}</td>
+          <td ng-if="showResponsiveness" align="center"   class="tbl-heatmap-category-td" ng-class="{'rate-terrible': summarycategory.responsive < '55', 'rate-poor': summarycategory.responsive >= '55' && summarycategory.responsive < '65', 'rate-fair': summarycategory.responsive >= '65' && summarycategory.responsive < '75','rate-good': summarycategory.responsive >= '75' && summarycategory.responsive < '85','rate-excellent': summarycategory.responsive >=  '85'}">{{summarycategory.responsive}}</td>
+          <td ng-if="showPriceCompete" align="center"     class="tbl-heatmap-category-td" ng-class="{'rate-terrible': summarycategory.compete < '55', 'rate-poor': summarycategory.compete >= '55' && summarycategory.compete < '65', 'rate-fair': summarycategory.compete >= '65' && summarycategory.compete < '75','rate-good': summarycategory.compete >= '75' && summarycategory.compete < '85','rate-excellent': summarycategory.compete >=  '85'}">{{summarycategory.compete}}</td>
+          <td ng-if="showPriceVol" align="center"         class="tbl-heatmap-category-td" ng-class="{'rate-terrible': summarycategory.volatility < '55', 'rate-poor': summarycategory.volatility >= '55' && summarycategory.volatility < '65', 'rate-fair': summarycategory.volatility >= '65' && summarycategory.volatility < '75','rate-good': summarycategory.volatility >= '75' && summarycategory.volatility < '85','rate-excellent': summarycategory.volatility >=  '85'}">{{summarycategory.volatility}}</td>
+          <td ng-if="showPercentTarget" align="center"    class="tbl-heatmap-category-td" ng-class="{'rate-terrible': summarycategory.target < '55', 'rate-poor': summarycategory.target >= '55' && summarycategory.target < '65', 'rate-fair': summarycategory.target >= '65' && summarycategory.target < '75','rate-good': summarycategory.target >= '75' && summarycategory.target < '85','rate-excellent': summarycategory.target >=  '85'}">{{summarycategory.target}}</td>
+          
+          <td class="tbl-bootstrap-border-none"><img src="images/heatmap/spacer-transparent.png" width="50" height="1" /></td>
+          
+          <td align="right" class="cat-perf-metric-values" style="width:60px;">{{summarycategory.summaryspend | number:0}}</td>
+          <td align="center" class="cat-perf-metric-values" style="width:120px;">{{summarycategory.summaryperfchange}}</td>
+          <td align="center" class="cat-perf-metric-values" style="width:80px;">{{summarycategory.summaryrank}}</td>
+          <td align="center" class="cat-perf-metric-values" style="width:80px;">{{summarycategory.summarysuppliercount}}</td>
+
+        </tr>
+        
+
+        </tbody>
+        
+      </table>
+
+      
+<!-- script that progamatically rotates x axis labels -->
+<script>
+$(document).ready(function () {
+    $('.rotate').css('height', $('.rotate').width());
+	
+});
+</script>
+

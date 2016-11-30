@@ -1,0 +1,241 @@
+<!-- Original heat map category/kpi template - dropdown 1nd selection -->
+<style>
+/* In page style for heat maps - some necessary to override defaults. Will move other classes to main.css */
+
+.tbl-bootstrap-border-none {
+	border: none !important;
+}
+.tbl-heatmap-td {
+	border: 1px solid white !important;
+	width: 45px !important;
+	height: 40px !important;
+}
+.tbl-heatmap-category-td {
+	border: 1px solid white !important;
+	width: 60px !important;
+	height: 40px !important;
+}
+.tbl-heatmap-category-score-td {
+	border: 1px solid white !important;
+	width: 65px !important;
+	height: 40px !important;
+}
+.tbl-heatmap-label-score {
+	font-size: 13px;
+	padding-top: 10px;
+	color: #666666;
+}
+.tbl-heatmap-y-label {
+	width: 180px !important;
+	color: #666666 !important;
+	line-height: .8em !important;
+	word-wrap: break-word !important;
+}
+/* Ratings ng-classes for background coloring */
+/* < 1 */
+/* rate-none class for when there are no values for a DC */
+/* Note to self - could use content before: after: css */
+.rate-none {
+	background: #cccccc;
+	/*background:#d8d6d6;*/
+	color: white;
+	font-size: 18px;
+}
+.rate-none:hover {
+	opacity: .80;
+	cursor: pointer;
+}
+/* Could use the css content property to add "No Data" */
+
+.rate-none:after {
+    content: "No Data";
+	font-size:13px;
+}
+
+
+
+/* < 55 */
+.rate-terrible {
+	background: #cd3333;
+	color: white;
+	font-size: 18px;
+}
+.rate-terrible:hover {
+	opacity: .80;
+	cursor: pointer;
+}
+/* >=55 && < 65 */
+.rate-poor {
+	background: #ffa500;
+	color: white;
+	font-size: 18px;
+}
+.rate-poor:hover {
+	opacity: .60;
+	cursor: pointer;
+}
+/* >=65 && < 75 */
+.rate-fair {
+	background: #ffd600;
+	color: white;
+	font-size: 18px;
+}
+.rate-fair:hover {
+	opacity: .60;
+	cursor: pointer;
+}
+/* >=75 && < 85 */
+.rate-good {
+	color: white;
+	font-size: 18px;	background: #a2cd5a;
+
+}
+.rate-good:hover {
+	opacity: .60;
+	cursor: pointer;
+}
+/* >85 */
+.rate-excellent {
+	background: #388e3c;
+	color: white;
+	font-size: 18px;
+}
+.rate-excellent:hover {
+	opacity: .80;
+	cursor: pointer;
+}
+.icon-ontarget-small {
+	color: #666666;
+}
+.cat-perf-metric-labels {
+	border-top: none !important;
+	border-bottom: 1px solid #dddddd !important;
+	font-size: 13px;
+	color: #655959;
+}
+.cat-perf-metric-values {
+	border-top: none !important;
+	font-size: 16px;
+	color: #333333;
+}
+/* Text for overview risk charts - use for category header */
+.txtOverviewNav {
+	font-size: 16px;
+	padding-left: 10px;
+	padding-top: 10px;
+}
+/* ************ */
+/* Class used in conjunction with jQuery to programatically rotate x axis labels */
+.rotate {
+	padding-left: 0px;
+	font-size: 13px;
+	color: #655959;
+	-ms-transform: rotate(-60deg); /* IE 9+ */
+	-webkit-transform: rotate(-60deg); /* Chrome, Safari, Opera */
+	transform: rotate(-60deg);/*line-height:1em;*/
+}
+.relative-td {
+	position: relative;
+	top: 20px;
+}
+.relative-div {
+	position: relative;
+	left: 15px;
+	top: 20px;
+}
+.relative-div-dc-cat {
+	position: relative;
+	left: 15px;
+	top: 30px;
+	font-weight:600;
+}
+/* Latest additions */
+.perf-breakout-subheader {
+	position: relative;
+	bottom: 30px;
+	font-weight: bold;
+}
+.div-cat-heatmap-labels {
+	font-size: 13px;
+	color: #655959;
+}
+/* For fixed header - scroll heatmap */
+/*
+.scrollme > thead, .scrollme > tbody, .scrollme > tr, .scrollme > td, .scrollme > th {
+	display: block;
+}
+.scrollme > tbody {
+	max-height: 247px;
+	overflow-y: auto;
+	overflow-x: hidden !important;
+}
+.scrollme > thead {
+	position: relative;
+	top: 38px;
+}
+*/
+</style>
+<div class="perf-breakout-subheader">Category Performance by Distribution Center</div>
+<!-- Table for heat map by dc/category - dropdown 2nd selection -->
+
+<table class="table scrollme" style="width:auto;position:relative;bottom:55px;">
+  <thead>
+    <tr ng-repeat="dcsummarycategoryheader in dcsummarycategoryheaders">
+      <td align="center"  class="tbl-bootstrap-border-none"></td>
+      <td align="center"  class="tbl-bootstrap-border-none"><div style="width:65px;" class='rotate'></div>
+        <div class="div-cat-heatmap-labels" align="center"><br/>
+          Score</div></td>
+      <td class="tbl-bootstrap-border-none" style="width:15px;">&nbsp;</td>
+      <td align="left" class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div-dc-cat'>{{dcsummarycategoryheader.dcname1}}</div></td>
+      <td align="left" class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div-dc-cat'>{{dcsummarycategoryheader.dcname2}}</div></td>
+      <td align="left" class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div-dc-cat'>{{dcsummarycategoryheader.dcname3}}</div></td>
+      <td align="left" class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div-dc-cat'>{{dcsummarycategoryheader.dcname4}}</div></td>
+      <td align="left" class="tbl-bootstrap-border-none"><div style="width:60px;" class='rotate relative-div-dc-cat'>{{dcsummarycategoryheader.dcname5}}</div></td>
+      
+      <!-- Spacing between heatmap and category metrics -->
+      <td style="border-top:none;border-bottom:1px solid #dddddd;width:50px;">&nbsp;</td>
+      <!-- End spacing between heatmap and category metrics -->
+      
+      <td align="center" class="cat-perf-metric-labels" style="width:60px;"><div style="width:60px;" class="rotate"></div>
+        <div class="div-cat-heatmap-labels" align="right"><br/>
+          Spend($)</div></td>
+      <td align="center" class="cat-perf-metric-labels"><div style="width:120px;" class="rotate"></div>
+        <div class="div-cat-heatmap-labels" align="center"> Performance <br/> Change (YoY)</div></td>
+      <td align="center" class="cat-perf-metric-labels"><div style="width:80px;" class="rotate"></div>
+        <div class="div-cat-heatmap-labels" align="center"><br/>
+          Rank</div></td>
+      <td align="center" class="cat-perf-metric-labels" style="width:80px;"><div style="width:80px;" class="rotate"></div>
+        <div class="div-cat-heatmap-labels" align="center">Suppliers in<br/>
+          Category</div></td>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Here I have added an ng-class=rate-none which looks for 0 value and applies class -->
+    <tr ng-repeat="dcsummarycategory in queryService.sc.info.categoryPerfInfo"><!-- Heatmap data -->
+      <td align="left" class="tbl-bootstrap-border-none tbl-heatmap-y-label">{{dcsummarycategory.name}}</td>
+      <td align="center"  class="tbl-heatmap-category-score-td" ng-class="{'rate-none': dcsummarycategory.score < '1','rate-terrible': dcsummarycategory.score > '1' &&  dcsummarycategory.score < '55', 'rate-poor': dcsummarycategory.score >= '55' && dcsummarycategory.score < '65', 'rate-fair': dcsummarycategory.score >= '65' && dcsummarycategory.score < '75','rate-good': dcsummarycategory.score >= '75' && dcsummarycategory.score < '85','rate-excellent': dcsummarycategory.score >=  '85'}">{{dcsummarycategory.score}}</td>
+      <td class="tbl-bootstrap-border-none" style="width:15px;">&nbsp;</td>
+      <td align="center"    class="tbl-heatmap-category-td" ng-class="{'rate-none': dcsummarycategory.dcname1score < '1','rate-terrible': dcsummarycategory.dcname1score > '1' && dcsummarycategory.dcname1score < '55', 'rate-poor': dcsummarycategory.dcname1score >= '55' && dcsummarycategory.dcname1score < '65', 'rate-fair': dcsummarycategory.dcname1score >= '65' && dcsummarycategory.dcname1score < '75','rate-good': dcsummarycategory.dcname1score >= '75' && dcsummarycategory.dcname1score < '85','rate-excellent': dcsummarycategory.dcname1score >=  '85'}">{{dcsummarycategory.dcname1score}}</td>
+      <td align="center"     class="tbl-heatmap-category-td" ng-class="{'rate-none': dcsummarycategory.dcname2score < '1','rate-terrible': dcsummarycategory.dcname2score > '1' && dcsummarycategory.dcname2score < '55', 'rate-poor': dcsummarycategory.dcname2score >= '55' && dcsummarycategory.dcname2score < '65', 'rate-fair': dcsummarycategory.dcname2score >= '65' && dcsummarycategory.dcname2score < '75','rate-good': dcsummarycategory.dcname2score >= '75' && dcsummarycategory.dcname2score < '85','rate-excellent': dcsummarycategory.dcname2score >=  '85'}">{{dcsummarycategory.dcname2score}}</td>
+      <td align="center"    class="tbl-heatmap-category-td" ng-class="{'rate-none': dcsummarycategory.dcname3score < '1','rate-terrible': dcsummarycategory.dcname3score > '1' && dcsummarycategory.dcname3score < '55', 'rate-poor': dcsummarycategory.dcname3score >= '55' && dcsummarycategory.dcname3score < '65', 'rate-fair': dcsummarycategory.dcname3score >= '65' && dcsummarycategory.dcname3score < '75','rate-good': dcsummarycategory.dcname3score >= '75' && dcsummarycategory.dcname3score < '85','rate-excellent': dcsummarycategory.dcname3score >=  '85'}">{{dcsummarycategory.dcname3score}}</td>
+      <td align="center"  class="tbl-heatmap-category-td" ng-class="{'rate-none': dcsummarycategory.dcname4score < '1','rate-terrible': dcsummarycategory.dcname4score > '1' && dcsummarycategory.dcname4score < '55', 'rate-poor': dcsummarycategory.dcname4score >= '55' && dcsummarycategory.dcname4score < '65', 'rate-fair': dcsummarycategory.dcname4score >= '65' && dcsummarycategory.dcname4score < '75','rate-good': dcsummarycategory.dcname4score >= '75' && dcsummarycategory.dcname4score < '85','rate-excellent': dcsummarycategory.dcname4score >=  '85'}">{{dcsummarycategory.dcname4score}}</td>
+      <td align="center"   class="tbl-heatmap-category-td" ng-class="{'rate-none': dcsummarycategory.dcname5score < '1','rate-terrible': dcsummarycategory.dcname5score > '1' && dcsummarycategory.dcname5score < '55', 'rate-poor': dcsummarycategory.dcname5score >= '55' && dcsummarycategory.dcname5score < '65', 'rate-fair': dcsummarycategory.dcname5score >= '65' && dcsummarycategory.dcname5score < '75','rate-good': dcsummarycategory.dcname5score >= '75' && dcsummarycategory.dcname5score < '85','rate-excellent': dcsummarycategory.dcname5score >=  '85'}">{{dcsummarycategory.dcname5score}}</td>
+      <td class="tbl-bootstrap-border-none">&nbsp;</td>
+      <td align="right" class="cat-perf-metric-values" style="width:60px;">{{dcsummarycategory.summaryspend | number:0}}</td>
+      <td align="center" class="cat-perf-metric-values" style="width:120px;">{{dcsummarycategory.summaryperfchange}}</td>
+      <td align="center" class="cat-perf-metric-values" style="width:80px;">{{dcsummarycategory.summaryrank}}</td>
+      <td align="center" class="cat-perf-metric-values" style="width:80px;">{{dcsummarycategory.summarysuppliercount}}</td>
+    </tr>
+    
+    <!-- The <tr> below is an old css trick using a sliver of a transparent image to maintain table spacing for scroll --> 
+    <!-- The same image is used - different widths - so the file size is extremely small and insignificant -->
+  </tbody>
+</table>
+
+<!-- script that progamatically rotates x axis labels --> 
+<script>
+$(document).ready(function () {
+    $('.rotate').css('height', $('.rotate').width());
+	
+});
+</script> 

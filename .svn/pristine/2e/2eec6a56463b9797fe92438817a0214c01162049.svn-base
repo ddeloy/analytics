@@ -1,0 +1,734 @@
+<!-- Styles below override default popover directive styling -->
+<style>
+.popover.top {
+    margin-top: -10px;
+}
+.popover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1060;
+    display: none;
+    /*max-width: 276px;*/
+	max-width: 500px !important;
+    padding: 1px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: left;
+    text-align: start;
+    text-decoration: none;
+    text-shadow: none;
+    text-transform: none;
+    letter-spacing: normal;
+    word-break: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+    white-space: normal;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    line-break: auto;
+}
+.txt-score-perf {
+	font-size:60px;
+	font-weight:600;
+	color:#515151;
+}
+.txt-hdr-score-perf {
+	font-size:14px;
+	color:#333333;
+}
+.txt-score-subtitle {
+	font-size:16px;
+	color:#515151;
+}
+.txt-overall-rank-supplier {
+	font-size:12px;
+	color:#999999;
+}
+	
+.kpi-target-down {
+	color:#d3d3d3;
+	font-size:36px;
+
+}
+/*.kpi-target-met {
+	color:#515151;
+	font-size:36px;
+}
+*/
+.kpi-target-met {
+	color:#666666;
+	font-size:36px;
+}
+.icon-ontarget-small {
+	color:#666666;
+}
+.ontarget-popover-hover-values {
+	font-size:16px;
+	font-weight:600;
+	color:#5E5E5E;
+}
+.ontarget-popover-hover-labels{
+	font-size:13px;
+	font-weight:600;
+	color: #1E1E1E;	
+}
+
+.ontarget-popover-hover-header{
+	font-size:13px;
+	font-weight:600;
+	color:#6B6B6B;
+	
+}
+
+/* Style for middle section and category section - heat maps */
+.tbl-bootstrap-border-none {
+	border: none !important;
+}
+
+.tbl-heatmap-td {
+	border:1px solid white !important;
+	width:45px !important;
+	height:40px !important;
+}
+.tbl-heatmap-category-td {
+	border:1px solid white !important;
+	width:60px !important;
+	height:40px !important;
+}
+.tbl-heatmap-category-score-td {
+	border:1px solid white !important;
+	width:65px !important;
+	height:40px !important;
+}
+
+.tbl-heatmap-label-score {
+	font-size:13px;
+	padding-top:10px;
+	color:#666666;
+}
+.tbl-heatmap-y-label {
+	width:180px !important;
+	color:#666666 !important;
+	line-height: .8em !important;
+	word-wrap: break-word !important;
+	/*overflow-wrap: break-word !important;*/
+    /*overflow-wrap: break-word;*/
+}
+/*
+.enabled-class {
+	background: red;
+}
+.enabled-class-2 {
+	background: yellow;
+}
+.disabled-class {
+	background: gray;
+}
+.std-background {
+	background: gray;
+}
+*/
+.txt-rotate {
+	/*  width: 100px;
+    height: 100px; */
+    /* Rotate div */
+    font-size: 13px;
+	color:#616161;
+	-ms-transform: rotate(-45deg); /* IE 9 */
+	-webkit-transform: rotate(-45deg); /* Chrome, Safari, Opera */
+	transform: rotate(-45deg);
+}
+/* < 55 */
+.rate-terrible {
+	background: #cd3333;
+	color: white;
+	font-size: 18px;
+}
+.rate-terrible:hover {
+	opacity: .80;
+	cursor: pointer;
+}
+/* >=55 && < 65 */
+.rate-poor {
+	background: #ffa500;
+	color: white;
+	font-size: 18px;
+}
+.rate-poor:hover {
+	opacity: .60;
+	cursor: pointer;
+}
+/* >=65 && < 75 */
+.rate-fair {
+	background: #ffd600;
+	color: white;
+	font-size: 18px;
+}
+.rate-fair:hover {
+	opacity: .60;
+	cursor: pointer;
+}
+/* >=75 && < 85 */
+.rate-good {
+	background: #a2cd5a;
+	color: white;
+	font-size: 18px;
+}
+.rate-good:hover {
+	opacity: .60;
+	cursor: pointer;
+}
+/* >85 */
+.rate-excellent {
+	background: #388e3c;
+	color: white;
+	font-size: 18px;
+}
+.rate-excellent:hover {
+	opacity: .80;
+	cursor: pointer;
+}
+.icon-ontarget-small {
+	color: #666666;
+}
+.cat-perf-metric-labels {
+	border-top: none !important;
+	border-bottom: 1px solid #dddddd !important;
+	font-size: 13px;
+	color:#616161;
+	/*position:relative;
+	top:76px;*/
+}
+
+.cat-perf-metric-values {
+	border-top: none !important;
+	font-size: 16px;
+	color: #333333;
+}
+
+/* Text for overview risk charts - use for category header */
+.txtOverviewNav {
+	font-size: 16px;
+	padding-left: 10px;
+	padding-top: 10px;
+}
+.image-responsive {
+	max-width:100%;
+	height:auto;
+}
+/* Expand collapse classes */
+.div-toggle-up {
+	width:51px;
+	height:31px;
+	background:white;
+}
+.icon-toggle-up {
+	color:#666666;
+	font-size:16px;
+	position:relative;
+	top:5px;
+}
+.icon-toggle-down {
+	color:#666666;
+	font-size:16px;
+	position:relative;
+	top:5px;
+	display:none;
+}
+#toggle-score-perf:hover {
+	border:1px solid #b7c7d5;
+	cursor:pointer;
+}
+
+#toggle-score-perf:hover > .icon-toggle-up {
+	font-weight:bold;
+}
+
+#toggle-score-perf:hover > .icon-toggle-down {
+	font-weight:bold;
+}
+
+.no-data {
+	/*color:#666666;*/
+	color:#808080;
+	background:#fafafa;
+	font-size:12px;
+	font-style:italic;
+	padding:5px;
+	
+}
+
+</style>
+
+<!-- Start top level scorecard summary -->
+
+<div style="height:25px;"></div>
+<div class="row container-fluid">
+<div class="score-perf-content container-fluid" style="border:1px solid #b7c7d5;display:none;position:relative;top:17px;">
+</div>
+    <div class="col-md-8">
+    
+        <div class="score-perf-content" style="color:#434343;font-size:16px;position:relative;right:15px;">Scoring  and Performance Summary</div>
+
+    
+    </div>
+    
+    <div class="col-md-4">
+        <div style="position:relative;left:15px;" align="center" id="toggle-score-perf" class="div-toggle-up pull-right">
+        <i class="fa fa-angle-double-up icon-toggle-up"></i>
+        <i class="fa fa-angle-double-down icon-toggle-down"></i>
+        </div>
+    </div>
+
+</div>
+
+
+
+        
+<div class="score-perf-content" style="border:1px solid #b7c7d5;">
+<br/>
+
+<div style="position:relative;right:20px;" class="row score-perf-content">
+    <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-2">
+                    <p class="txt-hdr-score-perf" align="center">90/90 Rolling Compare</p>
+                    <!-- Add ng-if to show no data -->
+                    <p class="txt-score-perf" align="center"><span ng-if="queryService.sc.info.changeMetrics.diff90d!='-'">{{queryService.sc.info.changeMetrics.diff90d}}</span>
+                    <span ng-if="queryService.sc.info.changeMetrics.diff90d=='-'"> <img src="images/heatmap/no-data.png" width="98" height="66" /></span>
+                    </p>
+                    <p class="txt-overall-rank-supplier" align="center">(last 90 days compared<br/>
+                    to previous 90)
+                    </p>
+                </div>
+                
+                <div class="col-md-2">
+                    <p class="txt-hdr-score-perf" align="center">365-Day Score Change</p>
+                    <!-- Add ng-if to show no data -->
+                    <p class="txt-score-perf" align="center"><span ng-if="queryService.sc.info.changeMetrics.diffYr!='-'">{{queryService.sc.info.changeMetrics.diffYr}}</span><span ng-if="queryService.sc.info.changeMetrics.diffYr=='-'"><img src="images/heatmap/no-data.png" width="98" height="66" /></span></p>
+                    <p class="txt-overall-rank-supplier" align="center">(compared to <br/>
+                    previous 365 days)
+                    </p>
+
+                </div>
+                
+                <div class="col-md-2">
+                    <p class="txt-hdr-score-perf" align="center">Supplier Rank</p>
+                    <p class="txt-score-perf" align="center">{{queryService.sc.info.changeMetrics.rank}}</p>
+                    <p class="txt-score-subtitle" align="center">of {{queryService.sc.info.changeMetrics.curCnt}}</p>
+                    <p align="center" class="txt-overall-rank-supplier" style="position:relative;bottom:10px;">(suppliers)</p>
+                    
+                </div>
+                
+                
+                <div class="col-md-6 container-fluid p-left-80">
+                    <p class="txt-hdr-score-perf">Achieved KPI Targets</p>
+
+                    <table class="table table-bordered table-condensed" border="1" style="width:auto;">
+                      <tr style="height:75px;">
+                          <!-- Fill Rate Performance -->
+                          <td ng-if="showTotalFillRate" align="center" style="width:70px;padding-top:18px;">
+                                <div class="pointer" data-placement="top" title="Fill Rate Performance" html="true" 
+                                data-content="
+                                <table class='table' style='width:400px;' border='0'>
+                                      <tr class='ontarget-popover-hover-header'>
+                                        <td style='border-top:none;'><br/>&nbsp;</td>
+                                        <td style='border-top:none;'><br/>Supplier</td>
+                                        <td style='border-top:none;'>Supplier<br/>Average</td>
+                                        <td style='border-top:none;'><br/>Target</td>
+                                      </tr>
+                                      <tbody>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Score</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.total_fill_rate_score}}</td> 
+                                        <td class='ontarget-popover-hover-value'>70</td>
+                                        <td class='ontarget-popover-hover-value'>--</td>
+                                      </tr>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Performance</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.total_fill_rate}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.total_fill_rate_avg}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.fillratetarget}}%</td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                "
+                                data-trigger="hover" bs-popover><i class="{{queryService.sc.info.exec_summary.total_fill_rate_check ? 'fa fa-check kpi-target-met' : 'fa fa-arrow-down kpi-target-down'}}"></i>
+                                </div>
+                            </td>
+                        
+                            <!-- On Time Pick-Up -->
+                            <td ng-if="showOntimePickup" style="width:70px;padding-top:18px;" align="center">
+                                <div class="pointer" data-placement="top" title="On Time Pick-Up" html="true" 
+                                data-content="
+                                <table class='table' style='width:400px;' border='0'>
+                                      <tr class='ontarget-popover-hover-header'>
+                                        <td style='border-top:none;'><br/>&nbsp;</td>
+                                        <td style='border-top:none;'><br/>Supplier</td>
+                                        <td style='border-top:none;'>Supplier<br/>Average</td>
+                                        <td style='border-top:none;'><br/>Target</td>
+                                      </tr>
+                                      <tbody>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Score</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.ontimepickup_score}}</td>
+                                        <td class='ontarget-popover-hover-value'>70</td>
+                                        <td class='ontarget-popover-hover-value'>--</td>
+                                      </tr>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Performance</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.ontimepickup}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.ontimepickup_avg}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.ontimeratetarget}}%</td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                "
+                                data-trigger="hover" bs-popover><i class="{{queryService.sc.info.exec_summary.ontimepickup_check ? 'fa fa-check kpi-target-met' : 'fa fa-arrow-down kpi-target-down'}}"></i>
+                                </div>
+                              </td>
+
+ 							<!-- Cancellations -->
+                            <td ng-if="showCancellations" style="width:70px;padding-top:18px;" align="center">
+                                <div class="pointer" data-placement="top" title="Cancellations" html="true" 
+                                data-content="
+                                <table class='table' style='width:400px;' border='0'>
+                                      <tr class='ontarget-popover-hover-header'>
+                                        <td style='border-top:none;'><br/>&nbsp;</td>
+                                        <td style='border-top:none;'><br/>Supplier</td>
+                                        <td style='border-top:none;'>Supplier<br/>Average</td>
+                                        <td style='border-top:none;'><br/>Target</td>
+                                      </tr>
+                                      <tbody>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Score</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.cancel_percent_score}}</td>
+                                        <td class='ontarget-popover-hover-value'>70</td>
+                                        <td class='ontarget-popover-hover-value'>--</td>
+                                      </tr>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Performance</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.cancel_percent}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.cancel_percent_avg}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.cancelratetarget}}%</td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                "
+                                data-trigger="hover" bs-popover><i class="{{queryService.sc.info.exec_summary.cancel_percent_check ? 'fa fa-check kpi-target-met' : 'fa fa-arrow-down kpi-target-down'}}"></i>
+                                </div>
+                              </td>
+ 
+                            <!-- Reconciliations -->
+                            <td ng-if="showReconciliations" style="width:70px;padding-top:18px;" align="center">
+                                <div class="pointer" data-placement="top" title="Reconciliations" html="true" 
+                                data-content="
+                                <table class='table' style='width:400px;' border='0'>
+                                      <tr class='ontarget-popover-hover-header'>
+                                        <td style='border-top:none;'><br/>&nbsp;</td>
+                                        <td style='border-top:none;'><br/>Supplier</td>
+                                        <td style='border-top:none;'>Supplier<br/>Average</td>
+                                        <td style='border-top:none;'><br/>Target</td>
+                                      </tr>
+                                      <tbody>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Score</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.reconciled_score}}</td>
+                                        <td class='ontarget-popover-hover-value'>70</td>
+                                        <td class='ontarget-popover-hover-value'>--</td>
+                                      </tr>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Performance</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.reconciled_percent}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.reconciled_percent_avg}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.reconciledratetarget}}%</td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                "
+                                data-trigger="hover" bs-popover><i class="{{queryService.sc.info.exec_summary.reconciled_percent_check ? 'fa fa-check kpi-target-met' : 'fa fa-arrow-down kpi-target-down'}}"></i>
+                                </div>
+                              </td>
+
+							<!-- Responsiveness -->
+                            <td ng-if="showResponsiveness" style="width:70px;padding-top:18px;" align="center">
+                                <div class="pointer" data-placement="top" title="Responsiveness" html="true" 
+                                data-content="
+                                <table class='table' style='width:400px;' border='0'>
+                                      <tr class='ontarget-popover-hover-header'>
+                                        <td style='border-top:none;'><br/>&nbsp;</td>
+                                        <td style='border-top:none;'><br/>Supplier</td>
+                                        <td style='border-top:none;'>Supplier<br/>Average</td>
+                                        <td style='border-top:none;'><br/>Target</td>
+                                      </tr>
+                                      <tbody>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Score</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.confirmed240_score}}</td>
+                                        <td class='ontarget-popover-hover-value'>70</td>
+                                        <td class='ontarget-popover-hover-value'>--</td>
+                                      </tr>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Performance</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.confirmed240}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.confirmed240_avg}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.confirmed240ratetarget}}%</td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                "
+                                data-trigger="hover" bs-popover><i class="{{queryService.sc.info.exec_summary.confirmed240_check ? 'fa fa-check kpi-target-met' : 'fa fa-arrow-down kpi-target-down'}}"></i>
+                                </div>
+                              </td>
+
+							<!-- Price Competitiveness -->
+                            <td ng-if="showPriceCompete" style="width:70px;padding-top:18px;" align="center">
+                                <div class="pointer" data-placement="top" title="Price Competitiveness" html="true" 
+                                data-content="
+                                <table class='table' style='width:400px;' border='0'>
+                                      <tr class='ontarget-popover-hover-header'>
+                                        <td style='border-top:none;'><br/>&nbsp;</td>
+                                        <td style='border-top:none;'><br/>Supplier</td>
+                                        <td style='border-top:none;'>Supplier<br/>Average</td>
+                                        <td style='border-top:none;'><br/>Target</td>
+                                      </tr>
+                                      <tbody>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Score</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.price_competitiveness_score}}</td>
+                                        <td class='ontarget-popover-hover-value'>70</td>
+                                        <td class='ontarget-popover-hover-value'>--</td>
+                                      </tr>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Performance</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.price_competitiveness}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.price_competitiveness_avg}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.competitiveratetarget}}%</td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                "
+                                data-trigger="hover" bs-popover><i class="{{queryService.sc.info.exec_summary.price_competitiveness_check ? 'fa fa-check kpi-target-met' : 'fa fa-arrow-down kpi-target-down'}}"></i>
+                                </div>
+                              </td>
+
+                            <!-- Price Volatility -->
+                            <td ng-if="showPriceVol" style="width:70px;padding-top:18px;" align="center">
+                                <div class="pointer" data-placement="top" title="Price Volatility" html="true" 
+                                data-content="
+                                <table class='table' style='width:400px;' border='0'>
+                                      <tr class='ontarget-popover-hover-header'>
+                                        <td style='border-top:none;'><br/>&nbsp;</td>
+                                        <td style='border-top:none;'><br/>Supplier</td>
+                                        <td style='border-top:none;'>Supplier<br/>Average</td>
+                                        <td style='border-top:none;'><br/>Target</td>
+                                      </tr>
+                                      <tbody>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Score</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.seller_month_price_volatility_score}}</td>
+                                        <td class='ontarget-popover-hover-value'>70</td>
+                                        <td class='ontarget-popover-hover-value'>--</td>
+                                      </tr>
+                                      <tr>
+                                        <td class='ontarget-popover-hover-labels' style='border-top:none;'>Performance</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.seller_month_price_volatility}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.seller_month_price_volatility_avg}}%</td>
+                                        <td class='ontarget-popover-hover-value'>{{queryService.sc.info.exec_summary.volatilityratetarget}}%</td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                "
+                                data-trigger="hover" bs-popover><i class="{{queryService.sc.info.exec_summary.seller_month_price_volatility_check ? 'fa fa-check kpi-target-met' : 'fa fa-arrow-down kpi-target-down'}}"></i>
+                                </div>
+                              </td>
+                      </tr>
+                      <tr style="background:#DDDDDD;height:30px;">
+                        <td ng-if="showTotalFillRate" align="center"><i class="fa fa-shopping-basket icon-ontarget-small"></i></td>
+                        <td ng-if="showOntimePickup" align="center"><i class="fa fa-truck icon-ontarget-small"></i></td>
+                        <td ng-if="showCancellations" align="center"><i class="fa fa-ban icon-ontarget-small"></i></td>
+                        <td ng-if="showReconciliations" align="center"><i class="fa fa-random icon-ontarget-small"></i></td>
+                        <td ng-if="showResponsiveness" align="center"><i class="fa fa-mail-reply icon-ontarget-small"></i></td>
+                        <td ng-if="showPriceCompete" align="center"><i class="fa fa-bar-chart icon-ontarget-small"></i></td>
+                        <td ng-if="showPriceVol" align="center"><i class="fa fa-bolt icon-ontarget-small"></i></td>
+                      </tr>
+                    </table>
+
+                </div>
+                
+                
+            </div><!-- End row -->
+    </div><!-- End col-12 -->
+</div><!-- End Top Row --> 
+<div align="center" class="score-perf-content" style="border-top:15px solid #e4e4e4;margin-left:1%;width:98%;"></div>
+
+<!--<div class="score-perf-content" style="border-top:1px solid #e4e4e4;margin-top:5px;"></div>-->
+<!--<br/>-->
+
+
+
+<!-- Begin Middle Section and Category Section -->
+<!-- ***************************************** -->
+ <br/>
+  <div class="row container-fluid score-perf-content" ng-controller="ScorecardSummaryHeatMapController"> 
+    <!-- 90-Day Score Comparison --> 
+    <!-- *********************** -->
+    <div class="col-md-6">
+      <div style="color:#434343;"><span style="font-weight:600;">90-Day Score Comparison</span> <span style="font-weight:normal;">(YoY)</span></div>
+      <table class="table" style="width:auto;">
+        <tr>
+          <td align="center"  class="tbl-bootstrap-border-none"></td>
+          <td align="center"  class="tbl-bootstrap-border-none"><span class="tbl-heatmap-label-score">Score</span></td>
+          <td class="tbl-bootstrap-border-none" style="width:15px;">&nbsp;</td>
+          <td ng-if="showTotalFillRate" align="center"  class="tbl-bootstrap-border-none"><i style="font-size:13px;" class="fa fa-shopping-basket icon-ontarget-small"/></td>
+          <td ng-if="showOntimePickup" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-truck icon-ontarget-small"/></td>
+          <td ng-if="showCancellations" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-ban icon-ontarget-small"/></td>
+          <td ng-if="showReconciliations" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-random icon-ontarget-small"/></td>
+          <td ng-if="showResponsiveness" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-mail-reply icon-ontarget-small"/></td>
+          <td ng-if="showPriceCompete" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-bar-chart icon-ontarget-small" /></td>
+          <td ng-if="showPriceVol" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-bolt icon-ontarget-small"/></td>
+          <td ng-if="showPercentTarget" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-bullseye icon-ontarget-small"/></td>
+        </tr>
+        <tr ng-repeat="ninetyday in queryService.sc.info.ninetydays"><!-- Last 90 Days - 2016 -->
+          <td align="left"  class="tbl-bootstrap-border-none tbl-heatmap-y-label">{{ninetyday.name}}</td>
+          <td align="center"  class="tbl-heatmap-td"  ng-class="{'rate-terrible': ninetyday.score < '55', 'rate-poor': ninetyday.score >= '55' && ninetyday.score < '65', 'rate-fair': ninetyday.score >= '65' && ninetyday.score < '75','rate-good': ninetyday.score >= '75' && ninetyday.score < '85','rate-excellent': ninetyday.score >=  '85','no-data': ninetyday.nodata}">{{ninetyday.nodata ? 'No data available' : ninetyday.score}}</td>
+          <td class="tbl-bootstrap-border-none" style="width:15px;">&nbsp;</td>
+          <td ng-if="showTotalFillRate" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': ninetyday.fillrate < '55', 'rate-poor': ninetyday.fillrate >= '55' && ninetyday.fillrate < '65', 'rate-fair': ninetyday.fillrate >= '65' && ninetyday.fillrate < '75','rate-good': ninetyday.fillrate >= '75' && ninetyday.fillrate < '85','rate-excellent': ninetyday.fillrate >=  '85'}">{{ninetyday.fillrate}}</td>
+          <td ng-if="showOntimePickup" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': ninetyday.ontime < '55', 'rate-poor': ninetyday.ontime >= '55' && ninetyday.ontime < '65', 'rate-fair': ninetyday.ontime >= '65' && ninetyday.ontime < '75','rate-good': ninetyday.ontime >= '75' && ninetyday.ontime < '85','rate-excellent': ninetyday.ontime >=  '85'}">{{ninetyday.ontime}}</td>
+          <td ng-if="showCancellations" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': ninetyday.cancel < '55', 'rate-poor': ninetyday.cancel >= '55' && ninetyday.cancel < '65', 'rate-fair': ninetyday.cancel >= '65' && ninetyday.cancel < '75','rate-good': ninetyday.cancel >= '75' && ninetyday.cancel < '85','rate-excellent': ninetyday.cancel >=  '85'}">{{ninetyday.cancel}}</td>
+          <td ng-if="showReconciliations" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': ninetyday.reconcile < '55', 'rate-poor': ninetyday.reconcile >= '55' && ninetyday.reconcile < '65', 'rate-fair': ninetyday.reconcile >= '65' && ninetyday.reconcile < '75','rate-good': ninetyday.reconcile >= '75' && ninetyday.reconcile < '85','rate-excellent': ninetyday.reconcile >=  '85'}">{{ninetyday.reconcile}}</td>
+          <td ng-if="showResponsiveness" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': ninetyday.responsive < '55', 'rate-poor': ninetyday.responsive >= '55' && ninetyday.responsive < '65', 'rate-fair': ninetyday.responsive >= '65' && ninetyday.responsive < '75','rate-good': ninetyday.responsive >= '75' && ninetyday.responsive < '85','rate-excellent': ninetyday.responsive >=  '85'}">{{ninetyday.responsive}}</td>
+          <td ng-if="showPriceCompete" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': ninetyday.compete < '55', 'rate-poor': ninetyday.compete >= '55' && ninetyday.compete < '65', 'rate-fair': ninetyday.compete >= '65' && ninetyday.compete < '75','rate-good': ninetyday.compete >= '75' && ninetyday.compete < '85','rate-excellent': ninetyday.compete >=  '85'}">{{ninetyday.compete}}</td>
+          <td ng-if="showPriceVol" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': ninetyday.volatility < '55', 'rate-poor': ninetyday.volatility >= '55' && ninetyday.volatility < '65', 'rate-fair': ninetyday.volatility >= '65' && ninetyday.volatility < '75','rate-good': ninetyday.volatility >= '75' && ninetyday.volatility < '85','rate-excellent': ninetyday.volatility >=  '85'}">{{ninetyday.volatility}}</td>
+          <td ng-if="showPercentTarget" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': ninetyday.target < '55', 'rate-poor': ninetyday.target >= '55' && ninetyday.target < '65', 'rate-fair': ninetyday.target >= '65' && ninetyday.target < '75','rate-good': ninetyday.target >= '75' && ninetyday.target < '85','rate-excellent': ninetyday.target >=  '85'}">{{ninetyday.target}}</td>
+        </tr>
+        <tr>
+          <td class="tbl-bootstrap-border-none" colspan="11"></td>
+        </tr>
+        <tr ng-repeat="prevninetyday in queryService.sc.info.prevninetydays"> <!-- Same Period - 2015 -->
+          <td align="left"  class="tbl-bootstrap-border-none tbl-heatmap-y-label">{{prevninetyday.name}}</td>
+          <td align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevninetyday.score < '55', 'rate-poor': prevninetyday.score >= '55' && prevninetyday.score < '65', 'rate-fair': prevninetyday.score >= '65' && prevninetyday.score < '75','rate-good': prevninetyday.score >= '75' && prevninetyday.score < '85','rate-excellent': prevninetyday.score >=  '85','no-data': prevninetyday.nodata}">{{prevninetyday.nodata ? 'No data available' : prevninetyday.score}}</td>
+          <td class="tbl-bootstrap-border-none" style="width:15px;">&nbsp;</td>
+          <td ng-if="showTotalFillRate" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevninetyday.fillrate < '55', 'rate-poor': prevninetyday.fillrate >= '55' && prevninetyday.fillrate < '65', 'rate-fair': prevninetyday.fillrate >= '65' && prevninetyday.fillrate < '75','rate-good': prevninetyday.fillrate >= '75' && prevninetyday.fillrate < '85','rate-excellent': prevninetyday.fillrate >=  '85'}">{{prevninetyday.fillrate}}</td>
+          <td ng-if="showOntimePickup" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevninetyday.ontime < '55', 'rate-poor': prevninetyday.ontime >= '55' && prevninetyday.ontime < '65', 'rate-fair': prevninetyday.ontime >= '65' && prevninetyday.ontime < '75','rate-good': prevninetyday.ontime >= '75' && prevninetyday.ontime < '85','rate-excellent': prevninetyday.ontime >=  '85'}">{{prevninetyday.ontime}}</td>
+          <td ng-if="showCancellations" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevninetyday.cancel < '55', 'rate-poor': prevninetyday.cancel >= '55' && prevninetyday.cancel < '65', 'rate-fair': prevninetyday.cancel >= '65' && prevninetyday.cancel < '75','rate-good': prevninetyday.cancel >= '75' && prevninetyday.cancel < '85','rate-excellent': prevninetyday.cancel >=  '85'}">{{prevninetyday.cancel}}</td>
+          <td ng-if="showReconciliations" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevninetyday.reconcile < '55', 'rate-poor': prevninetyday.reconcile >= '55' && prevninetyday.reconcile < '65', 'rate-fair': prevninetyday.reconcile >= '65' && prevninetyday.reconcile < '75','rate-good': prevninetyday.reconcile >= '75' && prevninetyday.reconcile < '85','rate-excellent': prevninetyday.reconcile >=  '85'}">{{prevninetyday.reconcile}}</td>
+          <td ng-if="showResponsiveness" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevninetyday.responsive < '55', 'rate-poor': prevninetyday.responsive >= '55' && prevninetyday.responsive < '65', 'rate-fair': prevninetyday.responsive >= '65' && prevninetyday.responsive < '75','rate-good': prevninetyday.responsive >= '75' && prevninetyday.responsive < '85','rate-excellent': prevninetyday.responsive >=  '85'}">{{prevninetyday.responsive}}</td>
+          <td ng-if="showPriceCompete" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevninetyday.compete < '55', 'rate-poor': prevninetyday.compete >= '55' && prevninetyday.compete < '65', 'rate-fair': prevninetyday.compete >= '65' && prevninetyday.compete < '75','rate-good': prevninetyday.compete >= '75' && prevninetyday.compete < '85','rate-excellent': prevninetyday.compete >=  '85'}">{{prevninetyday.compete}}</td>
+          <td ng-if="showPriceVol" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevninetyday.volatility < '55', 'rate-poor': prevninetyday.volatility >= '55' && prevninetyday.volatility < '65', 'rate-fair': prevninetyday.volatility >= '65' && prevninetyday.volatility < '75','rate-good': prevninetyday.volatility >= '75' && prevninetyday.volatility < '85','rate-excellent': prevninetyday.volatility >=  '85'}">{{prevninetyday.volatility}}</td>
+          <td ng-if="showPercentTarget" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevninetyday.target < '55', 'rate-poor': prevninetyday.target >= '55' && prevninetyday.target < '65', 'rate-fair': prevninetyday.target >= '65' && prevninetyday.target < '75','rate-good': prevninetyday.target >= '75' && prevninetyday.target < '85','rate-excellent': prevninetyday.target >=  '85'}">{{prevninetyday.target}}</td>
+        </tr>
+      </table>
+    </div>
+    
+    <!-- Annual Score Comparison --> 
+    <!-- *********************** -->
+    <div class="col-md-6 p-left-60">
+      <div style="color:#434343;"><span style="font-weight:600;">Annual Score Comparison</span> <span style="font-weight:normal;"> (Rolling 365)</span></div>
+      <table class="table" style="width:auto;">
+        <tr>
+          <td align="center"  class="tbl-bootstrap-border-none"></td>
+          <td align="center"  class="tbl-bootstrap-border-none" ><span class="tbl-heatmap-label-score">Score</span></td>
+          <td class="tbl-bootstrap-border-none" style="width:15px;">&nbsp;</td>
+          <td ng-if="showTotalFillRate" align="center"  class="tbl-bootstrap-border-none"><i style="font-size:13px;" class="fa fa-shopping-basket icon-ontarget-small"/></td>
+          <td ng-if="showOntimePickup" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-truck icon-ontarget-small"/></td>
+          <td ng-if="showCancellations" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-ban icon-ontarget-small"/></td>
+          <td ng-if="showReconciliations" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-random icon-ontarget-small"/></td>
+          <td ng-if="showResponsiveness" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-mail-reply icon-ontarget-small"/></td>
+          <td ng-if="showPriceCompete" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-bar-chart icon-ontarget-small" /></td>
+          <td ng-if="showPriceVol" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-bolt icon-ontarget-small"/></td>
+          <td ng-if="showPercentTarget" align="center"  class="tbl-bootstrap-border-none"><i class="fa fa-bullseye icon-ontarget-small"/></td>
+        </tr>
+        <tr ng-repeat="threesixtyfiveday in queryService.sc.info.threesixtyfivedays">
+          <td align="left"  class="tbl-bootstrap-border-none tbl-heatmap-y-label">{{threesixtyfiveday.name}}</td>
+          <td align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': threesixtyfiveday.score < '55', 'rate-poor': threesixtyfiveday.score >= '55' && threesixtyfiveday.score < '65', 'rate-fair': threesixtyfiveday.score >= '65' && threesixtyfiveday.score < '75','rate-good': threesixtyfiveday.score >= '75' && threesixtyfiveday.score < '85','rate-excellent': threesixtyfiveday.score >=  '85','no-data': threesixtyfiveday.nodata}">{{threesixtyfiveday.nodata ? 'No data available' : threesixtyfiveday.score}}</td>
+          <td class="tbl-bootstrap-border-none" style="width:15px;">&nbsp;</td>
+          <td ng-if="showTotalFillRate" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': threesixtyfiveday.fillrate < '55', 'rate-poor': threesixtyfiveday.fillrate >= '55' && threesixtyfiveday.fillrate < '65', 'rate-fair': threesixtyfiveday.fillrate >= '65' && threesixtyfiveday.fillrate < '75','rate-good': threesixtyfiveday.fillrate >= '75' && threesixtyfiveday.fillrate < '85','rate-excellent': threesixtyfiveday.fillrate >=  '85'}">{{threesixtyfiveday.fillrate}}</td>
+          <td ng-if="showOntimePickup" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': threesixtyfiveday.ontime < '55', 'rate-poor': threesixtyfiveday.ontime >= '55' && threesixtyfiveday.ontime < '65', 'rate-fair': threesixtyfiveday.ontime >= '65' && threesixtyfiveday.ontime < '75','rate-good': threesixtyfiveday.ontime >= '75' && threesixtyfiveday.ontime < '85','rate-excellent': threesixtyfiveday.ontime >=  '85'}">{{threesixtyfiveday.ontime}}</td>
+          <td ng-if="showCancellations" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': threesixtyfiveday.cancel < '55', 'rate-poor': threesixtyfiveday.cancel >= '55' && threesixtyfiveday.cancel < '65', 'rate-fair': threesixtyfiveday.cancel >= '65' && threesixtyfiveday.cancel < '75','rate-good': threesixtyfiveday.cancel >= '75' && threesixtyfiveday.cancel < '85','rate-excellent': threesixtyfiveday.cancel >=  '85'}">{{threesixtyfiveday.cancel}}</td>
+          <td ng-if="showReconciliations" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': threesixtyfiveday.reconcile < '55', 'rate-poor': threesixtyfiveday.reconcile >= '55' && threesixtyfiveday.reconcile < '65', 'rate-fair': threesixtyfiveday.reconcile >= '65' && threesixtyfiveday.reconcile < '75','rate-good': threesixtyfiveday.reconcile >= '75' && threesixtyfiveday.reconcile < '85','rate-excellent': threesixtyfiveday.reconcile >=  '85'}">{{threesixtyfiveday.reconcile}}</td>
+          <td ng-if="showResponsiveness" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': threesixtyfiveday.responsive < '55', 'rate-poor': threesixtyfiveday.responsive >= '55' && threesixtyfiveday.responsive < '65', 'rate-fair': threesixtyfiveday.responsive >= '65' && threesixtyfiveday.responsive < '75','rate-good': threesixtyfiveday.responsive >= '75' && threesixtyfiveday.responsive < '85','rate-excellent': threesixtyfiveday.responsive >=  '85'}">{{threesixtyfiveday.responsive}}</td>
+          <td ng-if="showPriceCompete" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': threesixtyfiveday.compete < '55', 'rate-poor': threesixtyfiveday.compete >= '55' && threesixtyfiveday.compete < '65', 'rate-fair': threesixtyfiveday.compete >= '65' && threesixtyfiveday.compete < '75','rate-good': threesixtyfiveday.compete >= '75' && threesixtyfiveday.compete < '85','rate-excellent': threesixtyfiveday.compete >=  '85'}">{{threesixtyfiveday.compete}}</td>
+          <td ng-if="showPriceVol" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': threesixtyfiveday.volatility < '55', 'rate-poor': threesixtyfiveday.volatility >= '55' && threesixtyfiveday.volatility < '65', 'rate-fair': threesixtyfiveday.volatility >= '65' && threesixtyfiveday.volatility < '75','rate-good': threesixtyfiveday.volatility >= '75' && threesixtyfiveday.volatility < '85','rate-excellent': threesixtyfiveday.volatility >=  '85'}">{{threesixtyfiveday.volatility}}</td>
+          <td ng-if="showPercentTarget" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': threesixtyfiveday.target < '55', 'rate-poor': threesixtyfiveday.target >= '55' && threesixtyfiveday.target < '65', 'rate-fair': threesixtyfiveday.target >= '65' && threesixtyfiveday.target < '75','rate-good': threesixtyfiveday.target >= '75' && threesixtyfiveday.target < '85','rate-excellent': threesixtyfiveday.target >=  '85'}">{{threesixtyfiveday.target}}</td>
+        </tr>
+        <tr>
+          <td class="tbl-bootstrap-border-none" colspan="11"></td>
+        </tr>
+        <tr ng-repeat="prevthreesixtyfiveday in queryService.sc.info.prevthreesixtyfivedays">
+          <td align="left"  class="tbl-bootstrap-border-none tbl-heatmap-y-label">{{prevthreesixtyfiveday.name}}</td>
+          <td align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevthreesixtyfiveday.score < '55', 'rate-poor': prevthreesixtyfiveday.score >= '55' && prevthreesixtyfiveday.score < '65', 'rate-fair': prevthreesixtyfiveday.score >= '65' && prevthreesixtyfiveday.score < '75','rate-good': prevthreesixtyfiveday.score >= '75' && prevthreesixtyfiveday.score < '85','rate-excellent': prevthreesixtyfiveday.score >=  '85','no-data': prevthreesixtyfiveday.nodata}">{{prevthreesixtyfiveday.nodata ? 'No data available' : prevthreesixtyfiveday.score}}</td>
+          <td class="tbl-bootstrap-border-none" style="width:15px;">&nbsp;</td>
+          <td ng-if="showTotalFillRate" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevthreesixtyfiveday.fillrate < '55', 'rate-poor': prevthreesixtyfiveday.fillrate >= '55' && prevthreesixtyfiveday.fillrate < '65', 'rate-fair': prevthreesixtyfiveday.fillrate >= '65' && prevthreesixtyfiveday.fillrate < '75','rate-good': prevthreesixtyfiveday.fillrate >= '75' && prevthreesixtyfiveday.fillrate < '85','rate-excellent': prevthreesixtyfiveday.fillrate >=  '85'}">{{prevthreesixtyfiveday.fillrate}}</td>
+          <td ng-if="showOntimePickup" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevthreesixtyfiveday.ontime < '55', 'rate-poor': prevthreesixtyfiveday.ontime >= '55' && prevthreesixtyfiveday.ontime < '65', 'rate-fair': prevthreesixtyfiveday.ontime >= '65' && prevthreesixtyfiveday.ontime < '75','rate-good': prevthreesixtyfiveday.ontime >= '75' && prevthreesixtyfiveday.ontime < '85','rate-excellent': prevthreesixtyfiveday.ontime >=  '85'}">{{prevthreesixtyfiveday.ontime}}</td>
+          <td ng-if="showCancellations" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevthreesixtyfiveday.cancel < '55', 'rate-poor': prevthreesixtyfiveday.cancel >= '55' && prevthreesixtyfiveday.cancel < '65', 'rate-fair': prevthreesixtyfiveday.cancel >= '65' && prevthreesixtyfiveday.cancel < '75','rate-good': prevthreesixtyfiveday.cancel >= '75' && prevthreesixtyfiveday.cancel < '85','rate-excellent': prevthreesixtyfiveday.cancel >=  '85'}">{{prevthreesixtyfiveday.cancel}}</td>
+          <td ng-if="showReconciliations" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevthreesixtyfiveday.reconcile < '55', 'rate-poor': prevthreesixtyfiveday.reconcile >= '55' && prevthreesixtyfiveday.reconcile < '65', 'rate-fair': prevthreesixtyfiveday.reconcile >= '65' && prevthreesixtyfiveday.reconcile < '75','rate-good': prevthreesixtyfiveday.reconcile >= '75' && prevthreesixtyfiveday.reconcile < '85','rate-excellent': prevthreesixtyfiveday.reconcile >=  '85'}">{{prevthreesixtyfiveday.reconcile}}</td>
+          <td ng-if="showResponsiveness" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevthreesixtyfiveday.responsive < '55', 'rate-poor': prevthreesixtyfiveday.responsive >= '55' && prevthreesixtyfiveday.responsive < '65', 'rate-fair': prevthreesixtyfiveday.responsive >= '65' && prevthreesixtyfiveday.responsive < '75','rate-good': prevthreesixtyfiveday.responsive >= '75' && prevthreesixtyfiveday.responsive < '85','rate-excellent': prevthreesixtyfiveday.responsive >=  '85'}">{{prevthreesixtyfiveday.responsive}}</td>
+          <td ng-if="showPriceCompete" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevthreesixtyfiveday.compete < '55', 'rate-poor': prevthreesixtyfiveday.compete >= '55' && prevthreesixtyfiveday.compete < '65', 'rate-fair': prevthreesixtyfiveday.compete >= '65' && prevthreesixtyfiveday.compete < '75','rate-good': prevthreesixtyfiveday.compete >= '75' && prevthreesixtyfiveday.compete < '85','rate-excellent': prevthreesixtyfiveday.compete >=  '85'}">{{prevthreesixtyfiveday.compete}}</td>
+          <td ng-if="showPriceVol" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevthreesixtyfiveday.volatility < '55', 'rate-poor': prevthreesixtyfiveday.volatility >= '55' && prevthreesixtyfiveday.volatility < '65', 'rate-fair': prevthreesixtyfiveday.volatility >= '65' && prevthreesixtyfiveday.volatility < '75','rate-good': prevthreesixtyfiveday.volatility >= '75' && prevthreesixtyfiveday.volatility < '85','rate-excellent': prevthreesixtyfiveday.volatility >=  '85'}">{{prevthreesixtyfiveday.volatility}}</td>
+          <td ng-if="showPercentTarget" align="center"  class="tbl-heatmap-td" ng-class="{'rate-terrible': prevthreesixtyfiveday.target < '55', 'rate-poor': prevthreesixtyfiveday.target >= '55' && prevthreesixtyfiveday.target < '65', 'rate-fair': prevthreesixtyfiveday.target >= '65' && prevthreesixtyfiveday.target < '75','rate-good': prevthreesixtyfiveday.target >= '75' && prevthreesixtyfiveday.target < '85','rate-excellent': prevthreesixtyfiveday.target >=  '85'}">{{prevthreesixtyfiveday.target}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  
+</div><!-- End top 2 sections -->
+
+<div class="score-perf-content" style="height:25px;"></div>
+<!--<div class="m-top-25">-->
+
+<!-- Bottom Heat map - Performance Breakout -->
+<!-- ************************************** -->
+
+<!--<div>-->
+     <div style="background:#e4e4e4;" class="navbar">
+      <p class="txtOverviewNav"><span style="font-size:1.2em;">Performance Breakout</span> 
+      <span style="padding-top:5px;padding-right:260px;font-size:14px;" class="pull-right">View By</span>
+      <!-- Hide for push to dev - uat -->
+     <!-- <span style="padding-top:5px;padding-right:260px;font-size:14px;visibility:hidden;" class="pull-right">View By</span> -->
+      </p>
+     </div>
+
+      <!-- ScorecardTemplateController - for drop down temlate selection -->
+      <div ng-controller="ScorecardTemplateController">
+          <div class="pull-right" style="position:relative;bottom:62px;right:10px;z-index:9;">
+            <select style="width:240px;font-size:13px;" class="form-control" ng-model="template" ng-options="t.name for t in templates">
+            </select>
+          <!-- Hide for push to dev - uat -->
+          <!--  <select style="width:240px;font-size:13px;visibility:hidden;" class="form-control" ng-model="template" ng-options="t.name for t in templates">
+            </select> -->
+
+          </div>
+		  
+          <!-- Moved heat map to separate templates using controller -->
+          <div class="row container-fluid" style="margin-top:0px;" ng-controller="ScorecardSummaryHeatMapController"> 
+            <!-- Include for appropriate category template --> 
+            <!-- *********************** -->
+             <div class="col-md-12" ng-include="template.url"> </div>
+
+        
+          </div>
+      </div><!-- Close ScorecardTemplateController - dropdown -->
+
+
+<br/>
+<br/>
+<!--</div>--><!-- End Middle and Bottom Section Controller -->
+
+<script>
+$('#toggle-score-perf').click(function(){
+	$('.score-perf-content').slideToggle();
+	$('.icon-toggle-down').toggle();
+	$('.icon-toggle-up').toggle();
+})
+</script>

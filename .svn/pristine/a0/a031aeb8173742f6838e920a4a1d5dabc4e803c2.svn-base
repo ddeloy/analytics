@@ -1,0 +1,437 @@
+<!-- Leave these style in page for now for ske of convenience - will move to main.css -->
+<style>
+.div-reset-kpi {
+	position: absolute;
+	top: -10px;
+	right: 15px;
+	z-index: 9999999;
+	border: 1px solid #337ab7;
+}
+.kpi-thead {
+	font-size: 14px;
+	color: #666666;
+	background: #f8f8f8;
+	font-weight: 600;
+}
+.kpi-display-name {
+	font-size: 16px;
+	font-weight: 600;
+	color: #434343;
+}
+.kpi-group-title {
+	font-size: 13px;
+	color: #4A7295;
+	font-weight: normal;
+}
+.kpi-target-text {
+	font-size: 18px;
+	font-weight: 600;
+	color: #434343;
+}
+.weight-l-m-h {
+	font-size: 10px;
+	font-weight: 300;
+	color: #5E5E5E;
+}
+.modal-header {
+	background: #E5F3FF;
+	font-size: 18px;
+	color: #4A7295;
+	border: 1px solid #E5F3FF;
+}
+.modal-footer {
+	background: white;
+}
+</style>
+
+<div ng-controller="KpiSettingsController" ng-init="queryActiveSettings()">
+  <div class="row container-fluid navbar navbar-fixed-top navbar-tools-fixed" style="z-index:99;">
+    <div class="col-md-12">
+      <div class="row"><!-- Beging top row -->
+        <div class="col-md-7"><span class="navTitileText">KPI Settings</span> </div>
+        <!-- End col with header title --> 
+        
+      </div>
+      <!-- End top row --> 
+      
+    </div>
+  </div>
+  <div  class="container-fluid" style="position:relative;top:10px;">
+    <div class="row bg-white">
+      <div class="col-md-12"><a href="javascript:void(0);" id="toggle-biz-insights" class="pull-right icon-biz-insights"><img class="iconToggleUp" src="images/icon-toggle-up.png" width="40" height="22"><img class="iconToggleDown" src="images/icon-toggle-down.png" width="40" height="22"></a></div>
+    </div>
+    <div class="row container-fluid">
+      <div class="col-md-12 container-fluid biz-insights-content">
+        <div class="row container-fluid border-biz-insights-content">
+          <div class="row container-fluid"> <br/>
+            <div class="col-md-3">
+              <p class="info-panel-top"><i class="fa fa-bookmark header-icons"></i><span>Score</span></p>
+            </div>
+            <div class="col-md-3"> </div>
+            <div class="col-md-3">
+              <p class="info-panel-top"><span class="p-right-10">Weighting</span><span class="header-icons"><img src="images/icon_slider.png" width="44" height="9" /></span></p>
+            </div>
+            <div class="col-md-3">
+              <p class="info-panel-top"><span class="p-right-10">Target</span><i class="fa fa-bullseye header-icons"></i></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="biz-insights-sec-content">
+                <div class="col-md-3">
+                  <p class="kpi-descript">iTrade’s supplier score is based on performance KPIs. Every KPI has an average value; thus, average performance in KPI “X” will result in a KPI value of 70. The overall supplier score is calculated from these averaged KPI values.</p>
+                  <p class="kpi-descript">Each category a supplier sells is also assigned a score based on the same breakdown of KPI measures.</p>
+                </div>
+                <div class="col-md-3"> <span class="kpi-descript p-left-25"><strong>Score Performance Ranges</strong></span>
+                  <ul>
+                    <li>Excellent – Scores greater than 85</li>
+                    <li>Good – Scores between 75 and 84</li>
+                    <li>Fair – Scores between 65 and 74</li>
+                    <li>Poor – Scores between 55 and 64</li>
+                    <li>Terrible – Scores less than 55</li>
+                  </ul>
+                </div>
+                <div class="col-md-3">
+                  <p class="kpi-descript">Each KPI can be weighted according to its importance in the organization. By default, all KPIs are given a ‘medium’ weight. If set to a ‘Low’ weight, a KPI will contribute half as much to the score formula as a ‘Medium’ weighted KPI.  At a ‘High’ weight, a KPI will contribute twice as much.</p>
+                  <p class="kpi-descript">Any change to the weightings will recalculate the score and may impact previous assessments.</p>
+                </div>
+                <div class="col-md-3">
+                  <p class="kpi-descript">Targets are useful to judge whether a supplier is performing against expectations. When in use, the target appears as an orange line on the performance trend chart for that KPI in the supplier’s scorecard. </p>
+                  <p class="kpi-descript">The default ‘Target’ setting for each KPI is at the 90th percentile of supplier performance for a given KPI. </p>
+                </div>
+              </div>
+              <!-- end col --> 
+            </div>
+            <!-- end row --> 
+          </div>
+          <br/>
+        </div>
+      </div>
+    </div>
+    <br/>
+    <!-- RESET KPI MODAL -->
+    <div id="resetKPI" class="modal" role="dialog">
+      <div class="modal-dialog"> 
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+            <h4 class="modal-title">Confirm Reset Request</h4>
+          </div>
+          <div class="modal-body">
+            <p>This change can have a significant impact on how supplier scores are calculated and will affect all PMA users in your organization.</p>
+          </div>
+          <div class="modal-footer"> 
+            <!--  <a id="closeResetModal" class="p-right-20" href="javascript:void(0);" data-dismiss="modal">Cancel</a>-->
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button id="btnResetKPI" analytics-on analytics-event="tools - reset" analytics-category="Tools" analytics-label="User reset kpi settings to defaults" type="button" class="btn btn-primary" data-dismiss="modal" ng-click="queryActiveSettings('recommend_kpis');">Confirm Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END RESET KPI MODAL --> 
+    
+    <!-- Reset KPI button and help -->
+    <div class="row"><!-- Beging top row -->
+      <div class="col-md-7">
+        <p class="header-text-inside p-top-10"><strong>Note:</strong> The “On Target” KPI may cause a minor delay in score calculation changes (up to 24 hours) when other KPI settings are adjusted.</p>
+      </div>
+      <div class="col-md-5"><!-- Reset col --> 
+        <!-- Rest button -->
+        <button ng-disabled='presentation' type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#resetKPI">Revert Settings to Default</button>
+        <!-- Help popover --> 
+        <span class="pull-right" data-placement="top" data-content="This action resets the scoring mechanism to the original state. All KPIs will be included in the scoring formula and all weights will be set to Medium." data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/></span> </div>
+      <!-- End reset col --> 
+    </div>
+    <!-- End top row --> 
+    <!-- Reset KPI button and help -->
+    
+    <div class="row m-top-10"> 
+      
+      <!-- Begin Service -->
+      <div class="col-md-12"> 
+        <!-- Service -->
+        <form novalidate="novalidate" name="serviceTargetForm">
+          <table id="kpi-settings-service" class="table  table-responsive">
+            <thead>
+              <tr class="kpi-thead">
+                <th>KPI Name</th>
+                <th>Definition</th>
+                <th>Significance</th>
+                <th align="center"></th>
+                <th align="center">KPI Active</th>
+                <th colspan="3"><div align="center">Weight</div></th>
+                <th>Target</th>
+                <th>Edit</th>
+              </tr>
+              <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th><div class="weight-l-m-h" align="left">L</div></th>
+                <th><div class="weight-l-m-h" align="center">M</div></th>
+                <th><div class="weight-l-m-h" align="right">H</div></th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+              </tr>
+              <tr style="border-bottom:2px solid #a4b8c9;">
+                <th class="kpi-group-title">Service</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="setting in settingsService" ng-controller="KpiSettingsController">
+                <td style="width:16%;" class="kpi-display-name">{{setting.displayName}}</td>
+                <td style="width:26%;">{{setting.definition}}</td>
+                <td style="width:26%;">{{setting.significance}}</td>
+                <td style="width:2%;" align="center">&nbsp;</td>
+                <td align="center"><span ng-if="!editSettings"><i ng-show="!setting.includeInScoreCalculation" class="kpi-icon fa fa-1x fa-ban"></i><i ng-show="setting.includeInScoreCalculation" class="kpi-icon fa fa-1x fa-check"></i><span> <!--{{setting.displayName}}--> </span></span> <span ng-if="editSettings">
+                  <label style="font-weight:normal;">
+                    <input ng-true-value="true" ng-false-value="false"  type="checkbox" ng-model="setting.includeInScoreCalculation">
+                    Include KPI in Score </label>
+                  </span></td>
+                <td style="width:15%;" colspan="3"><div class="slider-dir">
+                    <rzslider rz-slider-model="setting.wt"
+                  rz-slider-floor="1"
+                  rz-slider-ceil="3"
+                  rz-slider-disabled="disableSlider || !setting.includeInScoreCalculation"
+                  rz-slider-show-ticks-value="false"></rzslider>
+                  </div></td>
+                <td align="center"><span ng-if="!editSettings"><span class="kpi-target-text">{{setting.target}}%</span></span> <span ng-if="editSettings">
+                  <input ng-disabled="!setting.includeInScoreCalculation"  name="servicetarget" class="form-control" type="number" min="0" max="120" step="10" ng-model="setting.target" required style="width:80px;">
+                  <div role="alert"> <span class="text-danger" ng-show="serviceTargetForm.servicetarget.$error.required"> <small>Valid number required!</small></span> <span class="text-danger" ng-show="serviceTargetForm.servicetarget.$error.number"> <small> Not a valid number!</small></span> <span class="text-danger" ng-show="serviceTargetForm.servicetarget.$error.max"> <small> Max not to exceed 120!</small></span> <span class="text-danger" ng-show="serviceTargetForm.servicetarget.$error.min"> <small> Min must be 10 or more!</small></span> </div>
+                  </span> <span style="display:none;"> <!-- Do not display the show target option per Kris --> 
+                  <!-- When include in score calculation is checked - use ng-init to trigger value of true for setting.display -->
+                  <label ng-if="setting.includeInScoreCalculation" style="font-weight:normal;">
+                    <input ng-true-value="true" ng-false-value="false" ng-init="setting.display=true" type="checkbox" ng-model="setting.display"/>
+                    Show Target </label>
+                  <!-- When include in score calculation is unchecked - use ng-init to trigger value of false for setting.display -->
+                  <label ng-if="!setting.includeInScoreCalculation" style="font-weight:normal;">
+                    <input ng-disabled="!setting.includeInScoreCalculation" ng-init="setting.display=false" ng-true-value="true" ng-false-value="false" type="checkbox" ng-model="setting.display"/>
+                    Show Target </label>
+                  </span></td>
+                <td><button ng-disabled="presentation" ng-hide="editSettings"  class="btn btn-default btn-xs" ng-click="showEditSettings()"><i class="fa fa-pencil"></i></button>
+                  <button  analytics-on analytics-event="tools - service kpi" analytics-category="Tools" analytics-label="User modified a service kpi" ng-show="editSettings" ng-disabled="serviceTargetForm.$invalid" class="btn btn-primary btn-xs" ng-click="saveSettings(setting.name)">Save</button>
+                  <br/>
+                  <br/>
+                  <a href="javascript:void(0);" ng-show="editSettings" ng-click="cancelSettings(setting.name);">Cancel</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+        
+        <!-- End Service --> 
+      </div>
+      <!-- End column --> 
+    </div>
+    <!-- End row -->
+    <div class="row m-top-10">
+      <div class="col-md-12"> 
+        <!-- Price -->
+        <form novalidate="novalidate" name="priceTargetForm">
+          <table id="kpi-settings-pricing" class="table  table-responsive" style="position:relative;bottom:60px;">
+            <thead>
+              <tr style="visibility:hidden;" class="kpi-thead">
+                <th>KPI Name</th>
+                <th>Definition</th>
+                <th>Significance</th>
+                <th align="center">X</th>
+                <th align="center">KPI Active</th>
+                <th colspan="3"><div align="center">Weight</div></th>
+                <th>Target</th>
+                <th>Edit</th>
+              </tr>
+              <tr style="visibility:hidden;">
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th><div class="weight-l-m-h" align="left">L</div></th>
+                <th><div class="weight-l-m-h" align="center">M</div></th>
+                <th><div class="weight-l-m-h" align="right">H</div></th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+              </tr>
+              <tr style="border-bottom:2px solid #a4b8c9;">
+                <th class="kpi-group-title">Price</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="setting in settingsPrice" ng-controller="KpiSettingsController">
+                <td style="width:16%;" class="kpi-display-name">{{setting.displayName}}</td>
+                <td style="width:26%;">{{setting.definition}}</td>
+                <td style="width:26%;">{{setting.significance}}</td>
+                <td style="width:2%;" align="center">&nbsp;</td>
+                <td align="center"><span ng-if="!editSettings"><i ng-show="!setting.includeInScoreCalculation" class="kpi-icon fa fa-1x fa-ban"></i><i ng-show="setting.includeInScoreCalculation" class="kpi-icon fa fa-1x fa-check"></i><span> <!--{{setting.displayName}}--> </span></span> <span ng-if="editSettings">
+                  <label style="font-weight:normal;">
+                    <input ng-true-value="true" ng-false-value="false"  type="checkbox" ng-model="setting.includeInScoreCalculation">
+                    Include in KPI Score </label>
+                  </span></td>
+                <td style="width:15%;" colspan="3"><div class="slider-dir">
+                    <rzslider rz-slider-model="setting.wt"
+                  rz-slider-floor="1"
+                  rz-slider-ceil="3"
+                  rz-slider-disabled="disableSlider || !setting.includeInScoreCalculation"
+                  rz-slider-show-ticks-value="false"></rzslider>
+                  </div></td>
+                <td align="center"><span ng-if="!editSettings"><span class="kpi-target-text">{{setting.target}}%</span></span> <span ng-if="editSettings">
+                  <input ng-disabled="!setting.includeInScoreCalculation" class="form-control" type="number" name="pricetarget" min="0" max="120" step="10" ng-model="setting.target"  required="required" style="width:80px;">
+                  <div role="alert"> <span class="text-danger" ng-show="priceTargetForm.pricetarget.$error.required"> <small>Valid number required!</small></span> <span class="text-danger" ng-show="priceTargetForm.pricetarget.$error.number"> <small> Not a valid number!</small></span> <span class="text-danger" ng-show="priceTargetForm.pricetarget.$error.max"> <small> Max not to exceed 120!</small></span> <span class="text-danger" ng-show="priceTargetForm.pricetarget.$error.min"> <small> Min must be 10 or more!</small></span> </div>
+                  </span> <span style="display:none;"> <!-- Do not display the show target option per Kris --> 
+                  <!-- When include in score calculation is checked - use ng-init to trigger value of true for setting.display -->
+                  <label ng-if="setting.includeInScoreCalculation" ng-init="setting.display=true" style="font-weight:normal;">
+                    <input ng-true-value="true" ng-false-value="false" type="checkbox" ng-model="setting.display"/>
+                    Show Target </label>
+                  <!-- When include in score calculation is unchecked - use ng-init to trigger value of false for setting.display -->
+                  <label ng-if="!setting.includeInScoreCalculation" style="font-weight:normal;">
+                    <input ng-disabled="!setting.includeInScoreCalculation" ng-init="setting.display=false" ng-true-value="true" ng-false-value="false" type="checkbox" ng-model="setting.display"/>
+                    Show Target </label>
+                  </span></td>
+                <td><button ng-disabled="presentation" ng-hide="editSettings"  class="btn btn-default btn-xs" ng-click="showEditSettings()"><i class="fa fa-pencil"></i></button>
+                  <button analytics-on analytics-event="tools - price kpi" analytics-category="Tools" analytics-label="User modified a price kpi" ng-show="editSettings"  class="btn btn-primary btn-xs" ng-disabled="priceTargetForm.$invalid" ng-click="saveSettings(setting.name)">Save</button>
+                  <br/>
+                  <br/>
+                  <a href="javascript:void(0);" ng-show="editSettings" ng-click="cancelSettings(setting.name);">Cancel</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+        
+        <!-- End Price --> 
+      </div>
+      <!-- .table-responsive --> 
+      <!--   <br/>
+      <br/> --> 
+    </div>
+    
+    <!-- On Target -->
+    <div class="row">
+      <div class="col-md-12"> 
+        <!-- Price -->
+        <form novalidate="novalidate" name="percentTargetForm">
+          <table id="kpi-settings-other" class="table  table-responsive" style="position:relative;bottom:115px;">
+            <thead>
+              <tr style="visibility:hidden;" class="kpi-thead">
+                <th>KPI Name</th>
+                <th>Definition</th>
+                <th>Significance</th>
+                <th align="center">X</th>
+                <th align="center">KPI Active</th>
+                <th colspan="3"><div align="center">Weight</div></th>
+                <th>Target</th>
+                <th>Edit</th>
+              </tr>
+              <tr style="visibility:hidden;">
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th><div class="weight-l-m-h" align="left">L</div></th>
+                <th><div class="weight-l-m-h" align="center">M</div></th>
+                <th><div class="weight-l-m-h" align="right">H</div></th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+              </tr>
+              <tr style="border-bottom:2px solid #a4b8c9;">
+                <th class="kpi-group-title">Target</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="setting in settingsOther" ng-controller="KpiSettingsController">
+                <td style="width:16%;" class="kpi-display-name">{{setting.displayName}}</td>
+                <td style="width:26%;">{{setting.definition}}</td>
+                <td style="width:26%;">{{setting.significance}}</td>
+                <td style="width:2%;" align="center">&nbsp;</td>
+                <td align="center"><span ng-if="!editSettings"><i ng-show="!setting.includeInScoreCalculation" class="kpi-icon fa fa-1x fa-ban"></i><i ng-show="setting.includeInScoreCalculation" class="kpi-icon fa fa-1x fa-check"></i><span> <!--{{setting.displayName}}--> </span></span> <span ng-if="editSettings">
+                  <label style="font-weight:normal;">
+                    <input ng-true-value="true" ng-false-value="false"  type="checkbox" ng-model="setting.includeInScoreCalculation">
+                    Include in KPI Score </label>
+                  </span></td>
+                <td style="width:15%;" colspan="3"><div class="slider-dir">
+                    <rzslider rz-slider-model="setting.wt"
+                  rz-slider-floor="1"
+                  rz-slider-ceil="3"
+                  rz-slider-disabled="disableSlider || !setting.includeInScoreCalculation"
+                  rz-slider-show-ticks-value="false"></rzslider>
+                  </div></td>
+                <td align="center"><span ng-if="!editSettings"><span class="kpi-target-text"><!--{{setting.target}}%-->N/A</span></span> <span ng-if="editSettings">
+                  <input style="display:none;width:80px;" ng-disabled="!setting.includeInScoreCalculation" class="form-control" type="number" name="pricetarget" min="0" max="120" step="10" ng-model="setting.target"  required="required"/>
+                  <div style="display:none;" role="alert"> <span class="text-danger" ng-show="priceTargetForm.pricetarget.$error.required"> <small>Valid number required!</small></span> <span class="text-danger" ng-show="priceTargetForm.pricetarget.$error.number"> <small> Not a valid number!</small></span> <span class="text-danger" ng-show="priceTargetForm.pricetarget.$error.max"> <small> Max not to exceed 120!</small></span> <span class="text-danger" ng-show="priceTargetForm.pricetarget.$error.min"> <small> Min must be 10 or more!</small></span> </div>
+                  </span> <span style="display:none;"> <!-- Do not display the show target option per Kris --> 
+                  <!-- When include in score calculation is checked - use ng-init to trigger value of true for setting.display -->
+                  <label ng-if="setting.includeInScoreCalculation" ng-init="setting.display=true" style="font-weight:normal;">
+                    <input ng-true-value="true" ng-false-value="false" type="checkbox" ng-model="setting.display"/>
+                    Show Target </label>
+                  <!-- When include in score calculation is unchecked - use ng-init to trigger value of false for setting.display -->
+                  <label ng-if="!setting.includeInScoreCalculation" style="font-weight:normal;">
+                    <input ng-disabled="!setting.includeInScoreCalculation" ng-init="setting.display=false" ng-true-value="true" ng-false-value="false" type="checkbox" ng-model="setting.display"/>
+                    Show Target </label>
+                  </span></td>
+                <td><button ng-disabled="presentation" ng-hide="editSettings"  class="btn btn-default btn-xs" ng-click="showEditSettings()"><i class="fa fa-pencil"></i></button>
+                  <button analytics-on analytics-event="tools - price kpi" analytics-category="Tools" analytics-label="User modified a price kpi" ng-show="editSettings"  class="btn btn-primary btn-xs" ng-disabled="priceTargetForm.$invalid" ng-click="saveSettings(setting.name)">Save</button>
+                  <br/>
+                  <br/>
+                  <a href="javascript:void(0);" ng-show="editSettings" ng-click="cancelSettings(setting.name);">Cancel</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+        
+        <!-- End Price --> 
+      </div>
+      <!-- .table-responsive --> 
+      <br/>
+      <br/>
+    </div>
+    
+    <!-- ------------------ --> 
+    
+  </div>
+</div>
+</div>
+</div>
+<script>
+$('#toggle-biz-insights').click(function(){
+	$('.biz-insights-sec-content').slideToggle();
+	$('.iconToggleDown').toggle();
+	$('.iconToggleUp').toggle();
+})
+/*$('#btnResetKPI').click(function(){
+	$('#closeResetModal').trigger('click');
+})
+*/
+
+	
+	
+	
+</script>

@@ -1,0 +1,102 @@
+<div class="modal" tabindex="-1" role="dialog" id="itnInfoModal">
+<!-- Use in page style to override globals -->
+<style>
+.input-group-addon {
+	padding: 0px 3px;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 1;
+	color: #555;
+	text-align: center;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	border-radius: 0px;
+}
+.input-group-addon, .input-group-btn {
+	width: 1%;
+	white-space: nowrap;
+	vertical-align: middle;
+}
+.modal-header {
+	background:#E5F3FF;
+	font-size:18px;
+	color:#4A7295;
+	border:1px solid #E5F3FF;
+}
+.modal-footer{
+	background:white;
+}
+.field-name {
+	font-size:14px;
+	color:#333333;
+}
+</style>
+  <div class="modal-dialog" ng-controller="ModalCtrl">
+  <form novalidate name="addUserForm" ng-submit="addUser(true, 0)" class="css-form">
+    <div class="modal-content">
+      <div class="modal-header" ng-show="title">
+        <button type="button" class="close" ng-click="$hide()"><i class="fa fa-times-circle"></i></button>
+        <p class="modal-title">Create User Account</p>
+      </div>
+      <div class="modal-body text-info" ng-show="content">
+        <div class="pull-right">
+          <div style="border-left:6px solid #FF8C00;">&nbsp;<span class="modal-required-field-descrip"> = Required Field</span></div>
+        </div>
+        <br class="clear"/>
+        <div class="m-btm-20">
+          <p class="field-name">Last Name</p>
+          <div class="input-group">
+            <div ng-hide="addUserForm.$submitted && addUserForm.userLastName.$error.required || addUserForm.userLastName.$touched && addUserForm.userLastName.$error.required" class="input-group-addon" style="background-color:#FF8C00;"></div>
+            <div ng-show="addUserForm.$submitted && addUserForm.userLastName.$error.required || addUserForm.userLastName.$touched && addUserForm.userLastName.$error.required" class="input-group-addon" style="background-color:#B22222;"></div>
+            <input name="userLastName" id="ln" class="form-control" type="text" ng-model="user.lastname" required />
+          </div>
+          <span ng-show="addUserForm.$submitted || addUserForm.userLastName.$touched"> <span class="form-validate-text" ng-show="addUserForm.userLastName.$error.required">Required field</span> </span> </div>
+        <div class="m-btm-20">
+          <p class="field-name">First Name</p>
+          <div class="input-group">
+            <div ng-hide="addUserForm.$submitted && addUserForm.userFirstName.$error.required || addUserForm.userFirstName.$touched && addUserForm.userFirstName.$error.required" class="input-group-addon" style="background-color:#FF8C00;"></div>
+            <div ng-show="addUserForm.$submitted && addUserForm.userFirstName.$error.required || addUserForm.userFirstName.$touched && addUserForm.userFirstName.$error.required" class="input-group-addon" style="background-color:#B22222;"></div>
+            <input name="userFirstName" id="fn" class="form-control" type="text" ng-model="user.firstname" required />
+          </div>
+          <span ng-show="addUserForm.$submitted || addUserForm.userFirstName.$touched"> <span class="form-validate-text" ng-show="addUserForm.userFirstName.$error.required">Required field</span> </span> </div>
+        <div class="m-btm-20">
+          <p class="field-name">User Role</p>
+          <div class="input-group">
+            <div ng-hide="addUserForm.$submitted && addUserForm.userRole.$error.required || addUserForm.userRole.$touched && addUserForm.userRole.$error.required" class="input-group-addon" style="background-color:#FF8C00;"></div>
+            <div ng-show="addUserForm.$submitted && addUserForm.userRole.$error.required || addUserForm.userRole.$touched && addUserForm.userRole.$error.required" class="input-group-addon" style="background-color:#B22222;"></div>
+            <select name="userRole" id="role" class="form-control form-required" ng-model="user.userrole" required>
+              <option value="Admin">Admin</option>
+              <option value="Standard">Standard</option>
+			  <option value="Presentation">Presentation</option>
+            </select>
+          </div>
+          <span ng-show="addUserForm.$submitted || addUserForm.userRole.$touched"> <span class="form-validate-text" ng-show="addUserForm.userRole.$error.required">Required field</span> </span> </div>
+        <div class="m-btm-20">
+          <p class="field-name">Email</p>
+          <div class="input-group">
+            <div ng-hide="addUserForm.$submitted && addUserForm.userEmail.$error.required || addUserForm.userEmail.$error.email || addUserForm.userEmail.$touched && addUserForm.userEmail.$error.required || addUserForm.userEmail.$error.email" class="input-group-addon" style="background-color:#FF8C00;"></div>
+            <div ng-show="addUserForm.$submitted && addUserForm.userEmail.$error.required || addUserForm.userEmail.$error.email || addUserForm.userEmail.$touched && addUserForm.userEmail.$error.required || addUserForm.userEmail.$error.email" class="input-group-addon" class="input-group-addon" style="background-color:#B22222;">
+          </div>
+          <input name="userEmail" id="email" class="form-control" type="email" ng-model="user.email" required />
+        </div>
+        <span ng-show="addUserForm.$submitted || addUserForm.userEmail.$touched"> <span class="form-validate-text" ng-show="addUserForm.userEmail.$error.required">Required field</span> <span class="form-validate-text" ng-show="addUserForm.userEmail.$error.email">This is not a valid email</span> </span> </div>
+      <div class="m-btm-20">
+        <p class="field-name">Status</p>
+        <div class="input-group">
+          <div ng-hide="addUserForm.$submitted && addUserForm.userStatus.$error.required || addUserForm.userStatus.$touched && addUserForm.userStatus.$error.required" class="input-group-addon" style="background-color:#FF8C00;"></div>
+          <div ng-show="addUserForm.$submitted && addUserForm.userStatus.$error.required || addUserForm.userStatus.$touched && addUserForm.userStatus.$error.required" class="input-group-addon" style="background-color:#B22222;"></div>
+          <select name="userStatus" id="status" class="form-control" ng-model="user.status" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        <span ng-show="addUserForm.$submitted || addUserForm.userStatus.$touched"> <span class="form-validate-text" ng-show="addUserForm.userStatus.$error.required">Required field</span> </span> </div>
+      <div class="m-btm-20"><span class="form-validate-text">{{addUserMsg}}</span> </div>
+    </div>
+    <div class="modal-footer"> <a class="p-right-20" href="javascript:void(0);" ng-click="$hide()">Cancel</a>
+      <input ng-controller="ModalCtrl"  type="submit" value="Save" class="btn btn-primary" ng-disabled="addUserForm.$invalid" ng-click="$hide()"/>
+    </div>
+    </div>
+  </form>
+</div>
+</div>

@@ -1,0 +1,677 @@
+<!-- Include for scorecard service tab -->
+<!-- In page style to override global defaults -->
+<style>
+.kpi-table-hdr-value-range {
+	font-size: 14px;
+	color: #333333;
+	font-weight: 400;
+}
+.kpi-table-hdr-value-weighting {
+	font-size: 14px;
+	font-weight: 400;
+}
+.icon-kpi-table-status {
+	color: #999999;
+}
+.nav-tabs.secondary > li.active > a, .nav-tabs.secondary > li.active > a:hover, .nav-tabs.secondary > li.active > a:focus {
+	color: #666666;
+	font-weight: 400;
+	cursor: default;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-bottom-color: transparent;
+}
+</style>
+<subtabs>
+<subpane ng-if="showTotalFillRate" title="Fill Rate">
+<div class="row">
+  <div class="col-md-12"> <span class="pull-right" data-placement="top" title="Fill Rate" data-content="The fill rate is the percent of cases a supplier fulfills based off the buyer’s desired quantity" data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/><small class="text-muted" style="position:relative;right:5px;">About this KPI</small></span> </div>
+</div>
+<table width="100%" border="1"  bordercolor="#E4E4E4">
+  <tr style="height:40px;">
+    <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.scores.total_fill_rate_score}}</td>
+    <td class="kpi-table-hdr-value-range" align="center"><span>{{queryService.sc.info.scs.status.total_fill_rate}}</span> <span ng-if="queryService.sc.info.scs.status.total_fill_rate=='Excellent'"><i class="fa fa-trophy icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.total_fill_rate=='Good'"><i class="fa fa-bookmark icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.total_fill_rate=='Fair'"><i class="fa fa-adjust icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.total_fill_rate=='Poor'"><i class="fa fa-flag icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.total_fill_rate=='Terrible'"><i class="fa fa-warning icon-kpi-table-status"/></span></td>
+    <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.kpis.total_fill_rate}}%</td>
+    <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.targets.total_fill_rate}}%</td>
+    <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.cavg.kpis.total_fill_rate}}%</td>
+    <td class="kpi-table-hdr-value-weighting" align="center">{{queryService.sc.info.scs.weights.total_fill_rate}}</td>
+  </tr>
+  <tr style="height:20px;" bgcolor="#4a7295"> 
+    <!-- <td class="kpi-table-hdr-descrip" width="20%" align="center" ><i class="fa fa-user" style="color:#ffffff;"/>&nbsp;&nbsp;Supplier Performance</td>-->
+    <td class="kpi-table-hdr-descrip" width="17%" align="center" >KPI Score</td>
+    <td class="kpi-table-hdr-descrip" width="17%" align="center">Score Range</td>
+    <td class="kpi-table-hdr-descrip" width="17%" align="center" >Supplier Performance</td>
+    <td class="kpi-table-hdr-descrip" width="17%" align="center">Target</td>
+    <td class="kpi-table-hdr-descrip" width="16%" align="center">Category Average</td>
+    <td class="kpi-table-hdr-descrip" width="16%" align="center">Weighting</td>
+  </tr>
+</table>
+<br/>
+<div ng-controller="ScorecardPerfTrendControllerDual" ng-init="init('#container-pricing-fillrate-trend', '#button-service-fillrate')" >
+  <div class="row" style="margin-bottom:10px;">
+    <div class="col-md-4 container-fluid"><!-- <span style="font-size:16px;font-weight:600;">12-Month Fill Rate Trend</span>--> </div>
+    <div class="col-md-8 container-fluid">
+      <div class="pull-right">
+        <input type="checkbox" checked class="autocompare" id="button-service-fillrate"/>
+        <span style="padding-right:20px;padding-left:10px;" class="text-muted"><small>Show performance average for category</small></span></div>
+    </div>
+  </div>
+  <div class="row container-fluid">
+    <div class="col-md-12 container-fluid">
+      <div id="container-service-fillrate-trend" style="min-width: 70%; height: 275px; margin: 0 auto"></div>
+    </div>
+  </div>
+</div>
+<!-- End performance trend --> 
+<br/>
+
+<!-- Spend chart -->
+<div class="row container-fluid">
+  <div class="col-md-12 container-fluid">
+    <div ng-controller="ScorecardSpendTrendController" ng-init="init('#container-service-fillrate-spend-trend')" style="position:relative;bottom:57px;z-index:">
+      <div id="container-service-fillrate-spend-trend" style="min-width:70%; height: 125px; margin: 0 auto"></div>
+    </div>
+  </div>
+</div>
+<!-- End spend chart --> 
+
+<!-- Begin Supplier Comparison: Service Tab: Fill Rate --> 
+<!-- ************************************** --> 
+<!-- Heading -->
+<div class="row">
+  <div class="col-md-12 container-fluid">
+    <div style="font-size:16px;font-weight:600;margin-bottom:10px;margin-left:30px;"> Supplier Comparison </div>
+  </div>
+</div>
+<!-- Controller - in on-finish-chart directive -->
+<div class="row" ng-controller="ServiceFillRateComparisonController" style="position:relative;left:30px;"> 
+  <!-- Left side of bar chart: 12 month data -->
+  <div class="col-md-6 container-fluid"> 
+    <!-- 12 month header -->
+    <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">Fill Rate Performance Ranking (12 Months)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp12m.total_fill_rate.length}}</span></span></div>
+    <br style="clear:both;"/>
+    <!-- Surrounding div to apply scroll Hide if no data -->
+    <div ng-hide="!queryService.sc.info.cmp12m.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+      <div id="container-servicetab-fillrate-12"></div>
+      <!-- Bar chart --> 
+    </div>
+    <!-- Display if no data -->
+    <div ng-show="!queryService.sc.info.cmp12m.score" class="container-fluid text-danger">No Data</div>
+    
+    <!-- Hidden data table -->
+    <table id="datatable-servicetab-fillrate-12" class="table-sparkline" style="display:none;">
+      <tbody class="tbody-sparkline">
+        <tr><!-- Blank row to align with count -->
+          <th></th>
+          <td></td>
+        </tr>
+        <tr ng-repeat="data in queryService.sc.info.cmp12m.total_fill_rate" on-finish-chart="callHighchartServiceFillRateRendering12()"><!-- directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+          <td>{{data.kpi}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Right side of bar chart: 30 day data -->
+  <div class="col-md-6 container-fluid"> 
+    <!-- 30 day header -->
+    <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">Fill Rate Performance Ranking (30 Days)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp30d.total_fill_rate.length}}</span></span></div>
+    <br style="clear:both;"/>
+    <!-- Surrounding div to apply scroll Hide if no data -->
+    <div ng-hide="!queryService.sc.info.cmp30d.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+      <div id="container-servicetab-fillrate-30"></div>
+      <!-- Bar chart --> 
+    </div>
+    <!-- Display if no data -->
+    <div ng-show="!queryService.sc.info.cmp30d.score" class="container-fluid text-danger">No Data</div>
+    <!-- Hidden data table -->
+    <table id="datatable-servicetab-fillrate-30" class="table-sparkline" style="display:none;">
+      <tbody class="tbody-sparkline">
+        <tr><!-- Blank row to align with count -->
+          <th></th>
+          <td></td>
+        </tr>
+        <tr ng-repeat="data in queryService.sc.info.cmp30d.total_fill_rate" on-finish-chart="callHighchartServiceFillRateRendering30()"><!-- Directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+          <td>{{data.kpi}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- End column --> 
+</div>
+<!-- End Row -->
+</subpane>
+<subpane ng-if="showOntimePickup" title="On Time Pick Up">
+  <div class="row">
+    <div class="col-md-12"> <span class="pull-right" data-placement="top" title="On-Time Pick Up" data-content="On-time pick up is the percent of time the supplier is ready to load an order on the scheduled pick up date." data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/><small class="text-muted" style="position:relative;right:5px;">About this KPI</small></span> </div>
+  </div>
+  <table width="100%" border="1"  bordercolor="#E4E4E4">
+    <tr style="height:40px;">
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.scores.ontimepickup_score}}</td>
+      <td class="kpi-table-hdr-value-range" align="center"><span>{{queryService.sc.info.scs.status.ontimepickup}}</span> <span ng-if="queryService.sc.info.scs.status.ontimepickup=='Excellent'"><i class="fa fa-trophy icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.ontimepickup=='Good'"><i class="fa fa-bookmark icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.ontimepickup=='Fair'"><i class="fa fa-adjust icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.ontimepickup=='Poor'"><i class="fa fa-flag icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.ontimepickup=='Terrible'"><i class="fa fa-warning icon-kpi-table-status"/></span></td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.kpis.ontimepickup}}%</td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.targets.ontimepickup}}%</td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.cavg.kpis.ontimepickup}}%</td>
+      <td class="kpi-table-hdr-value-weighting" align="center">{{queryService.sc.info.scs.weights.ontimepickup}}</td>
+    </tr>
+    <tr style="height:20px;" bgcolor="#4a7295">
+      <td class="kpi-table-hdr-descrip" width="17%" align="center" >KPI Score</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center">Score Range</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center" >Supplier Performance</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center">Target</td>
+      <td class="kpi-table-hdr-descrip" width="16%" align="center">Category Average</td>
+      <td class="kpi-table-hdr-descrip" width="16%" align="center">Weighting</td>
+    </tr>
+  </table>
+  <br/>
+  
+  <!-- 12-Month On Time Pickup Trend Chart -->
+  <div ng-controller="ScorecardPerfTrendControllerDual" ng-init="init('#container-service-ontimepu-trend', '#button-service-ontimepu')" >
+    <div class="row" style="margin-bottom:10px;">
+      <div class="col-md-4 container-fluid"> <!--<span style="font-size:16px;font-weight:600;">12-Month On-Time Pick Up Trend</span>--> </div>
+      <div class="col-md-8 container-fluid">
+        <div class="pull-right">
+          <input type="checkbox" checked class="autocompare" id="button-service-ontimepu"/>
+          <span style="padding-right:20px;padding-left:10px;" class="text-muted"><small>Show performance average for category</small></span></div>
+      </div>
+    </div>
+    <div class="row container-fluid">
+      <div class="col-md-12 container-fluid">
+        <div id="container-service-ontimepu-trend" style="min-width: 70%; height: 275px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+  <!-- End performance trend chart --> 
+  <br/>
+  
+  <!-- Spend chart -->
+  <div class="row container-fluid">
+    <div class="col-md-12 container-fluid">
+      <div ng-controller="ScorecardSpendTrendController" ng-init="init('#container-service-ontimepu-spend-trend')" style="position:relative;bottom:57px;z-index:">
+        <div id="container-service-ontimepu-spend-trend" style="min-width:70%; height: 125px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+  <!-- End spend chart --> 
+  
+  <!-- Begin Supplier Comparison: Service Tab: On Time Pickup --> 
+  <!-- ************************************** --> 
+  <!-- Heading -->
+  <div class="row">
+    <div class="col-md-12 container-fluid">
+      <div style="font-size:16px;font-weight:600;margin-bottom:10px;margin-left:30px;"> Supplier Comparison </div>
+    </div>
+  </div>
+  <!--Controller - in on-finish-chart directive -->
+  <div class="row" ng-controller="ServiceOnTimePickUpComparisonController" style="position:relative;left:30px;"> 
+    <!-- Left side of bar chart: 12 month data -->
+    <div class="col-md-6 container-fluid"> 
+      <!-- 12 month header -->
+      <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">On Time Pick up Performance Ranking (12 Months)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp12m.ontimepickup.length}}</span></span></div>
+      <br style="clear:both;"/>
+      <!-- Surrounding div to apply scroll Hide if no data -->
+      <div ng-hide="!queryService.sc.info.cmp12m.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+        <div id="container-servicetab-ontimepickup-12"></div>
+        <!-- Bar chart --> 
+      </div>
+      <!-- Display if no data -->
+      <div ng-show="!queryService.sc.info.cmp12m.score" class="container-fluid text-danger">No Data</div>
+      <!-- Hidden data table -->
+      <table id="datatable-servicetab-ontimepickup-12" class="table-sparkline" style="display:none;">
+        <tbody class="tbody-sparkline">
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-repeat="data in queryService.sc.info.cmp12m.ontimepickup" on-finish-chart="callHighchartServiceOnTimePickupRendering12()"><!-- directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+          <td>{{data.kpi}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End left column --> 
+    <!-- Right side of bar chart: 30 day data -->
+    <div class="col-md-6 container-fluid"> 
+      <!-- 30 day header -->
+      <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">On Time Pick up Performance Ranking (30 Days)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp30d.ontimepickup.length}}</span></span></div>
+      <br style="clear:both;"/>
+      <!-- Surrounding div to apply scroll Hide if no data -->
+      <div ng-hide="!queryService.sc.info.cmp30d.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+        <div id="container-servicetab-ontimepickup-30"></div>
+        <!-- Bar chart --> 
+      </div>
+      <!-- Display if no data -->
+      <div ng-show="!queryService.sc.info.cmp30d.score" class="container-fluid text-danger">No Data</div>
+      <!-- Hidden data table -->
+      <table id="datatable-servicetab-ontimepickup-30" class="table-sparkline" style="display:none;">
+        <tbody class="tbody-sparkline">
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-repeat="data in queryService.sc.info.cmp30d.ontimepickup" on-finish-chart="callHighchartServiceOnTimePickupRendering30()"><!-- Directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+            <td>{{data.kpi}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End Column --> 
+    
+  </div>
+  <!-- End Row --> 
+</subpane>
+<subpane ng-if="showCancellations" title="Cancellations">
+  <div class="row">
+    <div class="col-md-12"> <span class="pull-right" data-placement="top" title="Cancellations" data-content="Cancellations refers to the percent of line items a supplier cancels across all POs." data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/><small class="text-muted" style="position:relative;right:5px;">About this KPI</small></span> </div>
+  </div>
+  <table width="100%" border="1"  bordercolor="#E4E4E4">
+    <tr style="height:40px;">
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.scores.cancel_percent_score}}</td>
+      <td class="kpi-table-hdr-value-range" align="center"><span>{{queryService.sc.info.scs.status.cancel_percent}}</span> <span ng-if="queryService.sc.info.scs.status.cancel_percent=='Excellent'"><i class="fa fa-trophy icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.cancel_percent=='Good'"><i class="fa fa-bookmark icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.cancel_percent=='Fair'"><i class="fa fa-adjust icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.cancel_percent=='Poor'"><i class="fa fa-flag icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.cancel_percent=='Terrible'"><i class="fa fa-warning icon-kpi-table-status"/></span></td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.kpis.cancel_percent}}%</td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.targets.cancel_percent}}%</td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.cavg.kpis.cancel_percent}}%</td>
+      <td class="kpi-table-hdr-value-weighting" align="center">{{queryService.sc.info.scs.weights.cancel_percent}}</td>
+    </tr>
+    <tr style="height:20px;" bgcolor="#4a7295">
+      <td class="kpi-table-hdr-descrip" width="17%" align="center" >KPI Score</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center">Score Range</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center" >Supplier Performance</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center">Target</td>
+      <td class="kpi-table-hdr-descrip" width="16%" align="center">Category Average</td>
+      <td class="kpi-table-hdr-descrip" width="16%" align="center">Weighting</td>
+    </tr>
+  </table>
+  <br/>
+  <div ng-controller="ScorecardPerfTrendControllerDual" ng-init="init('#container-service-cancel-trend', '#button-service-cancel')" >
+    <div class="row" style="margin-bottom:10px;">
+      <div class="col-md-4 container-fluid"><!-- <span style="font-size:16px;font-weight:600;">12-Month Cancellation by Seller Trend</span> --> </div>
+      <div class="col-md-8 container-fluid">
+        <div class="pull-right">
+          <input type="checkbox" checked class="autocompare" id="button-service-cancel"/>
+          <span style="padding-right:20px;padding-left:10px;" class="text-muted"><small>Show performance average for category</small></span></div>
+      </div>
+    </div>
+    <div class="row container-fluid">
+      <div class="col-md-12 container-fluid">
+        <div id="container-service-cancel-trend" style="min-width: 70%; height: 275px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+  <!-- End Perf Controller --> 
+  <br/>
+  <!-- Spend chart -->
+  <div class="row container-fluid">
+    <div class="col-md-12 container-fluid">
+      <div ng-controller="ScorecardSpendTrendController" ng-init="init('#container-service-cancel-spend-trend')" style="position:relative;bottom:57px;z-index:">
+        <div id="container-service-cancel-spend-trend" style="min-width:70%; height: 125px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+  <!-- End spend chart --> 
+  
+  <!-- Begin Supplier Comparison: Service Tab: Cancellations --> 
+  <!-- ************************************** --> 
+  
+  <!-- Heading -->
+  <div class="row">
+    <div class="col-md-12 container-fluid">
+      <div style="font-size:16px;font-weight:600;margin-bottom:10px;margin-left:30px;"> Supplier Comparison </div>
+    </div>
+  </div>
+  <!--Controller - in on-finish-chart directive -->
+  <div class="row" ng-controller="ServiceCancellationsComparisonController" style="position:relative;left:30px;"> 
+    <!-- Left side of bar chart: 12 month data -->
+    <div class="col-md-6 container-fluid"> 
+      <!-- 12 month header -->
+      <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">Cancellations Performance Ranking (12 Months)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp12m.cancel_percent.length}}</span></span></div>
+      <br style="clear:both;"/>
+      <!-- Surrounding div to apply scroll hide if no data -->
+      <div ng-hide="!queryService.sc.info.cmp12m.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+        <div id="container-servicetab-cancellations-12"></div>
+        <!-- Bar chart --> 
+      </div>
+      <!-- Display if no data -->
+      <div ng-show="!queryService.sc.info.cmp12m.score" class="container-fluid text-danger">No Data</div>
+      <!-- Hidden data table -->
+      <table id="datatable-servicetab-cancellations-12" class="table-sparkline" style="display:none;">
+        <tbody class="tbody-sparkline">
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-repeat="data in queryService.sc.info.cmp12m.cancel_percent" on-finish-chart="callHighchartCancellationsRendering12()"><!-- directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+            <td>{{data.kpi}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End left column --> 
+    <!-- Right side of bar chart: 30 day data -->
+    <div class="col-md-6 container-fluid"> 
+      <!-- 30 day header -->
+      <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">Cancellations Performance Ranking (30 Days)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp30d.cancel_percent.length}}</span></span></div>
+      <br style="clear:both;"/>
+      <!-- Surrounding div to apply scroll Hide if no data -->
+      <div ng-hide="!queryService.sc.info.cmp30d.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+        <div id="container-servicetab-cancellations-30"></div>
+        <!-- Bar chart --> 
+      </div>
+      <!-- Display if no data -->
+      <div ng-show="!queryService.sc.info.cmp30d.score" class="container-fluid text-danger">No Data</div>
+      
+      <!-- Hidden data table -->
+      <table id="datatable-servicetab-cancellations-30" class="table-sparkline" style="display:none;">
+        <tbody class="tbody-sparkline">
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-repeat="data in queryService.sc.info.cmp30d.cancel_percent" on-finish-chart="callHighchartCancellationsRendering30()"><!-- Directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+            <td>{{data.kpi}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End left column --> 
+    
+  </div>
+  <!-- End Row --> 
+</subpane>
+<subpane ng-if="showReconciliations" title="Reconciliations">
+  <div class="row">
+    <div class="col-md-12"> <span class="pull-right" data-placement="top" title="Reconciliations" data-content="Reconciliations refers to the percent of invoice lines flagged for reconciliation that have an item, price, or quantity difference across all orders." data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/><small class="text-muted" style="position:relative;right:5px;">About this KPI</small></span> </div>
+  </div>
+  <table width="100%" border="1"  bordercolor="#E4E4E4">
+    <tr style="height:40px;">
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.scores.reconciled_score}}</td>
+      <td class="kpi-table-hdr-value-range" align="center"><span>{{queryService.sc.info.scs.status.reconciled_percent}}</span> <span ng-if="queryService.sc.info.scs.status.reconciled_percent=='Excellent'"><i class="fa fa-trophy icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.reconciled_percent=='Good'"><i class="fa fa-bookmark icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.reconciled_percent=='Fair'"><i class="fa fa-adjust icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.reconciled_percent=='Poor'"><i class="fa fa-flag icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.reconciled_percent=='Terrible'"><i class="fa fa-warning icon-kpi-table-status"/></span></td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.kpis.reconciled_percent}}%</td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.targets.reconciled}}%</td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.cavg.kpis.reconciled_percent}}%</td>
+      <td class="kpi-table-hdr-value-weighting" align="center">{{queryService.sc.info.scs.weights.reconciled}}</td>
+    </tr>
+    <tr style="height:20px;" bgcolor="#4a7295">
+      <td class="kpi-table-hdr-descrip" width="17%" align="center" >KPI Score</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center">Score Range</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center" >Supplier Performance</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center">Target</td>
+      <td class="kpi-table-hdr-descrip" width="16%" align="center">Category Average</td>
+      <td class="kpi-table-hdr-descrip" width="16%" align="center">Weighting</td>
+    </tr>
+  </table>
+  <br/>
+  <div ng-controller="ScorecardPerfTrendControllerDual" ng-init="init('#container-service-reconcile-trend', '#button-service-reconcile')" >
+    <div class="row" style="margin-bottom:10px;">
+      <div class="col-md-4 container-fluid"><!-- <span style="font-size:16px;font-weight:600;">12-Month Reconciliation Trend</span> --> </div>
+      <div class="col-md-8 container-fluid">
+        <div class="pull-right">
+          <input type="checkbox" checked class="autocompare" id="button-service-reconcile"/>
+          <span style="padding-right:20px;padding-left:10px;" class="text-muted"><small>Show performance average for category</small></span></div>
+      </div>
+    </div>
+    <div class="row container-fluid">
+      <div class="col-md-12 container-fluid">
+        <div id="container-service-reconcile-trend" style="min-width: 70%; height: 275px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+  <!-- End perf trend --> 
+  <br/>
+  
+  <!-- Spend chart -->
+  <div class="row container-fluid">
+    <div class="col-md-12 container-fluid">
+      <div ng-controller="ScorecardSpendTrendController" ng-init="init('#container-service-reconcile-spend-trend')" style="position:relative;bottom:57px;z-index:">
+        <div id="container-service-reconcile-spend-trend" style="min-width:70%; height: 125px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+  <!-- End Spend Chart --> 
+  
+  <!-- Begin Supplier Comparison: Service Tab: Reconciliations --> 
+  <!-- ************************************** --> 
+  <!-- Heading -->
+  <div class="row">
+    <div class="col-md-12 container-fluid">
+      <div style="font-size:16px;font-weight:600;margin-bottom:10px;margin-left:30px;"> Supplier Comparison </div>
+    </div>
+  </div>
+  <!--Controller - in on-finish-chart directive -->
+  <div class="row" ng-controller="ServiceReconciliationsComparisonController" style="position:relative;left:30px;"> 
+    <!-- Left side of bar chart: 12 month data -->
+    <div class="col-md-6 container-fluid"> 
+      
+      <!-- 12 month header -->
+      <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">Reconciliations Performance Ranking (12 Months)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp12m.reconciled_percent.length}}</span></span></div>
+      <br style="clear:both;"/>
+      <!-- Surrounding div to apply scroll hide if no data -->
+      <div ng-hide="!queryService.sc.info.cmp12m.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+        <div id="container-servicetab-reconciliations-12"></div>
+        <!-- Bar chart --> 
+      </div>
+      <!-- Display if no data -->
+      <div ng-show="!queryService.sc.info.cmp12m.score" class="container-fluid text-danger">No Data</div>
+      <!-- Hidden data table using Highcharts data module to render chart from tabular data --> 
+      <!-- If desired - we could have toggle display as table or chart -->
+      <table id="datatable-servicetab-reconciliations-12" class="table-sparkline" style="display:none;">
+        <tbody class="tbody-sparkline">
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-repeat="data in queryService.sc.info.cmp12m.reconciled_percent" on-finish-chart="callHighchartReconciliationsRendering12()"><!-- directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+            <td>{{data.kpi}}</td>
+            <!-- Use ng-bind for faster rendering --> 
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End left side column --> 
+    <!-- Right side of bar chart: 30 day data -->
+    <div class="col-md-6 container-fluid"> 
+      <!-- 30 day header -->
+      <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">Reconciliations Performance Ranking (30 Days)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp30d.reconciled_percent.length}}</span></span></div>
+      <br style="clear:both;"/>
+      <!-- Surrounding div to apply scroll hide chart if no data -->
+      <div ng-hide="!queryService.sc.info.cmp30d.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+        <div id="container-servicetab-reconciliations-30"></div>
+        <!-- Bar chart --> 
+      </div>
+      <!-- Display if no data -->
+      <div ng-show="!queryService.sc.info.cmp30d.score" class="container-fluid text-danger">No Data</div>
+      <!-- Hidden data table -->
+      <table id="datatable-servicetab-reconciliations-30" class="table-sparkline" style="display:none;">
+        <tbody class="tbody-sparkline">
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-repeat="data in queryService.sc.info.cmp30d.reconciled_percent" on-finish-chart="callHighchartReconciliationsRendering30()"><!-- Directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+            <td>{{data.kpi}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End right column --> 
+    
+  </div>
+  <!-- End Row --> 
+</subpane>
+<subpane ng-if="showResponsiveness" title="Responsiveness">
+  <div class="row">
+    <div class="col-md-12"> <span class="pull-right" data-placement="top" title="Responsiveness" data-content="Supplier responsiveness is the percent of times an order is confirmed within 4 hours by the supplier after an order is sent." data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/><small class="text-muted" style="position:relative;right:5px;">About this KPI</small></span> </div>
+  </div>
+  <table width="100%" border="1"  bordercolor="#E4E4E4">
+    <tr style="height:40px;">
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.scores.confirmed240_score}}</td>
+      <td class="kpi-table-hdr-value-range" align="center"><span>{{queryService.sc.info.scs.status.confirmed240}}</span> <span ng-if="queryService.sc.info.scs.status.cconfirmed240=='Excellent'"><i class="fa fa-trophy icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.confirmed240=='Good'"><i class="fa fa-bookmark icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.confirmed240=='Fair'"><i class="fa fa-adjust icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.confirmed240=='Poor'"><i class="fa fa-flag icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.confirmed240=='Terrible'"><i class="fa fa-warning icon-kpi-table-status"/></span></td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.kpis.confirmed240}}%</td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.targets.confirmed240}}%</td>
+      <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.cavg.kpis.confirmed240}}%</td>
+      <td class="kpi-table-hdr-value-weighting" align="center">{{queryService.sc.info.scs.weights.confirmed240}}</td>
+    </tr>
+    <tr style="height:20px;" bgcolor="#4a7295">
+      <td class="kpi-table-hdr-descrip" width="17%" align="center" >KPI Score</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center">Score Range</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center" >Supplier Performance</td>
+      <td class="kpi-table-hdr-descrip" width="17%" align="center">Target</td>
+      <td class="kpi-table-hdr-descrip" width="16%" align="center">Category Average</td>
+      <td class="kpi-table-hdr-descrip" width="16%" align="center">Weighting</td>
+    </tr>
+  </table>
+  <br/>
+  <div ng-controller="ScorecardPerfTrendControllerDual" ng-init="init('#container-service-responsiveness-trend', '#button-service-responsiveness')" >
+    <div class="row" style="margin-bottom:10px;">
+      <div class="col-md-4 container-fluid"> <!-- <span style="font-size:16px;font-weight:600;">12-Month Supplier Responsiveness Trend</span> --> </div>
+      <div class="col-md-8 container-fluid">
+        <div class="pull-right">
+          <input type="checkbox" checked class="autocompare" id="button-service-responsiveness"/>
+          <span style="padding-right:20px;padding-left:10px;" class="text-muted"><small>Show performance average for category</small></span></div>
+      </div>
+    </div>
+    <div class="row container-fluid">
+      <div class="col-md-12 container-fluid">
+        <div id="container-service-responsiveness-trend" style="min-width: 70%; height: 275px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+  <!-- End perf chart --> 
+  <br/>
+  
+  <!-- Spend chart -->
+  <div class="row container-fluid">
+    <div class="col-md-12 container-fluid">
+      <div ng-controller="ScorecardSpendTrendController" ng-init="init('#container-service-responsiveness-spend-trend')" style="position:relative;bottom:57px;z-index:">
+        <div id="container-service-responsiveness-spend-trend" style="min-width:70%; height: 125px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+  <!-- End spend chart --> 
+  
+  <!-- Begin Supplier Comparison: Service Tab: Responsiveness --> 
+  <!-- ************************************** --> 
+  <!-- Heading -->
+  <div class="row">
+    <div class="col-md-12 container-fluid">
+      <div style="font-size:16px;font-weight:600;margin-bottom:10px;margin-left:30px;"> Supplier Comparison </div>
+    </div>
+  </div>
+  <!--Controller - in on-finish-chart directive -->
+  <div class="row" ng-controller="ServiceResponsivenessComparisonController" style="position:relative;left:30px;"> 
+    <!-- Left side of bar chart: 12 month data -->
+    <div class="col-md-6 container-fluid"> 
+      <!-- 12 month header -->
+      <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">Responsiveness Performance Ranking (12 Months)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp12m.confirmed240.length}}</span></span></div>
+      <br style="clear:both;"/>
+      <!-- Surrounding div to apply scroll -->
+      <div ng-hide="!queryService.sc.info.cmp12m.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+        <div id="container-servicetab-responsiveness-12"></div>
+        <!-- Bar Chart --> 
+      </div>
+      <!-- Display if no data -->
+      <div ng-show="!queryService.sc.info.cmp12m.score" class="container-fluid text-danger">No Data</div>
+      <!-- Hidden data table using Highcharts data module to render chart from tabular data --> 
+      <!-- If desired - we could have toggle display as table or chart -->
+      <table id="datatable-servicetab-responsiveness-12" class="table-sparkline" style="display:none;">
+        <tbody class="tbody-sparkline">
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-repeat="data in queryService.sc.info.cmp12m.confirmed240" on-finish-chart="callHighchartResponsivenessRendering12()"><!-- directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+            <td>{{data.kpi}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End left column --> 
+    <!-- Right side of bar chart: 30 day data -->
+    <div class="col-md-6 container-fluid"> 
+      <!-- 30 day header -->
+      <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">Responsiveness Performance Ranking (30 Days)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp30d.confirmed240.length}}</span></span></div>
+      <br style="clear:both;"/>
+      <!-- Surrounding div to apply scroll hide if no data -->
+      <div ng-hide="!queryService.sc.info.cmp30d.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+        <div id="container-servicetab-responsiveness-30"></div>
+        <!-- Bar chart --> 
+      </div>
+      <!-- Display if no data -->
+      <div ng-show="!queryService.sc.info.cmp30d.score" class="container-fluid text-danger">No Data</div>
+      <!-- Hidden data table -->
+      <table id="datatable-servicetab-responsiveness-30" class="table-sparkline" style="display:none;">
+        <tbody class="tbody-sparkline">
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr ng-repeat="data in queryService.sc.info.cmp30d.confirmed240" on-finish-chart="callHighchartResponsivenessRendering30()"><!-- Directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+            <td>{{data.kpi}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End right column --> 
+  </div>
+  <!-- End Row --> 
+</subpane>
+</subtabs>

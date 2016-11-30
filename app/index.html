@@ -1,0 +1,203 @@
+<!doctype html>
+<html ng-app="tpanalyticsApp" xmlns:ng="http://angularjs.org">
+<head>
+<meta charset="utf-8">
+<title>Partner Performance</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- Add tag to force IE to use Edge instead of older rendering engine -->
+<!--<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"/>-->
+<script src="https://use.fontawesome.com/79b6458414.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'/>
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- build:css(.tmp) styles/vendor.css -->
+<!-- vendor:css -->
+<link rel="stylesheet" href="styles/angular-gridster.min.css" />
+<link rel="stylesheet" href="styles/bootstrap-select.min.css" />
+<link rel="stylesheet" href="styles/angular-strap.min.css" />
+<link rel="stylesheet" href="styles/rzslider.min.css" />
+<!-- endvendor -->
+<!-- endbuild -->
+
+<!-- build:css(.) styles/bower.css -->
+<!-- bower:css -->
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+<link rel="stylesheet" href="bower_components/ng-table/dist/ng-table.min.css" />
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:css(.tmp) styles/main.css -->
+<link rel="stylesheet" href="styles/main.css" />
+<!-- endbuild -->
+</head>
+<body id="top">
+<!--[if lte IE 8]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+<nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid" ng-controller="NavbarController">
+    <div class="navbar-header"><span><img src="images/iTrade_logo-2015-Rev-sml_swoosh.png" width="31" height="42"></span><span class="navbar-pma-title">Partner Performance</span> </div>
+    <br style="clear:both;"/>
+    <div id="navbar" class="navbar-collapse collapse navbar-header" style="position:relative;bottom:1px;">
+      <ul class="nav main-nav navbar-nav">
+        <li  ng-hide="presentation" ng-class="{active: routeIs('/overview')}"><a analytics-on="click" analytics-event="select supp overview" analytics-category="Top Nav" analytics-label="Top nav to supp overview" ui-sref="overview" ng-click="defaultOptions()" ng-controller="SuppOverviewResetFilterController" class="txtTopNav">Supplier Overview</a></li>
+        <li  ng-hide="presentation" ng-class="{active: routeIs('/overviewcat')}"><a analytics-on="click" analytics-event="select cat overview" analytics-category="Top Nav" analytics-label="Top nav to cat overview" ui-sref="overviewcat" ng-click="defaultCategoryOptions()" ng-controller="CatOverviewResetFilterController" class="txtTopNav">Category Overview</a></li>
+        <li ng-class="{active: routeIs('/scorecards')}"><a analytics-on="click" analytics-event="select scorecard" analytics-category="Top Nav" analytics-label="Top nav to scorecard" ui-sref="scorecards"  ng-click="defaultScorecardOptions();" ng-controller="ScorecardResetFilterController" id="show-scorecards-nav" class="txtTopNav active-overview-score">Scorecards</a></li>
+        <li ng-class="{active: routeIs('/tools')}"><a analytics-on="click" analytics-event="select tools" analytics-category="Top Nav" analytics-label="Top nav to tools" ui-sref="tools" class="txtTopNav">Tools</a></li>
+        <li ng-show="admin"><a class="white pointer txtTopNav" href="javascript:void(0)" bs-dropdown aria-haspopup="true" aria-expanded="false">Administration <i class="fa fa-angle-down"></i></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a analytics-on="click" analytics-event="company accounts" analytics-category="Admin" analytics-label="Modify user accounts" ui-sref="adminuser">Manage Users</a></li>
+            <li style="display:none;"><a analytics-on="click" analytics-event="user accounts" analytics-category="Admin" analytics-label="User selected user accounts" href="#/tools">Adjust KPI Settings</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div id="navbar" class="navbar-right navbar-collapse collapse navbar-header pull-right">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+           <a href="javascript:void(0);" class="dropdown-toggle txtTopNav" data-toggle="dropdown">IPP User <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="li-dropdown"><a analytics-on="click" analytics-event="change password" analytics-category="User" analytics-label="User selected change password" href="/updatePassword">Change Passsword</li>
+                <li class="li-dropdown"><a analytics-on="click" analytics-event="logout" analytics-category="User" analytics-label="User initiated logout" href="/logout">Sign Out</a></li>
+              </ul>
+        </li>
+        <li class="white p-top-15">|</li>
+        <li><a analytics-on="click" analytics-event="select help" analytics-category="Help" analytics-label="User navigated to help" class="white pointer txtTopNav" href="views/help/IPP_User_Guide_v1.pdf" target="_blank">Help</a></li>
+        <li class="white p-top-15">|</li>
+        <li><a analytics-on="click" analytics-event="select feedback" analytics-category="Top Nav" analytics-label="User provided feedback" data-placement="left" data-content="Provide Feedback" data-trigger="hover" bs-popover class="white pointer txtTopNav" href="mailto:IPPsupport@itradenetwork.com"><i class="fa fa-envelope"></i></a> </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container-fluid" style="padding-top:80px;">
+  <div ui-view></div>
+</div>
+<div ng-include src="'views/footer/footer.html'"></div>
+
+<!-- Google Analytics: change UA-XXXXX-X to be our site's ID --> 
+<script>
+       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
+       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
+       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
+       }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	   // itrade site id 
+	     ga('create', 'UA-76557693-1','auto');
+	   
+       // my site id for testing
+	   // ga('create', 'UA-71233973-1','auto'); 
+       // disable when using angulartics  ga('send', 'pageview');
+</script> 
+
+<!-- build:js(.) scripts/vendor.js --> 
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-touch/angular-touch.js"></script>
+<script src="bower_components/angular-strap/dist/angular-strap.js"></script>
+<script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/highcharts/highcharts.js"></script>
+<script src="bower_components/highcharts/highcharts-more.js"></script>
+<script src="bower_components/highcharts/modules/data.js"></script>
+<script src="bower_components/highcharts/modules/exporting.js"></script>
+<script src="bower_components/highcharts/modules/heatmap.js"></script>
+<script src="bower_components/javascript-detect-element-resize/detect-element-resize.js"></script>
+<script src="bower_components/waypoints/lib/noframework.waypoints.min.js"></script>
+<script src="bower_components/SHA-1/sha1.js"></script>
+<script src="bower_components/angulartics/src/angulartics.js"></script>
+<script src="bower_components/angulartics/src/angulartics-clicky.js"></script>
+<script src="bower_components/angulartics/src/angulartics-cnzz.js"></script>
+<script src="bower_components/angulartics/src/angulartics-ga-cordova.js"></script>
+<script src="bower_components/angulartics/src/angulartics-gtm.js"></script>
+<script src="bower_components/angulartics/src/angulartics-piwik.js"></script>
+<script src="bower_components/angulartics/src/angulartics-scroll.js"></script>
+<script src="bower_components/angulartics/src/angulartics-splunk.js"></script>
+<script src="bower_components/angulartics/src/angulartics-woopra.js"></script>
+<script src="bower_components/angulartics/src/angulartics-marketo.js"></script>
+<script src="bower_components/angulartics/src/angulartics-intercom.js"></script>
+<script src="bower_components/angulartics/src/angulartics-inspectlet.js"></script>
+<script src="bower_components/angulartics/src/angulartics-newrelic-insights.js"></script>
+<script src="bower_components/angulartics-google-analytics/lib/angulartics-google-analytics.js"></script>
+<script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
+<script src="bower_components/ng-table/dist/ng-table.min.js"></script>
+<!-- endbower --> 
+<!-- endbuild --> 
+<!-- build:js({.tmp,app}) scripts/scripts.js --> 
+<script src="scripts/app.js"></script> 
+<script src="scripts/vendor/bootstrap-select/bootstrap-select.js"></script> 
+<script src="scripts/vendor/bootstrap-select/nya-bootstrap-select.js"></script> 
+<script src="scripts/vendor/angularjs-slider/rzslider.js"></script> 
+<script src="scripts/vendor/angular-gridster/angularjs-gridster.js"></script> 
+<script src="scripts/script.js"></script> 
+
+<!-- Services --> 
+<script src="scripts/services/QueryService.js"></script>
+<script src="scripts/services/modal/ModalService.js"></script>  
+<!-- End services --> 
+
+<!-- biz-overview-supplier based controllers --> 
+<script src="scripts/controllers/biz-overview-supplier/SuppOverviewBizStatsController.js"></script> 
+<script src="scripts/controllers/biz-overview-supplier/SuppOverviewWatchlistController.js"></script> 
+<script src="scripts/controllers/biz-overview-supplier/SuppOverviewSupplierController.js"></script> 
+<script src="scripts/controllers/biz-overview-supplier/SuppOverviewCategoryController.js"></script> 
+<script src="scripts/controllers/biz-overview-supplier/SuppOverviewDtRangeController.js"></script> 
+<script src="scripts/controllers/biz-overview-supplier/SuppOverviewResetFilterController.js"></script> 
+<script src="scripts/controllers/ModalController.js"></script> 
+<script src="scripts/controllers/CrudController.js"></script> 
+<!-- end biz-overview-supplier based controllers --> 
+
+<!-- biz-overview-category based controllers --> 
+<script src="scripts/controllers/biz-overview-category/CatOverviewBizStatsController.js"></script> 
+<script src="scripts/controllers/biz-overview-category/CatOverviewWatchlistController.js"></script> 
+<script src="scripts/controllers/biz-overview-category/CatOverviewCategoryController.js"></script> 
+<script src="scripts/controllers/biz-overview-category/CatOverviewDtRangeController.js"></script> 
+<script src="scripts/controllers/biz-overview-category/CatOverviewResetFilterController.js"></script> 
+<!-- end biz-overview-category based controllers --> 
+
+<!-- scorecard based controllers --> 
+<script src="scripts/controllers/scorecard/ScorecardBizStatsController.js"></script> 
+<script src="scripts/controllers/scorecard/ScorecardSupplierController.js"></script> 
+<script src="scripts/controllers/scorecard/ScorecardDtRangeController.js"></script> 
+<script src="scripts/controllers/scorecard/ScorecardResetFilterController.js"></script> 
+<script src="scripts/controllers/scorecard/ScorecardClickThruResetFilterController.js"></script> 
+
+<!-- scorecard summary sample controller -->
+<script src="scripts/controllers/scorecard/ScorecardSummaryHeatMapController.js"></script> 
+<script src="scripts/controllers/scorecard/ScorecardTemplateController.js"></script> 
+
+
+<!-- sc trends --> 
+<script src="scripts/controllers/perf/ScorecardPerfTrendControllerDual.js"></script> 
+<script src="scripts/controllers/perf/PricePerfDualController.js"></script> 
+<script src="scripts/controllers/spend/ScorecardSpendTrendController.js"></script> 
+<!-- end scorecard based controllers --> 
+
+<!-- tools based controllers --> 
+<script src="scripts/controllers/KpiSettingsController.js"></script> 
+<!-- end tools based controllers --> 
+
+<!-- admin user based controllers --> 
+<script src="scripts/controllers/admin/AdminUserController.js"></script>
+
+
+<!-- General Controllers --> 
+<script src="scripts/controllers/navigation/NavbarController.js"></script> 
+
+<!-- Directives --> 
+<script src="scripts/directives/on-finish-chart.js"></script> 
+<script src="scripts/directives/angular-gridster.js"></script> 
+<script src="scripts/directives/subtabs.js"></script> 
+<script src="scripts/directives/ng-switch.js"></script> 
+<!-- endbuild -->
+</body>
+</html>

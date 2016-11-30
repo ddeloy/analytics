@@ -1,0 +1,92 @@
+<!-- Use in page style to override globals -->
+<style>
+/* Set bootstrap default table padding and border to 0 got kpi scores */
+#low-scoring-kpis > tbody  > tr > td {
+	border-top: none !important;
+}
+#high-scoring-kpis > tbody  > tr > td {
+	border-top: none !important;
+}
+</style>
+
+<div class="col-md-12 conatainer-fluid bg-needsattn m-btm-20 p-btm-10">
+<div class="row">
+  <!-- Left col-md-6: low scoring -->
+    <div class="col-md-6 p-top-10"> <span class="hdr-kpi-overview-txt p-left-5">Low Scoring KPIs</span>
+          <div class="row">
+          	<div class="col-md-12 p-top-10 fsize-13">
+          		<table id="low-scoring-kpis" class="table table-condensed table-responsive" width="100%" border="0">
+                  <tr ng-if="queryService.sc.info.scs.scores.seller_month_price_volatility_score < 65">
+                    <td width="35%">Price Volatility</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.seller_month_price_volatility_score}}</td>
+                  </tr>
+                  <tr ng-if="queryService.sc.info.scs.scores.price_competitiveness_score < 65">
+                    <td width="35%">Price Competitiveness</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.price_competitiveness_score}}</td>
+                  </tr>
+                  <tr ng-if="queryService.sc.info.scs.scores.reconciled_score < 65">
+                    <td width="35%">Reconciliations</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.reconciled_score}}</td>
+                  </tr>
+                  <tr ng-if="queryService.sc.info.scs.scores.confirmed240_score < 65">
+                    <td width="35%">Seller Responsiveness</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.confirmed240_score}}</td>
+                  </tr>
+                  <tr ng-if="queryService.sc.info.scs.scores.cancel_percent_score < 65">
+                    <td width="35%">Cancellations</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.cancel_percent_score}}</td>
+                  </tr>
+                  <tr ng-if="queryService.sc.info.scs.scores.total_fill_rate_score < 65 ">
+                    <td width="35%">Total Fill Rate</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.total_fill_rate_score}}</td>
+                  </tr>
+                  <tr ng-if="queryService.sc.info.scs.scores.ontimepickup_score < 65">
+                    <td width="35%">On-Time Pickup</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.ontimepickup_score}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+         </div>
+         
+<!-- Right col-md-6: High scoring -->
+    <div class="col-md-6 p-top-10"><span class="hdr-kpi-overview-txt p-left-5">High Scoring KPIs</span>
+          <div class="row">
+          	<div class="col-md-12 p-top-10 fsize-13">
+          		<table id="high-scoring-kpis" class="table table-condensed table-responsive" width="100%" border="0">
+                  <tr ng-if="queryService.sc.info.scs.scores.seller_month_price_volatility_score >= 75">
+                    <td width="35%">Price Volatility</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.seller_month_price_volatility_score}}</td>
+                  </tr>
+                  <tr ng-if="queryService.sc.info.scs.scores.price_competitiveness_score >= 75">
+                    <td width="35%">Price Competitiveness</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.price_competitiveness_score}}</td>
+                  </tr>
+                  <tr ng-if="queryService.sc.info.scs.scores.reconciled_score >= 75">
+                    <td width="35%">Reconciliations</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.reconciled_score}}</td>
+                  </tr>
+                  <tr ng-if="queryService.sc.info.scs.scores.confirmed240_score >= 75">
+                    <td width="35%">Seller Responsiveness</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.confirmed240_score}}</td>
+                  </tr>
+
+                  <tr ng-if="queryService.sc.info.scs.scores.cancel_percent_score >= 75">
+                    <td width="35%">Cancellations</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.cancel_percent_score}}</td>
+                  </tr>
+                  <tr ng-if="queryService.sc.info.scs.scores.total_fill_rate_score >= 75">
+                    <td width="35%">Total Fill Rate</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.total_fill_rate_score}}</td>
+                  </tr>
+                  <tr ng-if="queryService.sc.info.scs.scores.ontimepickup_score >= 75">
+                    <td width="35%">On-Time Pickup</td>
+                    <td width="65%">{{queryService.sc.info.scs.scores.ontimepickup_score}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+         </div>
+      
+</div><!-- Main col-md-12 -->      
+</div><!-- End doing well/needs attention -->    

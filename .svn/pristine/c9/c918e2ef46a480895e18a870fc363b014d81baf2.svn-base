@@ -1,0 +1,118 @@
+<!-- This is the Summary Tab -->
+
+<div id="scorecard-scroll" analytics-category="Scorecards - Tabs" analytics-label="User scrolled to supp comp" analytics-on="scrollby"> 
+  <!-- Help popover -->
+  <div class="row">
+    <div class="col-md-12"> <span class="pull-right" data-placement="top" title="Summary" data-content="The supplier’s overall performance score for this category trended over time. The score is calculated from multiple KPIs related to service and price. " data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/><small class="text-muted" style="position:relative;right:5px;">About this Chart</small></span> </div>
+  </div>
+  <div class="row" style="margin-bottom:10px;">
+    <div class="col-md-3 container-fluid"> <!--<span style="font-size:16px;font-weight:600;">12-Month Performance Trend</span>--> </div>
+    <div class="col-md-9 container-fluid">
+      <div class="pull-right">
+        <input type="checkbox" checked class="autocompare" id="button-summary-perf-dual"/>
+        <span style="padding-right:20px;padding-left:10px;" class="text-muted"><small>Show performance average for category</small></span></div>
+    </div>
+  </div>
+  <div class="row container-fluid">
+    <div class="col-md-12 container-fluid">
+      <div id="container-summary-perf-dual" style="min-width: 70%; height: 275px; margin: 0 auto"><i class="fa fa-refresh fa-2x fa-spin dark-blue"></i></div>
+    </div>
+  </div>
+</div>
+<!-- End perf controller --> 
+
+<br/>
+
+<!-- Spend chart -->
+<div class="row container-fluid">
+  <div class="col-md-12 container-fluid">
+    <div ng-controller="ScorecardSpendTrendController" ng-init="init('#container-summary-spend-trend')" style="position:relative;bottom:57px;z-index:">
+      <div id="container-summary-spend-trend" style="min-width: 70%; height: 125px; margin: 0 auto"></div>
+    </div>
+  </div>
+</div>
+<!-- End spend chart --> 
+
+<!-- Begin Supplier Comparison: Summary Tab --> 
+<!-- ************************************** --> 
+<!-- Heading -->
+<div class="row">
+  <div class="col-md-12 container-fluid">
+    <div style="font-size:16px;font-weight:600;margin-bottom:10px;margin-left:30px;"> Supplier Comparison </div>
+  </div>
+</div>
+<!-- Controller - in on-finish-chart directive -->
+<div class="row" ng-controller="SummaryComparisonController" style="position:relative;left:30px;"> 
+  
+  <!-- Left side of bar chart: 12 month data -->
+  <div class="col-md-6 container-fluid"> 
+    
+    <!-- 12 month header -->
+    <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">12-Month Performance Ranking</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp12m.score.length}}</span></span></div>
+    <br style="clear:both;"/>
+    
+    <!-- Surrounding div to apply scroll --> 
+    <!-- ng-hide if no score -->
+    <div ng-hide="!queryService.sc.info.cmp12m.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+      <div id="container-summarytab-12"></div>
+      <!-- Bar chart --> 
+    </div>
+    <!-- Display if no data -->
+    <div ng-show="!queryService.sc.info.cmp12m.score" class="container-fluid text-danger">No Data</div>
+    <!-- Hidden data table -->
+    <table id="datatable-summarytab-12" class="table-sparkline" style="display:none;">
+      <tbody class="tbody-sparkline">
+        <tr><!-- Blank row to align with count -->
+          <th></th>
+          <td></td>
+        </tr>
+        <tr ng-repeat="data in queryService.sc.info.cmp12m.score" on-finish-chart="callHighchartSummaryRendering12()"><!-- directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+          <td>{{data.score}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- End left col -->
+  
+  <div class="col-md-6 container-fluid"><!-- Right side of bar chart: 30 day data --> 
+    <!-- 6 month header -->
+    <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">30-Day Performance Ranking</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp30d.score.length}}</span></span></div>
+    <br style="clear:both;"/>
+    
+    <!-- Surrounding div to apply scroll -->
+    <div ng-hide="!queryService.sc.info.cmp30d.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+      <div id="container-summarytab-30"></div>
+      <!-- Bar chart --> 
+    </div>
+    <!-- Display for no data -->
+    <div ng-show="!queryService.sc.info.cmp30d.score" class="container-fluid text-danger">No Data</div>
+    <!-- Hidden data table -->
+    <table id="datatable-summarytab-30" class="table-sparkline" style="display:none;">
+      <tbody class="tbody-sparkline">
+        <tr><!-- Blank row to align with count -->
+          <th></th>
+          <td></td>
+        </tr>
+        <tr ng-repeat="data in queryService.sc.info.cmp30d.score" on-finish-chart="callHighchartSummaryRendering30()"><!-- Directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+          <td>{{data.score}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- End right column --> 
+</div>
+<!-- End Row Summary Comp Controller --> 
+<!-- ************************************ --> 
+<!-- End Supplier Comparison: Summary Tab --> 

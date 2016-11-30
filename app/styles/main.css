@@ -1,0 +1,794 @@
+/* ******************************************************************** */
+/* FONT STYLES: font-family: 'Open Sans', sans-serif; */
+	/* 300: Light, 400: Normal, 600: Semi-Bold, 700: Bold */
+/* TABLE OF CONTENTS: Use find to move to repective css sections */
+	/* #GLOBAL - global convenience styles */
+	/* #INDEX.HTML - styles for index page */
+	/* #VIEW HEADERS - common styles */
+	/* #SCORECARD VIEW - styles specific to the scorecard */
+	/* #TOOLS VIEW - style specific to the tools page */
+	/* #PASSWORD - Update reset password styles */
+	/* #ALERT - Alert messaging styles */
+	/* #FORM VALIDATION - Form styles */
+	/* #RESPONSIVENESS - Responsive styles */
+
+
+/* ******************************************************************** */
+/* #GLOBAL STYLES */
+
+html {
+	position: relative;
+	min-height: 100%;
+}
+body {
+	margin-bottom: 40px; 	/* Margin bottom by footer height */
+	padding-top: 75px;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+}
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 40px;
+	background-color: #4A7295;
+	color: white;
+	overflow-x: hidden;
+}
+.footer-content {
+	font-size: 12px;
+	padding: 10px;
+}
+/* Make images responsive */
+/*
+ img {
+	 max-width:100%;
+	 height:auto;
+}
+*/
+
+/* Use to hide bindings until page is rendered */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+ display: none !important;
+}
+.p-5 {
+	padding: 5px;
+}
+.p-10 {
+	padding: 10px;
+}
+.p-top-3 {
+	padding-top: 3px;
+}
+.p-top-5 {
+	padding-top: 5px;
+}
+.p-top-10 {
+	padding-top: 10px;
+}
+.p-top-15 {
+	padding-top: 15px;
+}
+.p-top-20 {
+	padding-top: 20px;
+}
+.p-top-30 {
+	padding-top: 30px;
+}
+.p-btm-5 {
+	padding-bottom: 5px;
+}
+.p-btm-10 {
+	padding-bottom: 10px;
+}
+.p-btm-25 {
+	padding-bottom: 25px;
+}
+.p-btm-30 {
+	padding-bottom: 30px;
+}
+.p-left-5 {
+	padding-left: 5px;
+}
+.p-left-10 {
+	padding-left: 10px;
+}
+.p-left-15 {
+	padding-left: 15px;
+}
+.p-left-20 {
+	padding-left: 20px;
+}
+.p-left-25 {
+	padding-left: 25px;
+}
+.p-left-30 {
+	padding-left: 30px;
+	
+}
+.p-left-40 {
+	padding-left: 40px;
+	
+}
+.p-left-50 {
+	padding-left: 50px;
+}
+.p-left-60 {
+	padding-left: 60px;
+}
+.p-left-70 {
+	padding-left: 70px;
+}
+.p-left-80 {
+	padding-left: 80px;
+}
+.p-left-100 {
+	padding-left: 100px;
+}
+
+.p-right-5 {
+	padding-right: 5px;
+}
+.p-right-10 {
+	padding-right: 10px;
+}
+.p-right-15 {
+	padding-right: 15px;
+}
+.p-right-20 {
+	padding-right: 20px;
+}
+.p-right-30 {
+	padding-right: 30px;
+}
+.m-right-10 {
+	margin-right: 10px;
+}
+.m-right-20 {
+	margin-right: 20px;
+}
+.m-btm-5 {
+	margin-bottom: 5px;
+}
+.m-btm-10 {
+	margin-bottom: 10px;
+}
+.m-btm-20 {
+	margin-bottom: 20px;
+}
+.m-btm-30 {
+	margin-bottom: 30px;
+}
+.m-top-10 {
+	margin-top: 10px;
+}
+.m-top-20 {
+	margin-top: 20px;
+}
+.m-top-25 {
+	margin-top: 25px;
+}
+.m-top-30 {
+	margin-top: 30px;
+}
+.m-top-40 {
+	margin-top: 40px;
+}
+.m-left-25 {
+	margin-left: 25px;
+}
+.m-left-30 {
+	margin-left: 30px;
+}
+.fsize-10 {
+	font-size: 10px;
+}
+.fsize-11 {
+	font-size: 11px;
+}
+.fsize-12 {
+	font-size: 12px;
+}
+.fsize-13 {
+	font-size: 13px;
+}
+.fsize-15 {
+	font-size: 15px;
+}
+.fsize-16 {
+	font-size: 16px;
+}
+.white {
+	color: white;
+}
+/* Matches color of the sparkline chart bars */
+.dark-blue {
+	color: #9FB6CD;
+}
+.bg-white {
+	background: white;
+}
+.bg-ltblue {
+	background: #f7fbfe;
+}
+.pointer {
+	cursor: pointer;
+}
+.bold {
+	font-weight:bold;
+}
+.hidden {
+	display: none !important;
+	visibility: hidden !important;
+}
+.dis-none {
+	display: none;
+}
+a[ ng-click ] {
+	cursor: pointer;
+	text-decoration: none;
+}
+/* Check this */
+/*.selected {
+	background-color: rgba(41, 103, 182, 0.89);
+	color: #FFF;
+}
+*/
+
+/* #INDEX.HTML */
+/* #main-navbar */
+.navbar-inverse {
+	background-color: #4A7295;
+}
+.navbar-inverse .navbar-nav > li > a {
+	color: #D5D5D5;
+}
+/* *********************************** */
+/* IPP user dropdown css */
+/* *********************************** */
+
+
+/* Override IPP user dropdown on hover */
+.li-dropdown a:hover {
+	background-color: #F7FBFE !important;
+	font-weight: 600;
+}
+/* *********************************** */
+
+.navbar-nav > .open > a, .navbar-nav > .open > a:hover, .navbar-nav > .open > a:focus {
+	color: #fff;
+	background-color: #4A7295 !important;
+}
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+	background-color: #4A7295 !important;
+	border-bottom: 4px solid white;
+	color: #fff;
+	font-weight: 500; /* slightly bolder than normal */
+}
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+	background-color: #f5f5f5;
+	color: #000000;
+	outline: 0 none;
+	text-decoration: none;
+}
+/* Positioning for logout / feedback links */
+#navbar {
+	position: relative;
+	bottom: 45px;
+	right: 20px;
+}
+.navbar-pma-title {
+	font-size: 24px;
+	font-weight: 300;
+	padding-left: 12px;
+	position: relative;
+	top: 10px;
+	color: white;
+}
+/* main-nav - logout link */
+.navbar-right {
+	position: relative;
+	bottom: 1px;
+}
+/* main-nav link titles - Supplier Overview etc. */
+.txtTopNav {
+	font-size: 1.2em;
+}
+/* #VIEW HEADERS: BizOverview | CatOverview | Scorecard View | Tools View */
+/* Common styles */
+/* Fix top navbar - needs to be restyled to match scorecard */
+.navbar-bizoverview-fixed, .navbar-catoverview-fixed, .navbar-tools-fixed {
+	background: white;
+	padding-top: 30px;
+	top: 100px;
+	padding-bottom: 10px;
+}
+/* position biz stats container */
+.cat-overview-stats, .supp-overview-stats {
+	position: relative;
+	top: 40px;
+}
+/* Border above biz insights content */
+.border-biz-insights-content {
+	border-top: 2px solid #dde8f2;
+	background: #f7fbfe;
+}
+/* Main page title when entering a view */
+.navTitileText {
+	font-size: 1.6em;
+	color: #006699;
+	padding-right: 40px;
+}
+/* biz insights toggle button - all views */
+.icon-biz-insights {
+	padding-right: 15px;
+}
+.iconToggleDown {
+	display: none;
+}
+.iconToggleUp, .iconToggleDown {
+	position: relative;
+	top: 10px;
+	z-index: 9;
+}
+/* Select box dropdown styles - all views */
+.optBorder {
+	border-bottom: 1px solid #CCCCCC;
+}
+.optBorderDivider {
+	border-top: 1px solid #CCCCCC;
+}
+/* Text for overview risk charts */
+.txtOverviewNav {
+	font-size: 16px;
+	padding-left: 10px;
+	padding-top: 10px;
+}
+/* Styles for sparkline charts */
+/* Outer container for sparkline bar charts */
+.container-sparkline-supp-overview {
+	position: relative;
+	bottom: 20px;
+}
+/* div surronding supp overview & cat overview sparkline charts - sets the scroll */
+.div-sparkline-scroll {
+	max-height: 200px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	margin-top: 0px;
+	padding-right: 38px;
+}
+/* Header text that appears above sparkline bar chart */
+.hdr-text-sparkline-chart {
+	font-size: 14px;
+	font-weight: 600;
+}
+.sparkline-td {
+	position: relative;
+	top: 5px;
+	font-size: 13px;
+}
+/* Remove table border */
+.sparkline-th {
+	font-size: 13px;
+	font-weight: 600; /* semi bold */
+	color: #837E7E;
+}
+/* Hidden buttons for deselect supplier and category dropdowns */
+#deselect-supp, #deselect-cat {
+	display: none;
+}
+/* Set table padding and border to 0 for sparkline charts */
+#biz-overview-sparkline>tbody>tr>td, #biz-overview-sparkline>tbody>tr>th, #biz-overview-sparkline>tfoot>tr>td, #biz-overview-sparkline>tfoot>tr>th, #biz-overview-sparkline>thead>tr>td, #biz-overview-sparkline>thead>tr>th {
+	border: none !important;
+	padding: 0 !important;
+}
+#cat-overview-sparkline>tbody>tr>td, #cat-overview-sparkline>tbody>tr>th, #cat-overview-sparkline>tfoot>tr>td, #cat-overview-sparkline>tfoot>tr>th, #cat-overview-sparkline>thead>tr>td, #cat-overview-sparkline>thead>tr>th {
+	border: none !important;
+	padding: 0 !important;
+}
+/* text size for view based filters */
+#watch-filter, #supp-filter, #cat-filter, #dt-range-filter {
+	font-size: 14px;
+	font-weight: 600;/* semi-bold */
+}
+/* reset link common to biz-overview, cat-overview and scorecard */
+.reset-nav {
+	font-size: 13px;
+	font-weight: 400;
+}
+/* header styles */
+.header-text-outside {
+	font-size: 18px;
+	font-weight: 700;
+}
+.header-text-inside {
+	font-size: 12px;
+	font-weight: 300;
+}
+.all-supp-titles {
+	font-size: 16px;
+}
+.all-supp-titles-col {
+	font-size: 13px;
+	font-weight: 400;
+}
+.supp-title-values {
+	font-size: 16px;
+	font-weight: 600;
+}
+/* angular gridster plug-in styles */
+.gridster-container {
+	position: relative;
+	right: 35px;
+}
+/* ************** */
+/* save edit/link when perfroming crud operations */
+.save-edit-link {
+	position: relative;
+	right: 15px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #4277A5;
+}
+/* #SCORECARD VIEW STYLES */
+/* Top row styling */
+.headet-text-scorcard-supplier {
+	font-size: 22px;
+	font-weight: 400;
+}
+.header-numeric-text {
+	font-size: 16px;
+	font-weight: 400;
+}
+.header-numeric-text-supp-count {
+	font-size: 20px;
+	font-weight: 400;
+	color: #666666;
+}
+.header-numeric-text-descrip {
+	font-size: 13px;
+	font-weight: 300;
+}
+/* Top row rating display */
+
+/* Excellent Rating */
+.rating-toplevel-score-div-excellent {
+	min-width: 162px;
+	height: 52px;
+	border: 2px solid green;
+	color: green;
+	float: right;
+}
+/* Good Rating */
+.rating-toplevel-score-div-good {
+	min-width: 162px;
+	height: 52px;
+/*	border: 2px solid #66cd00; */
+	border: 2px solid #A2CD5A;
+/*	color: #66cd00; */
+	color:#A2CD5A;
+	float: right;
+}
+/* Fair Rating */
+.rating-toplevel-score-div-fair {
+	min-width: 162px;
+	height: 52px;
+	border: 2px solid #ffd700;
+	color: #ffd700;
+	float: right;
+}
+/* Poor Rating */
+.rating-toplevel-score-div-poor {
+	min-width: 162px;
+	height: 52px;
+	border: 2px solid #ff8c00;
+	color: #ff8c00;
+	float: right;
+	position: relative;
+	bottom: 0px;
+}
+/* Terrible Rating */
+.rating-toplevel-score-div-terrible {
+	min-width: 162px;
+	height: 52px;
+	border: 2px solid #b22222;
+	color: #b22222;
+	float: right;
+	position: relative;
+	bottom: 0px;
+}
+/* Rating Values */
+.rating-toplevel-score-value {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 36px;
+	position: relative;
+	left: 10px;
+	bottom: 3px;
+	width: 58px;
+	font-weight: bold;
+}
+/* Left Sidebar Styling */
+/* selected category */
+.activecat {
+	font-weight: 600;
+   /*background-color: #F7FBFE;*/
+	background-color: #F3F9FF;
+}
+.sidebar-rating-icons {
+	position: relative;
+	bottom: 4px;
+}
+/* Needs Attn/Doing Well Section */
+/* needs attn/doing well bg */
+.bg-needsattn {
+	background: #f8f8f8;
+}
+/* Secondary Header Display */
+.hdr-secondary-category-title {
+	font-size: 22px;
+	font-weight: 400;/*normal*/
+}
+/* KPI Overview */
+.hdr-kpi-overview-txt {
+	font-size: 14px;
+	font-weight: 600; /* semi-bold */
+	color: #607B8B;
+}
+.hdr-kpi-overview-count {
+	font-size: 14px;
+	font-weight: 300;
+	color: #607B8B;
+}
+.kpi-table-hdr-value {
+	font-size: 20px;
+	font-weight: 400;
+}
+.kpi-table-hdr-descrip {
+	font-size: 12px;
+	font-weight: 400;
+	color: #ffffff;
+}
+/* Supplier comparison tooltip styling */
+.table-sparkline .highcharts-tooltip>span {
+ background: white;
+ border: 1px solid silver;
+ border-radius: 3px;
+ box-shadow: 1px 1px 2px #888;
+ padding: 8px;
+ z-index: 9999;
+ opacity: 1.0;
+}
+/* needs attention - doing well style */
+.howdoing {
+	color: #666666;
+}
+/* Heading for performance charts... 12-month / 30 day performance */
+.sparkline-perfheading {
+	font-size: 13px;
+	font-weight: 600;
+	color: #666666;
+}
+/* If no suppliers */
+.sparkline-perfheading-nosuppliers {
+	font-size: 13px;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	color: #666666;
+}
+/* Tabset styles for scorecard */
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+	color: #555;
+	cursor: default;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-bottom-color: transparent;
+	border-top: 5px solid #FFA500;
+}
+/* Scorecard: Main Header Area  */
+/* main fixed navbar */
+.navbar-scorecard-fixed {
+	background: white;
+	padding-top: 50px;
+	top: 65px;
+	padding-bottom: 15px;
+	z-index: 999;
+}
+/* Scorecard: Biz Stats controller div */
+.biz-stats-scorecard {
+	position: relative;
+	top: 20px;
+	border-top: 2px solid #dde8f2;
+}
+.scorecard-dynamic-date {
+	position: relative;
+	bottom: 10px;
+}
+/* Biz metrics area */
+.scorecard-biz-metric-spend {
+	border-right: 1px solid #CCCCCC;
+	margin-top: 5px;
+	padding-right: 10px;
+	height: 30px;
+}
+/* #TOOLS VIEW */
+.header-text-settings {
+	font-size: 18px;
+	font-weight: 600;
+}
+.info-panel-top {
+	font-size: 18px;
+	font-weight: 600;
+	color: #607b8b;
+}
+.info-panel-top-subtext {
+	font-size: 18px;
+	font-weight: normal;
+}
+.kpi-descript {
+	padding-top: 5px;
+	font-size: 14px;
+}
+.full-details {
+	color: #4277a5;
+	font-size: 12px;
+	padding-top: 5px;
+}
+/* Slider styles */
+rzslider .rz-pointer {
+	background-color: #0db9f0;
+	border-radius: 16px;
+	cursor: pointer;
+	height: 20px;
+	top: -8px;
+	width: 32px;
+	z-index: 3;
+}
+rzslider .rz-pointer::after {
+	background: #ffffff none repeat scroll 0 0;
+	border-radius: 4px;
+	content: "";
+	height: 8px;
+	left: 12px;
+	position: absolute;
+	top: 6px;
+	width: 8px;
+}
+/* see line 31 rzslider.css for slider disabled state*/
+/* Don't display numeric tick value above slider */
+.tick-value {
+	display: none;
+}
+.header-icons {
+	padding-right: 10px;
+	color: #607B8B;
+}
+.kpi-icon {
+	padding-right: 10px;
+}
+/* Table that houses the kpi setting - service */
+#kpi-settings-service>tbody>tr>td, #kpi-settings-service>tbody>tr>th, #kpi-settings-service>tfoot>tr>td, #kpi-settings-service>tfoot>tr>th, #kpi-settings-service>thead>tr>td, #kpi-settings-service>thead>tr>th {
+	border: none !important;
+}
+/* Table that houses the kpi setting - pricing */
+#kpi-settings-pricing>tbody>tr>td, #kpi-settings-pricing>tbody>tr>th, #kpi-settings-pricing>tfoot>tr>td, #kpi-settings-pricing>tfoot>tr>th, #kpi-settings-pricing>thead>tr>td, #kpi-settings-pricing>thead>tr>th {
+	border: none !important;
+}
+#kpi-settings-other>tbody>tr>td, #kpi-settings-other>tbody>tr>th, #kpi-settings-other>tfoot>tr>td, #kpi-settings-other>tfoot>tr>th, #kpi-settings-other>thead>tr>td, #kpi-settings-other>thead>tr>th {
+	border: none !important;
+}
+/* Slider div positioning */
+.slider-dir {
+	position: relative;
+	bottom: 20px;
+}
+/* Use for disabled setting text description */
+.gray {
+	color: #999999;
+	padding-left: 30px;
+}
+/* #PASSWORD */
+.signin-form-header {
+	background: #E5F2FD;
+	border: 1px solid #E7ECF3;
+	padding: 10px;
+}
+.signin-form-header-signin {
+	font-size: 16px;
+	font-weight: 600;
+	color: #4A7296;
+	padding-left: 5px;
+}
+.signin-form-header-forgot {
+	font-size: 12px;
+	font-weight: normal;
+	color: #4A7296;
+	padding-right: 5px;
+}
+.signin-form-body {
+	border: 1px solid #E7ECF3;
+	padding: 10px;
+}
+/* Add margin to seperate input fields */
+#pass {
+	margin-bottom: 15px;
+}
+/* #ALERT - Alert messaging styles */
+/* Danger */
+.danger-alert {
+	background: #fff2f5;
+	padding: 10px;
+}
+.danger-icon-bolt {
+	color: #EE2C2C;
+	font-size: 20px !important;
+}
+.danger-alert-content {
+	font-size: 14px;
+	color: black;
+	padding-left: 10px;
+	font-weight: normal !important;
+}
+/* Confirm */
+.confirm-alert {
+	background: #eafed9;
+	padding: 10px;
+}
+.confirm-icon-check {
+	color: #66CD00;
+	font-size: 20px !important;
+}
+.confirm-alert-content {
+	font-size: 14px;
+	color: black;
+	padding-left: 10px;
+	font-weight: normal !important;
+}
+/* Info */
+.info-alert {
+	background: #f5f9fd;
+	padding: 10px;
+}
+.info-icon-circle {
+	color: #4F94CD;
+	font-size: 20px !important;
+}
+.info-alert-content {
+	font-size: 14px;
+	color: black;
+	padding-left: 10px;
+	font-weight: normal !important;
+}
+/* #FORM VALIDATION */
+/* CSS Form validation style */
+.css-form input.ng-invalid.ng-touched {
+	background-color: #FA787E;
+}
+.css-form input.ng-valid.ng-touched {
+	/*background-color: #78FA89;*/
+	
+}
+.form-validate-text {
+	font-size: 14px;
+	color:#B22222;
+}
+.modal-required-field-descrip {
+	font-size:12px;
+	color:#666666;
+}
+
+/* #RESPONSIVENESS */
+.img-responsive {
+	max-width:100%;
+}
+.ie-explorer-table-border {
+	border-color:#666666;
+}
+.smartphone-top-nav {
+	max-width:50%;
+}
+.smartphone-filters {
+	max-width:50%;
+}
+/* End responsiveness */

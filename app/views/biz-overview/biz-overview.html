@@ -1,0 +1,231 @@
+<div ng-if="presentation">
+<div ng-include src="'views/biz-overview/redirect.html'"></div>
+</div>
+<!-- hide for presentation mode -->
+<div ng-hide="presentation">
+<div>
+<!-- ************************** -->
+<div ng-controller="SuppOverviewResetFilterController" ng-init="defaultOptions()">
+  <div class="row container-fluid navbar navbar-fixed-top navbar-bizoverview-fixed" style="z-index:99;" >
+    <div class="col-md-12"> <span class="navTitileText">Supplier Overview</span> &nbsp; &nbsp;
+      <select analytics-on="change" analytics-event="watchlist"  analytics-category="Supp Overview" analytics-label="Interact with watchlists" id="watch-filter" ng-controller="SuppOverviewWatchlistController" class="watchlistFilter nya-selectpicker form-control" ng-model="WatchlistOpt" ng-init="fetch()" ng-change="filter('wl', WatchlistOpt, this);" title="&#10167; &nbsp;Saved Lists" data-live-search="false" data-style="btn-warning" data-size="auto" data-width="175px">
+       <!-- Don't need view all for single select: use reset instead -->
+       <!-- <option class="optBorder bg-warning" value="all">View All</option> -->
+        <option class="bg-info optBorder" value="CreateWL">Create Saved List</option>
+        <option class="optBorder"  ng-repeat="option in data.watchlists | orderBy:'-name':true" value="{{option.id}}">{{option.name}}</option>
+        <option class="optBorderDivider optBorder" value="t10">Top 10 by Score</option>
+        <option class="optBorder" value="t10s">Top 10 by Spend</option>
+        <option class="optBorder" value="b10">Bottom 10 by Score</option>
+      </select>
+      &nbsp;&nbsp;&nbsp; 
+      
+      <!-- Supplier Controller -->
+      <select analytics-on="change" analytics-event="suppliers"  analytics-category="Supp Overview" analytics-label="Interact with supplier list" id="supp-filter" ng-controller="SuppOverviewSupplierController" class="scorecardCategoryFilter nya-selectpicker form-control" ng-init="fetch();" ng-change="filter('s', SupplierOpt, this);" ng-model="SupplierOpt" data-live-search="true" data-style="btn-default" data-size="auto" data-width="175px" title="Suppliers" multiple data-selected-text-format="count>1">
+        <option class="optBorder bg-warning" value="deselect">View All</option>
+        <option class="optBorder"  ng-repeat="option in suppliers" value="{{option.supplierId}}">{{option.supplierName}} </option>
+      </select>
+      <button id="deselect-supp" class="btn btn-warning">View All</button>
+      <!-- This button is hidden from view --> 
+      &nbsp;&nbsp;&nbsp; 
+      
+      <!-- Category Controller -->
+      <select analytics-on="change" analytics-event="categories"  analytics-category="Supp Overview" analytics-label="Interact with category list" id="cat-filter" ng-controller="SuppOverviewCategoryController" class="scorecardCategoryFilter nya-selectpicker form-control" ng-init="fetch()" ng-model="CategoryOpt" ng-change="filter('c', CategoryOpt, this);"  data-live-search="true" data-style="btn-default" data-size="auto" data-width="175px" title="Categories"  data-selected-text-format="count>1">
+        <option class="optBorder"  ng-repeat="option in categories" value="{{option}}">{{option}}</option>
+      </select>
+      <button id="deselect-cat" class="btn btn-warning">View All</button>
+      <!-- This button is hidden from view --> 
+      &nbsp;&nbsp;&nbsp; 
+      
+      <!-- Date Range Controller -->
+      <select analytics-on="change" analytics-event="timeframe"  analytics-category="Supp Overview" analytics-label="Interact with timeframe" id="dt-range-filter-supp" ng-controller="SuppOverviewDtRangeController" class="daterange nya-selectpicker form-control" ng-model="DtRangeOpt" ng-change="filter('dtrange', DtRangeOpt);" title="12-Month Performance" data-live-search="false" data-width="195px" data-size="auto" data-style="btn-default">
+        <option class="optBorder" value="1">30-Day Performance</option>
+        <option class="optBorder" value="3">90-Day Performance</option>
+        <option selected class="optBorder" value="12">12-Month Performance</option>
+      </select>
+      <button id="deselect-supp-date-range" class="btn btn-warning hidden">View All</button>
+      <!-- This button is hidden from view --> 
+      &nbsp;&nbsp;&nbsp; 
+      <!-- Reset --> 
+      <a analytics-on="click" analytics-event="reset supp overview" analytics-category="Reset" analytics-label="User did manual reset" id="reset-overview" href="#/overview" ng-click="resetSupplierOverview()" ng-controller="SuppOverviewResetFilterController" class="text-muted reset-nav reset-titles">Reset</a> </div>
+  </div>
+  <div ng-controller="SuppOverviewBizStatsController" class="container-fluid supp-overview-stats">
+    <div class="row bg-white">
+      <div class="col-md-12">
+  <!-- Coment out built-in bootstrap collapse method -->
+  <!-- <a class="pull-right icon-biz-insights" role="button" data-toggle="collapse" href="#collapseBizInsights" aria-expanded="false" aria-controls="collapseExample">
+  <img class="iconToggleUp" src="images/icon-toggle-up.png" width="40" height="22" />
+  </a> -->
+
+   <a href="javascript:void(0);" id="toggle-biz-insights" class="pull-right icon-biz-insights"><img class="iconToggleUp" src="images/icon-toggle-up.png" width="40" height="22"><img class="iconToggleDown" src="images/icon-toggle-down.png" width="40" height="22"></a>
+   </div>
+    </div>
+    <div class="row container-fluid" >
+      <div class="col-md-12 container-fluid biz-insights-content">
+        <div class="row container-fluid border-biz-insights-content">
+          <div class="row container-fluid">
+            <div class="col-md-3"> <br/>
+              <p ng-if="!queryService.state.viewSelectedFlag" class="p-top-5"><span class="header-text-outside">{{bizoverview.supplierHdr}}</span>&nbsp;&nbsp;<span class="text-muted fsize-12"><br/>
+                <span class="supp-date-range-12">As of {{queryService.lastUpdateDate}}  ({{queryService.timeWindow}} rolling period)</span><span class="supp-date-range-1" style="display:none;">As of {{queryService.lastUpdateDate}}  ({{queryService.timeWindow}} rolling period)</span></span> </p>
+              <p ng-if="queryService.state.viewSelectedFlag" class="p-top-5"><span class="header-text-outside">{{bizoverview.supplierHdr}}</span>&nbsp;&nbsp;<span class="text-muted fsize-12"><br/>
+                <span class="supp-date-range-12">As of {{queryService.lastUpdateDate}}  ({{queryService.timeWindow}} rolling period)</span><span class="supp-date-range-1" style="display:none;">As of {{queryService.lastUpdateDate}}  ({{queryService.timeWindow}} rolling period)</span></p>
+              <div style="position:relative;bottom:15px;display:none;" id="supp-for-category" class="p-top-5"><span class="fsize-14">Selected Category: </span>&nbsp;&nbsp;<span class="text-muted fsize-12">Supplier Count ({{bizMetricData.result.supplierCount}})</span> </div>
+              <br/>
+            </div>
+            <div class="col-md-8" ><br/>
+              <section class="gridster-container" ng-controller="GridsterController" ng-if="queryService.state.viewSelectedFlag">
+                <div gridster="gridsterOpts" class="bg-ltblue"> 
+                  <!-- Use inline style for below - there is a glitch with properly rendering bg-images from main.css after build -->
+                  <p style="background:#f7fbfe;background-image:url(images/gridster-handle-1.png);background-position:bottom right;background-repeat:no-repeat;overflow:hidden;padding-top:5px;border-bottom:1px solid #CCCCCC;border-right:0px solid #CCCCCC;" gridster-item><span ng-show="noActiveTx" class="text-danger">No active transactions found for this criteria</span><span class="header-text-inside">| {{bizoverview.supplierSubHdr}}</span></p>
+                </div>
+              </section>
+              <br/>
+            </div>
+            <div class="col-md-1"><!-- fix edit saved list positioning --> 
+              <br/>
+              <p class="p-top-5"><span ng-controller="ModalCtrl"><a analytics-on="click" analytics-event="edit saved list link" analytics-category="Saved Lists" analytics-label="User clicked on the edit saved list link after selecting a saved list" class="save-edit-link" ng-click="showSavedlistModal(queryService.getCurrentWL());" ng-if="editwatchlist" href="javascript:void(0);">Edit Saved List</a><a analytics-on="click" analytics-event="save as list link" analytics-category="Saved Lists" analytics-label="User selected from supplier list and used save as list convenience" class="save-edit-link" ng-click="showSelectedlistModal();" ng-if="savewatchlist" href="javascript:void(0);">Save as List</a></span></p>
+            </div>
+          </div>
+          <!-- Comment out id and class for bootstrap collapse method -->
+          <!-- <div id="collapseBizInsights" class="biz-insights-sec-content collapse in"> -->
+          <div class="biz-insights-sec-content">  
+           <div ng-if="queryService.state.viewSelectedFlag" class="col-md-2">
+              <p><strong>&nbsp;</strong></p>
+              <p><span class="all-supp-titles">Spend for Period:</span></p>
+              <p><span class="all-supp-titles">Total PO Lines:</span></p>
+              <p><span class="all-supp-titles">Purchasing Categories:</span></p>
+            </div>
+            <div ng-if="!queryService.state.viewSelectedFlag" class="col-md-3" >
+              <p><span class="all-supp-titles">Spend for Period:</span><span class="supp-title-values p-left-10"> {{allBizMetricData.spend}} </span></p>
+              <p><span class="all-supp-titles">Total PO Lines:</span><span class="supp-title-values p-left-10"> {{allBizMetricData.poCount | number}}</span> </p>
+              <p><span class="all-supp-titles">Purchasing Categories:</span><span class="supp-title-values p-left-10"> {{allBizMetricData.categoryCount | number}}</span> </p>
+            </div>
+            <div class="col-md-1 selected-col1" ng-if="queryService.state.viewSelectedFlag">
+              <p class="all-supp-titles-col">Selected</p>
+              <p class="supp-title-values"> {{bizMetricData.result.spend}}
+              <p class="supp-title-values">{{bizMetricData.result.poCount | number}} </p>
+              <p class="supp-title-values">{{bizMetricData.result.categoryCount | number}} </p>
+            </div>
+            <div class="col-md-1" ng-if="queryService.state.viewSelectedFlag">
+              <p class="all-supp-titles-col">All Suppliers</p>
+              <!--({{allBizMetricData.supplierCount | number}})-->
+              </p>
+              <p class="supp-title-values">{{allBizMetricData.spend}} </p>
+              <p class="supp-title-values">{{allBizMetricData.poCount | number}} </p>
+              <p class="supp-title-values">{{allBizMetricData.categoryCount}} </p>
+            </div>
+            <div class="col-md-1 metric-totals1" ng-if="queryService.state.viewSelectedFlag">
+              <p class="all-supp-titles-col">% Total</p>
+              <p class="supp-title-values"> {{ bizMetricData.percentSpend }} %</p>
+              <p class="supp-title-values"> {{ bizMetricData.percentPOCount }} %</p>
+              <p class="supp-title-values"> {{ bizMetricData.percentCategoryCount }} %</p>
+            </div>
+            <div class="col-md-1" > </div>
+            <div class="col-md-2 hidden-col" ng-if="!queryService.state.viewSelectedFlag"></div>
+            <div class="col-md-6 container-sparkline-supp-overview">
+              <p class="hdr-text-sparkline-chart">Spend Breakdown by Category ({{bizMetricData.result.categoryCount}})</p>
+              <div class="div-sparkline-scroll"> 
+                <!-- New single bar chart container - in QueryService -->
+                <div id="supplier-barchart-container"><i class="fa fa-refresh fa-2x fa-spin dark-blue"></i></div>
+                <br/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<div id="supp-risk-scroll" analytics-category="Supp Overview - Chart" analytics-label="User scrolled to risk chart" analytics-on="scrollby" class="row container-fluid">
+  <div class="col-md-12">
+    <div style="background:#e4e4e4;" class="navbar">
+      <p class="txtOverviewNav"><span style="font-size:1.2em;">&nbsp;Supplier Risk</span> <span style="font-size:.9em;" ng-hide="queryService.state.viewSelectedFlag"><span class="supp-date-range-12"></span><span class="supp-date-range-1" style="display:none;"></span> ({{allBizMetricData.supplierCount}} Suppliers)</span> <span style="font-size:.9em;" ng-show="queryService.state.viewSelectedFlag">({{bizMetricData.result.supplierCount}} Suppliers)</span> <span class="pull-right" style="position:relative;right:5px;" data-placement="left" title="Supplier Risk Chart" html="true" data-content="<p>The degree to which suppliers represent risk in your business based on a given supplier's performance (score) and the amount you spend with them.
+      </p><p> The size of the bubble represents volume of trades (PO lines). The greater the volume, the more confident we are that the score is accurate. Supplier bubbles in lower right hand quarter are the greatest risk (high spend / lower than average score).</p> " data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/><span class="text-muted fsize-12" style="position:relative;right:5px;">About this Chart</span></span> </p>
+    </div>
+  </div>
+</div>
+<div class="row container-fluid">
+  <div class="col-md-12">
+    <div analytics-on="click" analytics-event="click through" analytics-category="Supp Overview" analytics-label="Click through to scorecards" style="height:700px;" class="container-fluid" id="container-overview"></div>
+  </div>
+</div>
+</div>
+<!-- End top controller div -->
+</div>
+
+
+<!-- Close tag - hide for presentation mode -->
+</div>
+</div>
+<!-- ************************** -->
+<script> 
+$(document).ready(function(){
+$("#supp-filter").change(function(){
+            $( "#supp-filter option:selected").each(function(){
+				$('#supp-for-category').hide();
+				 $('#deselect-supp').click(function() {
+				$('.disabled').prop('disabled',false);
+   				 $('#supp-filter').selectpicker('deselectAll');
+				 })
+				
+				if($(this).attr("value")=="deselect"){
+				
+				 $( "#deselect-supp" ).trigger( "click" ); // trigger click event on hidden deselect button
+				 
+                }
+				
+			
+            });
+        })
+$('#reset-overview').click(function(){
+	   $('#cat-filter').selectpicker('deselectAll');
+	   $('#watch-filter').selectpicker('deselectAll');
+	   $('#supp-for-category').hide();
+	   $( ".supp-date-range-12" ).show(); 
+	   $( ".supp-date-range-1" ).hide();
+	
+})		
+$("#cat-filter").change(function(){
+            $( "#cat-filter option:selected").each(function(){
+				 $('#supp-for-category').show();
+				 $('#deselect-cat').click(function() {
+				 $('.disabled').prop('disabled',false);
+   				 $('#cat-filter').selectpicker('deselectAll');
+				 })
+				
+				if($(this).attr("value")=="deselect"){
+				 $( "#deselect-cat" ).trigger( "click" ); // trigger click event on hidden deselect button
+                }
+            });
+        })
+/* Date range filter - manage 30-day to 12-month display updates */
+$("#dt-range-filter-supp").change(function(){
+            $( "#dt-range-filter-supp option:selected").each(function(){
+				 $('#deselect-supp-date-range').click(function() {
+				 $('.disabled').prop('disabled',false);
+   				 $('#dt-range-filter-supp').selectpicker('deselectAll');
+				 })
+				
+				if($(this).attr("value")=="12"){
+				 $( ".supp-date-range-12" ).show(); 
+				 $( ".supp-date-range-1" ).hide();
+                } else{
+				 $( ".supp-date-range-1" ).show();
+				 $( ".supp-date-range-12" ).hide(); 
+                }
+            });
+        })
+
+/* ************************************************************* */		
+$('#toggle-biz-insights').click(function(){
+	$('.biz-insights-sec-content').slideToggle();
+	$('.iconToggleDown').toggle();
+	$('.iconToggleUp').toggle();
+})
+
+})
+</script> 

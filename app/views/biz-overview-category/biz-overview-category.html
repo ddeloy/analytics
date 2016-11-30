@@ -1,0 +1,173 @@
+<div ng-controller="CatOverviewResetFilterController" ng-init="defaultCategoryOptions()">
+  <div class="row container-fluid navbar navbar-fixed-top navbar-catoverview-fixed" style="z-index:99;">
+    <div class="col-md-12"> <span class="navTitileText">Category Overview</span> &nbsp; &nbsp;
+      <select analytics-on="change" analytics-event="watchlist"  analytics-category="Cat Overview" analytics-label="Interact with watchlists" id="cat-watch-filter" ng-controller="CatOverviewWatchlistController" class="watchlistFilter nya-selectpicker form-control" ng-model="WatchlistOpt" ng-init="fetch()" ng-change="filter('wl', WatchlistOpt, this);" title="Insights" data-live-search="false" data-style="btn-warning" data-size="auto" data-width="175px">
+        <option class="optBorder" value="t10">Top 10 by Score</option>
+        <option class="optBorder" value="t10s">Top 10 by Spend</option>
+        <option class="optBorder" value="b10">Bottom 10 by Score</option>
+      </select>
+      &nbsp;&nbsp;&nbsp; 
+      <!-- CatOverviewCategoryController: Category Controller -->
+      <select analytics-on="change" analytics-event="category"  analytics-category="Cat Overview" analytics-label="Interact with categories" id="cat-cat-filter" ng-controller="CatOverviewCategoryController" class="scorecardCategoryFilter nya-selectpicker form-control" ng-init="fetch()" ng-model="CategoryOpt" ng-change="filter('c', CategoryOpt, this);"  data-live-search="true" data-style="btn-default" data-size="auto" data-width="175px" title="Categories" multiple data-selected-text-format="count>1">
+        <option class="optBorder bg-warning" value="deselect">View All</option>
+        <option class="optBorder"  ng-repeat="option in categories" value="{{option}}">{{option}}</option>
+      </select>
+      <button id="deselect-cat" class="btn btn-warning">View All</button>
+      <!-- This button is hidden from view --> 
+      &nbsp;&nbsp;&nbsp; 
+      
+      <!-- Date Range Controller -->
+      <select analytics-on="change" analytics-event="timeframe"  analytics-category="Cat Overview" analytics-label="Interact with timeframe" id="dt-range-filter-cat" ng-controller="CatOverviewDtRangeController" class="daterange nya-selectpicker form-control" ng-model="DtRangeOpt" ng-change="filter('dtrange', DtRangeOpt);" title="12-Month Performance" data-live-search="false" data-width="195px" data-size="auto" data-style="btn-default">
+        <option class="optBorder" value="1">30-Day Performance</option>
+        <option class="optBorder" value="3">90-Day Performance</option>
+        <option selected class="optBorder" value="12">12-Month Performance</option>
+      </select>
+      <button id="deselect-cat-date-range" class="btn btn-warning hidden">View All</button>
+      <!-- This button is hidden from view --> 
+      &nbsp;&nbsp;&nbsp; 
+      <!-- Reset --> <!-- defaultCategoryOptions() resets the dropdown --> 
+      <a analytics-on="click" analytics-event="reset" analytics-category="Cat Overview" analytics-label="User did manual reset" id="reset-cat" href="#/overviewcat" ng-click="resetFilterCategoryOptions();defaultCategoryOptions()" ng-controller="CatOverviewResetFilterController" class="text-muted reset-nav reset-titles">Reset</a> </div>
+  </div>
+  <div ng-controller="CatOverviewBizStatsController" class="container-fluid cat-overview-stats">
+    <div class="row bg-white">
+      <div class="col-md-12"><a href="javascript:void(0);" id="toggle-biz-insights" class="pull-right icon-biz-insights"><img class="iconToggleUp" src="images/icon-toggle-up.png" width="40" height="22"><img class="iconToggleDown" src="images/icon-toggle-down.png" width="40" height="22"></a></div>
+    </div>
+    <div class="row container-fluid" >
+      <div class="col-md-12 container-fluid biz-insights-content">
+        <div class="row container-fluid border-biz-insights-content">
+          <div class="row container-fluid">
+            <div class="col-md-3"> <br/>
+              <p ng-if="!queryService.state.viewSelectedFlag"><span class="header-text-outside p-top-5">All Categories ({{allBizMetricData.categoryCount}})<!--{{bizoverview.supplierHdr}}--></span>&nbsp;&nbsp;<span class="text-muted" style="font-size:12px;"><br/>
+                <span class="cat-date-range-12">As of {{queryService.lastUpdateDate}}  ({{queryService.timeWindow}} rolling period)</span><span class="cat-date-range-1" style="display:none;">As of {{queryService.lastUpdateDate}}  ({{queryService.timeWindow}} rolling period)</span></span> </p>
+              <p ng-if="queryService.state.viewSelectedFlag"><span class="header-text-outside p-top-5">{{queryService.categoryHeading}} ({{bizMetricData.result.categoryCount}})<!--{{bizoverview.supplierHdr}}--></span>&nbsp;&nbsp;<span class="text-muted" style="font-size:12px;"><br/>
+                <span class="cat-date-range-12">As of {{queryService.lastUpdateDate}}  ({{queryService.timeWindow}} rolling period)</span><span class="cat-date-range-1" style="display:none;">As of {{queryService.lastUpdateDate}}  ({{queryService.timeWindow}} rolling period)</span> </p>
+              <br/>
+            </div>
+            <div class="col-md-8" ><br/>
+              <section style="position:relative;right:35px;" ng-controller="GridsterController" ng-if="queryService.state.viewSelectedFlag">
+                <div gridster="gridsterOpts" style="background:#f7fbfe;">
+                  <p style="background:#f7fbfe;background-image:url(images/gridster-handle-1.png);background-position:bottom right;background-repeat:no-repeat;overflow:hidden;padding-top:5px;border-bottom:1px solid #CCCCCC;border-right:0px solid #CCCCCC;" gridster-item><span ng-show="noActiveTx" class="text-danger">No active transactions found for this criteria</span><span class="header-text-inside">| {{bizoverview.supplierSubHdr}}</span></p>
+                </div>
+              </section>
+              <br/>
+            </div>
+            <div class="col-md-1"><!-- fix edit saved list positioning --> 
+              <br/>
+              <p style="padding-top:5px;"><span ng-hide="noActiveTx" ng-controller="ModalCtrl"><a style="position:relative;right:15px;" class="save-edit-link" ng-click="showSavedlistModal(queryService.getCurrentWL());" ng-if="editwatchlist" href="javascript:void(0);">Edit Saved List</a><a class="save-edit-link" ng-click="showSelectedlistModal();" ng-if="savewatchlist" href="javascript:void(0);">Save as List</a></span></p>
+            </div>
+          </div>
+          <div class="biz-insights-sec-content">
+            <div ng-if="queryService.state.viewSelectedFlag" class="col-md-2">
+              <p><strong>&nbsp;</strong></p>
+              <p><span class="all-supp-titles">Spend for Period:</span></p>
+              <p><span class="all-supp-titles">Total PO Lines:</span></p>
+              <p><span class="all-supp-titles">Total Suppliers:</span></p>
+            </div>
+            <div ng-if="!queryService.state.viewSelectedFlag" class="col-md-3" >
+              <p><span class="all-supp-titles">Spend for Period:</span><span class="supp-title-values" style="padding-left:10px;"> {{allBizMetricData.spend}} </span></p>
+              <p><span class="all-supp-titles">Total PO Lines:</span><span class="supp-title-values" style="padding-left:10px;"> {{allBizMetricData.poCount | number}}</span> </p>
+              <p><span class="all-supp-titles">Total Suppliers:</span><span class="supp-title-values" style="padding-left:10px;"> {{allBizMetricData.supplierCount | number}}</span> </p>
+            </div>
+            <div class="col-md-1 selected-col1" ng-if="queryService.state.viewSelectedFlag">
+              <p class="all-supp-titles-col">Selected</p>
+              <p class="supp-title-values"> {{bizMetricData.result.spend}}
+              <p class="supp-title-values">{{bizMetricData.result.poCount | number}} </p>
+              <p class="supp-title-values">{{bizMetricData.result.supplierCount | number}} </p>
+            </div>
+            <div class="col-md-1" ng-if="queryService.state.viewSelectedFlag">
+              <p class="all-supp-titles-col">All Categories</p>
+              <!--({{allBizMetricData.supplierCount | number}})-->
+              </p>
+              <p class="supp-title-values">{{allBizMetricData.spend}} </p>
+              <p class="supp-title-values">{{allBizMetricData.poCount | number}} </p>
+              <p class="supp-title-values">{{allBizMetricData.supplierCount}} </p>
+            </div>
+            <div class="col-md-1 metric-totals1" ng-if="queryService.state.viewSelectedFlag">
+              <p class="all-supp-titles-col">% Total</p>
+              <p class="supp-title-values"> {{ bizMetricData.percentSpend }} %</p>
+              <p class="supp-title-values"> {{ bizMetricData.percentPOCount }} %</p>
+              <p class="supp-title-values"> {{ bizMetricData.percentCategoryCount }} %</p>
+            </div>
+            <div class="col-md-1" ></div>
+            <div class="col-md-2 hidden-col" ng-if="!queryService.state.viewSelectedFlag"></div>
+            <div class="col-md-6" style="position:relative;bottom:20px;">
+              <p style="font-size:14px;font-weight:600;">Spend Breakdown by Supplier ({{bizMetricData.result.supplierCount}})</p>
+              <div class="div-sparkline-scroll"> 
+                <!-- New single bar chart container - in QueryServcie -->
+                <div id="category-barchart-container"><i class="fa fa-refresh fa-2x fa-spin" style="color:#A2CD5A;"></i></div>
+              </div>
+              <br/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<div analytics-on="scrollby" id="cat-risk-scroll" analytics-category="Cat Overview - Chart" analytics-label="User scrolled to risk chart" class="row container-fluid">
+  <div class="col-md-12">
+    <div style="background:#e4e4e4;" class="navbar">
+      <p class="txtOverviewNav"><span style="font-size:1.2em;">&nbsp;Category Risk</span><!--<span data-placement="top" title="Category Risk" data-content="You can drag your mouse around a selected area to zoom in." data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x" style="color:#F93;"/></span>--> <span style="font-size:.9em;" ng-hide="queryService.state.viewSelectedFlag"><span class="cat-date-range-12"></span><span class="cat-date-range-1" style="display:none;"></span>({{allBizMetricData.categoryCount}} Categories)</span> <span style="font-size:.9em;" ng-show="queryService.state.viewSelectedFlag">({{bizMetricData.result.categoryCount}} Categories)</span> <span class="pull-right" style="position:relative;right:5px;" data-placement="left" title="Category Risk Chart" html="true" data-content="<p>The degree to which various categories represent risk in your business based on the aggregate performance (score) of all suppliers in that category, and the amount you spend with them.
+      </p><p>The greater the volume, the more confident we are that the score is accurate. Category bubbles in lower right hand quarter are the greatest risk (high spend / lower than average score).</p> " data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/><span class="text-muted fsize-12" style="position:relative;right:5px;">About this Chart</span></span> </p>
+    </div>
+  </div>
+</div>
+<div class="row container-fluid">
+  <div class="col-md-12">
+    <div style="height:700px;" class="container-fluid" id="container-overview-category"></div>
+  </div>
+</div>
+</div>
+</div>
+<!-- End Reset Controller --> 
+<script> 
+$(document).ready(function(){    
+$("#cat-cat-filter").change(function(){
+            $( "#cat-cat-filter option:selected").each(function(){
+				 $('#deselect-cat').click(function() {
+				 $('.disabled').prop('disabled',false);
+   				 $('#cat-cat-filter').selectpicker('deselectAll');
+				 })
+				
+				if($(this).attr("value")=="deselect"){
+				 $( "#reset-cat" ).trigger( "click" ); // trigger click event on hidden deselect button
+                }
+            });
+        })
+/* Date range filter - manage 30-day to 12-month display updates */
+$("#dt-range-filter-cat").change(function(){
+            $( "#dt-range-filter-cat option:selected").each(function(){
+				 $('#deselect-cat-date-range').click(function() {
+				 $('.disabled').prop('disabled',false);
+   				 $('#dt-range-filter-cat').selectpicker('deselectAll');
+				 })
+				
+				if($(this).attr("value")=="12"){
+				 $( ".cat-date-range-12" ).show(); 
+				 $( ".cat-date-range-1" ).hide();
+                } else{
+				 $( ".cat-date-range-1" ).show();
+				 $( ".cat-date-range-12" ).hide(); 
+                }
+            });
+        })
+
+/* ************************************************************* */
+$('#reset-cat').click(function(){
+	   $('#cat-watch-filter').selectpicker('deselectAll');
+	   $( ".cat-date-range-12" ).show(); 
+	   $( ".cat-date-range-1" ).hide();
+	
+})			
+$('#toggle-biz-insights').click(function(){
+	$('.biz-insights-sec-content').slideToggle();
+	$('.iconToggleDown').toggle();
+	$('.iconToggleUp').toggle();
+})
+})
+</script> 

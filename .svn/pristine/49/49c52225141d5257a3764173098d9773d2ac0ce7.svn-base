@@ -1,0 +1,550 @@
+<style>
+/* Override highchart default tooltip style */
+.highcharts-tooltip>span {
+	background: white;
+	padding: 10px;
+	z-index: 9999;
+	opacity: 1.0;
+}
+.no-activetx-text {
+	padding-top: 30px;
+	padding-left: 20px;
+	padding-right: 20px;
+	font-size: 14px;
+	color: #666666;
+}
+.no-activetx-cols {
+	height: 550px;
+	background: #F2F2F2;
+}
+.no-active-tx-col-divider {
+	height: 550px;
+	width: 20px;
+	background: white;
+	z-index: 999;
+}
+.cat-score-right {
+	color: #333333;
+	font-size: 16px;
+	padding-right: 10px;
+}
+.cat-score-right-rating {
+	color: #333333;
+	font-size: 13px;
+	padding-left: 10px;
+}
+.cat-score-right-icon {
+	font-size: 11px;
+	position: relative;
+	bottom: 1px;
+}
+/* For Scorecard Summary */
+/* Toggle buttons */
+.fa-toggle {
+	font-size:18px;
+}
+.fa-enabled {
+	color:#b8bab5;
+}
+.fa-disabled {
+	color:#515151;
+}
+
+.enabled-class {
+	border:1px solid  #b8bab5;
+}
+.disabled-class {
+	border:2px solid  #515151;
+}
+
+.biz-stats-scorecard {
+    position: relative;
+    top: 16px;
+    border-top: 0px solid #dde8f2;
+}
+
+</style>
+
+<div ng-controller="ScorecardResetFilterController" ng-init="defaultScorecardOptions();">
+<div  ng-controller="ScorecardBizStatsController">
+<div class="row container-fluid navbar navbar-fixed-top navbar-scorecard-fixed" style="z-index:99;border-bottom:2px solid #dde8f2;">
+  <div class="col-md-8 container-fluid"> <span class="navTitileText">Scorecards</span> &nbsp; &nbsp; 
+    
+    <!-- Supplier Controller --> 
+    <span><strong>Supplier:</strong>&nbsp;</span>
+    <select ng-disabled="presentation" analytics-on="change" analytics-event="watchlist"  analytics-category="Scorecards" analytics-label="Interact with supplier list" id="supp-score-filter" ng-controller="ScorecardSupplierController" class="scorecardCategoryFilter nya-selectpicker form-control" ng-init="fetch();" ng-change="filter('s', SupplierOpt, this);" ng-model="SupplierOpt" data-live-search="true" data-style="btn-default" data-size="auto" data-width="175px" title="{{ScorecardSupplierName}}">
+      <option class="optBorder"  ng-repeat="option in suppliers" value="{{option.supplierId}}" ng-bind="option.supplierName"></option>
+    </select>
+    &nbsp;&nbsp;&nbsp; 
+    
+    <!-- Date Range Controller -->
+    <span id="timeframe" style="display:none;">
+    <select analytics-on="change" analytics-event="timeframe"  analytics-category="Scorecards" analytics-label="Interact with timeframe" id="dt-range-score-filter" ng-controller="ScorecardDtRangeController" class="daterange nya-selectpicker form-control" ng-model="DtRangeOpt" ng-change="filter('dtrange', DtRangeOpt);" title="12-Month Performance" data-size="auto" data-live-search="false" data-width="195px" data-style="btn-default">
+      <option class="optBorder" value="1">30-Day Performance</option>
+      <option class="optBorder" value="3">90-Day Performance</option>
+      <option selected class="optBorder" value="12">12-Month Performance</option>
+    </select>
+    &nbsp;&nbsp;&nbsp;
+    </span>
+    <!-- Reset --> 
+    <a ng-show="scorecardSummary" analytics-on="click" analytics-event="reset" analytics-category="Scorecards" analytics-label="User did manual reset" id="reset-scorecards" href="#/scorecards" ng-click="resetFilterScorecardClickThruOptions();defaultScorecardClickThruOptions()" ng-controller="ScorecardClickThruResetFilterController" class="text-muted reset-nav reset-titles">Reset</a>
+    </div>
+<div class="col-md-4 container-fluid">
+   <div class="pull-right p-right-20">
+
+
+   <!-- <a analytics-on="click" analytics-event="reset" analytics-category="Scorecards" analytics-label="User did manual reset" id="reset-scorecards" href="#/scorecards" ng-click="resetFilterScorecardClickThruOptions();defaultScorecardClickThruOptions()" ng-controller="ScorecardClickThruResetFilterController" class="text-muted reset-nav reset-titles">Reset</a> -->
+        <label title="View scorecard summary" id="hide-timeframe" ng-disabled="!scorecardSummary" class="btn btn-sm btn-default m-right-20"  ng-class="!scorecardSummary ? 'enabled-class' : 'disabled-class'" ng-init="scorecardSummary=true">
+                    <input ng-disabled="!scorecardSummary" hidden="true" ng-true-value="true" ng-false-value="false" checked type="checkbox" ng-model="scorecardSummary">
+                  <!-- <i class="fa fa-th"/> -->
+                    <i ng-class="!scorecardSummary ?  'fa-enabled' : 'fa-disabled'" class="fa fa-th fa-toggle"></i>
+                     </label> 
+                    
+        <label id="show-timeframe" title="View score data for categories" ng-disabled="scorecardSummary"  class="btn btn-sm btn-default"  ng-class="scorecardSummary ? 'enabled-class' : 'disabled-class'" ng-init="scorecardSummary=false">
+                    <input ng-disabled="scorecardSummary" hidden="true" ng-true-value="true" ng-false-value="false" checked type="checkbox" ng-model="scorecardSummary">
+                   <!-- <i class="fa fa-bar-chart"/> -->
+                    <i ng-class="scorecardSummary ?  'fa-enabled' : 'fa-disabled'" class="fa fa-bar-chart fa-toggle"></i>
+
+                    
+                    
+                    </label> 
+
+    
+    </div>
+</div>
+</div>
+<!-- End navbar fixed top --> 
+
+<!-- No ActiveTX Stylin -->
+<div ng-show="noActiveTx" class="container-fluid biz-stats-scorecard"><!-- controller --> 
+  <br/>
+  <div class="row">
+    <div class="col-md-3 scorecard-dynamic-date"> <span class="headet-text-scorcard-supplier">{{scorecardSupplierName}}</span> <br/>
+      <span class="header-text-inside text-danger">
+      No active transactions found for selected timeframe
+     <!-- As of {{queryService.sc.lastUpdateDate}}  ({{queryService.sc.timeWindow}} rolling period)</span> -->
+    </div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+  <!--    <div ng-show="noActiveTx" class="text-danger m-top-10">No active transactions found for this criteria</div> -->
+    </div>
+  </div>
+  <div ng-if="!noActiveTx" style="border-top:15px solid #e4e4e4;margin-top:5px;"></div>
+ <!-- <br/> -->
+<!--  <div ng-if="!scorecardSummary" ng-include src="'views/scorecard/scorecard-latest-summary.html'"></div> -->
+
+  
+  <!-- Sidebar Category List -->
+ <!-- <div class="row container-fluid">
+    <div class="col-md-3 container-fluid no-activetx-cols">
+      <p class="no-activetx-text">No categories were active for this supplier for the timeframe selected.</p>
+    </div>
+    <div class="col-md-9 container-fluid no-activetx-cols">
+      <div class="no-active-tx-col-divider"></div>
+    </div>
+  </div> -->
+</div>
+<!-- End controller --> 
+<!-- End no activeTX presentation -->
+
+<div ng-hide="noActiveTx" class="container-fluid biz-stats-scorecard">
+<br/>
+<div class="row"> 
+  <!-- Col -1 --> <!-- Supplier Name and Rolling Date -->
+  <div class="col-md-3 scorecard-dynamic-date"> <span class="headet-text-scorcard-supplier">{{scorecardSupplierName}}</span> <br/>
+    <span class="header-text-inside">As of {{queryService.sc.lastUpdateDate}}  ({{queryService.sc.timeWindow}} rolling period)</span> </div>
+  <!-- End col 1 -->
+  
+  <div class="col-md-5">
+    <div class="pull-left p-top-3" style="height:23px;border-right:1px solid #CCCCCC;"><span class="pull-right header-numeric-text-descrip p-right-20" style="padding-top:3px;">Spend</span><span class="header-numeric-text pull-right p-right-10">{{bizMetricData.result.spend}}</span></div>
+    <div class="pull-left p-top-3" style="height:23px;border-right:1px solid #CCCCCC;"><span class="header-numeric-text pull-left p-right-10 p-left-20" >{{bizMetricData.result.poCount | number}}</span><span class="pull-left header-numeric-text-descrip p-right-15" style="padding-top:3px;">PO Lines</span></div>
+    <div class="pull-left p-top-3" style="height:23px;"><span class="pull-right header-numeric-text-descrip p-right-10" style="padding-top:3px;">Categories</span><span class="header-numeric-text pull-right p-left-20 p-right-10">{{bizMetricData.result.categoryCount}}</span></div>
+    <div style="clear:both;"></div>
+  </div>
+  <div class="col-md-1"></div>
+  
+  <!-- Col -5 --> <!-- Selected Supplier Overall Score -->
+  <div class="col-md-3" style="position:relative;bottom:7px;"> 
+    
+    <!-- Begin Top Level Ratings -->
+    <div ng-include src="'views/scorecard/rating-top-level.html'"></div>
+    
+    <!-- End Top Level Ratings --> 
+  </div>
+  <!-- Close row --> 
+</div>
+<!-- Close Biz stats controller -->
+
+<div ng-show="scorecardSummary" style="border-top:15px solid #e4e4e4;margin-top:5px;"></div>
+<br ng-show="scorecardSummary"/>
+<div ng-show="!scorecardSummary" ng-include src="'views/scorecard/scorecard-latest-summary.html'"></div>
+
+<!-- End Top Row --> 
+<!-- #SIDEBAR --> 
+<!-- Sidebar Category List -->
+<div ng-hide="!scorecardSummary">
+<div class="row container-fluid">
+<div class="col-md-3 container-fluid" style="border-right:1px solid #CCCCCC;">
+  <div> 
+    <!-- Sidebar sort --> 
+    <span><strong>Sort by:</strong>&nbsp;</span>
+    <select id="sidebar-filter" class="nya-selectpicker form-control" ng-model="sidebarSort" title="Spend - High to Low" data-size="auto" data-live-search="false" data-width="195px" data-style="btn-default">
+      <option selected class="optBorder" value="spenddesc">Spend - High to Low</option>
+      <option selected class="optBorder" value="spendasc">Spend - Low to High</option>
+      <option selected class="optBorder" value="scoredesc">Score - High to Low</option>
+      <option selected class="optBorder" value="scoreasc">Score - Low to High</option>
+      <!--  <option selected class="optBorder" value="catdesc">Sort by Category (desc)</option> -->
+      <option selected class="optBorder" value="catasc">Category Name (A-Z)</option>
+    </select>
+    <br/>
+    <br/>
+    <!-- #SIDEBAR --> 
+    <!-- Order by Spend DESC -->
+    <table id="table-sidebar-spend-desc" class="table table-condensed table-fixed table-responsive" analytics-on="click" analytics-event="scorecard - spend desc" analytics-category="Scorecards - Category Sidebar" analytics-label="User interacted with category sidebar default - sort sort by spend(desc)">
+      <tbody>
+        <tr id="tr-sidebar-spend-desc" style="cursor:pointer;border-bottom:1px solid #EEEEEE;border-top:1px solid #EEEEEE;" ng-repeat="data in bizMetricData.result.spendByGroup" ng-click="filter('c', data.category);select($index)" ng-class="{activecat: $index == selected}">
+          <td style="width:53%;"><div class="fsize-16" style="margin-top:0px;padding-left:0%;">{{data.category}}</div>
+            <div class="fsize-16" style="padding-left:0%;">{{data.spend | currency:"$":0}}</div></td>
+          <td style="width:47%;" align="right"><div style="padding-right:5%;font-family:'Open Sans', sans-serif;font-size:2em;max-height:100%;position:relative;top:4px;left:5%;"><span style="color:#666666;"> {{data.score}} </span> 
+              <!-- Rating Excellent --> 
+              <span ng-if="data.score >= 85" data-placement="top" data-content="Performance: Excellent. Scores 85 or greater." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-excellent-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Good --> 
+              <span ng-if="data.score >= 75 && data.score < 85" data-placement="top" data-content="Performance: Good. Scores between 75 - 84." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-good-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Fair --> 
+              <span ng-if="data.score >= 65 && data.score < 75" data-placement="top" data-content="Performance: Fair. Scores 65 - 74." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-average-adjust-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Poor --> 
+              <span ng-if="data.score >= 55 && data.score < 65" data-placement="top" data-content="Performance: Poor. Scores 55 - 64." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-belowavg-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Terrible --> 
+              <span ng-if="data.score < 55" data-placement="top" data-content="Performance:Terrible. Scores less than 55." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-poor-1.png" style="max-width:100%;height:auto;" /></span> </div></td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- Order by Spend ASC -->
+    <table STyle="display:none;" id="table-sidebar-spend-asc" class="table table-condensed table-fixed table-responsive" analytics-on="click" analytics-event="scorecard - spend asc" analytics-category="Scorecards - Category Sidebar" analytics-label="User interacted with category sidebar - sort by score(asc)">
+      <tbody>
+        <tr id="tr-sidebar-spend-asc" style="cursor:pointer;border-bottom:1px solid #EEEEEE;border-top:1px solid #EEEEEE;" ng-repeat="data in bizMetricData.result.spendByGroup | orderBy:'spend'" ng-click="filter('c', data.category);select($index)" ng-class="{activecat: $index == selected}">
+          <td style="width:53%;"><div class="fsize-16" style="margin-top:0px;padding-left:0%;">{{data.category}}</div>
+            <div class="fsize-16" style="padding-left:0%;">{{data.spend | currency:"$":0}}</div></td>
+          <td style="width:47%;" align="right"><div style="padding-right:5%;font-family:'Open Sans', sans-serif;font-size:2em;max-height:100%;position:relative;top:4px;left:5%;"><span style="color:#666666;"> {{data.score}} </span> 
+              <!-- Rating Excellent --> 
+              <span ng-if="data.score >= 85" data-placement="top" data-content="Performance: Excellent. Scores 85 or greater." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-excellent-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Good --> 
+              <span ng-if="data.score >= 75 && data.score < 85" data-placement="top" data-content="Performance: Good. Scores between 75 - 84." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-good-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Fair --> 
+              <span ng-if="data.score >= 65 && data.score < 75" data-placement="top" data-content="Performance: Fair. Scores 65 - 74." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-average-adjust-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Poor --> 
+              <span ng-if="data.score >= 55 && data.score < 65" data-placement="top" data-content="Performance: Poor. Scores 55 - 64." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-belowavg-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Terrible --> 
+              <span ng-if="data.score < 55" data-placement="top" data-content="Performance:Terrible. Scores less than 55." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-poor-1.png" style="max-width:100%;height:auto;" /></span> </div></td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- Order by Score DESC -->
+    <table style="display:none;" id="table-sidebar-score-desc" class="table table-condensed table-fixed table-responsive" analytics-on="click" analytics-event="scorecard - score desc" analytics-category="Scorecards - Category Sidebar" analytics-label="User interacted with category sidebar - sort by score(desc)">
+      <tbody>
+        <tr id="tr-sidebar-score-desc"  style="cursor:pointer;border-bottom:1px solid #EEEEEE;border-top:1px solid #EEEEEE;" ng-repeat="data in bizMetricData.result.spendByGroup | orderBy:'-score'" ng-click="filter('c', data.category);select($index)" ng-class="{activecat: $index == selected}">
+          <td style="width:53%;"><div class="fsize-16" style="margin-top:0px;padding-left:0%;">{{data.category}}</div>
+            <div class="fsize-16" style="padding-left:0%;">{{data.spend | currency:"$":0}}</div></td>
+          <td style="width:47%;" align="right"><div style="padding-right:5%;font-family:'Open Sans', sans-serif;font-size:2em;max-height:100%;position:relative;top:4px;left:5%;"><span style="color:#666666;"> {{data.score}} </span> 
+              <!-- Rating Excellent --> 
+              <span ng-if="data.score >= 85" data-placement="top" data-content="Performance: Excellent. Scores 85 or greater." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-excellent-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Good --> 
+              <span ng-if="data.score >= 75 && data.score < 85" data-placement="top" data-content="Performance: Good. Scores between 75 - 84." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-good-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Fair --> 
+              <span ng-if="data.score >= 65 && data.score < 75" data-placement="top" data-content="Performance: Fair. Scores 65 - 74." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-average-adjust-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Poor --> 
+              <span ng-if="data.score >= 55 && data.score < 65" data-placement="top" data-content="Performance: Poor. Scores 55 - 64." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-belowavg-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Terrible --> 
+              <span ng-if="data.score < 55" data-placement="top" data-content="Performance:Terrible. Scores less than 55." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-poor-1.png" style="max-width:100%;height:auto;" /></span> </div></td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- Order by Score ASC -->
+    <table style="display:none;" id="table-sidebar-score-asc" class="table table-condensed table-fixed table-responsive" analytics-on="click" analytics-event="scorecard - score asc" analytics-category="Scorecards - Category Sidebar" analytics-label="User interacted with category sidebar - sort by score(asc)">
+      <tbody>
+        <tr id="tr-sidebar-score-asc"  style="cursor:pointer;border-bottom:1px solid #EEEEEE;border-top:1px solid #EEEEEE;" ng-repeat="data in bizMetricData.result.spendByGroup | orderBy:'score'" ng-click="filter('c', data.category);select($index)" ng-class="{activecat: $index == selected}">
+          <td style="width:53%;"><div class="fsize-16" style="margin-top:0px;padding-left:0%;">{{data.category}}</div>
+            <div class="fsize-16" style="padding-left:0%;">{{data.spend | currency:"$":0}}</div></td>
+          <td style="width:47%;" align="right"><div style="padding-right:5%;font-family:'Open Sans', sans-serif;font-size:2em;max-height:100%;position:relative;top:4px;left:5%;"><span style="color:#666666;"> {{data.score}} </span> 
+              <!-- Rating Excellent --> 
+              <span ng-if="data.score >= 85" data-placement="top" data-content="Performance: Excellent. Scores 85 or greater." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-excellent-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Good --> 
+              <span ng-if="data.score >= 75 && data.score < 85" data-placement="top" data-content="Performance: Good. Scores between 75 - 84." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-good-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Fair --> 
+              <span ng-if="data.score >= 65 && data.score < 75" data-placement="top" data-content="Performance: Fair. Scores 65 - 74." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-average-adjust-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Poor --> 
+              <span ng-if="data.score >= 55 && data.score < 65" data-placement="top" data-content="Performance: Poor. Scores 55 - 64." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-belowavg-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Terrible --> 
+              <span ng-if="data.score < 55" data-placement="top" data-content="Performance:Terrible. Scores less than 55." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-poor-1.png" style="max-width:100%;height:auto;" /></span> </div></td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- Order by Category ASC -->
+    <table style="display:none;" id="table-sidebar-category-asc" class="table table-condensed table-fixed table-responsive" analytics-on="click" analytics-event="scorecard - category asc" analytics-category="Scorecards - Category Sidebar" analytics-label="User interacted with category sidebar - sort by category(asc)">
+      <tbody>
+        <tr id="tr-sidebar-category-asc"  style="cursor:pointer;border-bottom:1px solid #EEEEEE;border-top:1px solid #EEEEEE;" ng-repeat="data in bizMetricData.result.spendByGroup | orderBy:'category'" ng-click="filter('c', data.category);select($index)" ng-class="{activecat: $index == selected}">
+          <td style="width:53%;"><div class="fsize-16" style="margin-top:0px;padding-left:0%;">{{data.category}}</div>
+            <div class="fsize-16" style="padding-left:0%;">{{data.spend | currency:"$":0}}</div></td>
+          <td style="width:47%;" align="right"><div style="padding-right:5%;font-family:'Open Sans', sans-serif;font-size:2em;max-height:100%;position:relative;top:4px;left:5%;"><span style="color:#666666;"> {{data.score}} </span> 
+              <!-- Rating Excellent --> 
+              <span ng-if="data.score >= 85" data-placement="top" data-content="Performance: Excellent. Scores 85 or greater." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-excellent-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Good --> 
+              <span ng-if="data.score >= 75 && data.score < 85" data-placement="top" data-content="Performance: Good. Scores between 75 - 84." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-good-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Fair --> 
+              <span ng-if="data.score >= 65 && data.score < 75" data-placement="top" data-content="Performance: Fair. Scores 65 - 74." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-average-adjust-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Poor --> 
+              <span ng-if="data.score >= 55 && data.score < 65" data-placement="top" data-content="Performance: Poor. Scores 55 - 64." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-belowavg-1.png" style="max-width:100%;height:auto;" /></span> 
+              <!-- Rating Terrible --> 
+              <span ng-if="data.score < 55" data-placement="top" data-content="Performance:Terrible. Scores less than 55." data-trigger="hover" bs-popover>&nbsp;<img class="sidebar-rating-icons" src="images/icon-cat-poor-1.png" style="max-width:100%;height:auto;" /></span> </div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- End sidebar-column 1 -->
+
+<div class="col-md-9">
+<div class="row"><!-- Sub row --> 
+  <!-- End col -->
+  <div class="col-md-9 m-top-10">
+    <div class="pull-left hdr-secondary-category-title p-right-30" style="position:relative;bottom:3px;">{{queryService.scActiveCategory}}</div>
+    <div class="pull-left p-top-3" style="height:23px;border-right:1px solid #CCCCCC;"><span class="pull-right header-numeric-text-descrip p-right-20" style="padding-top:3px;">Spend</span><span class="header-numeric-text pull-right p-right-10">{{queryService.scActiveCategoryInfo.spend | currency:"$":0}}</span></div>
+    <div class="pull-left p-top-3" style="height:23px;border-right:1px solid #CCCCCC;"><span class="header-numeric-text pull-left p-right-10 p-left-20" >{{queryService.scActiveCategoryInfo.poLines | number}}</span><span class="pull-left header-numeric-text-descrip p-right-15" style="padding-top:3px;">PO Lines</span></div>
+    <div class="pull-left p-top-3" style="height:23px;"> <span class="pointer" data-placement="right" html="true" data-content="{{queryService.scActiveCategoryInfo.supplierCount}} Suppliers in Category" data-trigger="hover" bs-popover> <span class="header-numeric-text pull-left p-right-10 p-left-20" >{{queryService.scActiveCategoryInfo.supplierCount}}</span><span class="pull-left header-numeric-text-descrip p-right-15" style="padding-top:3px;">Suppliers</span> </span> </div>
+    <div style="clear:both;"></div>
+  </div>
+  <div class="col-md-3">
+    <div class="pull-right" style="margin-top:8px;height:30px;"> 
+      <!-- Excellent --><span ng-if="queryService.sc.info.scs.score >= 85"><span class="cat-score-right">{{queryService.sc.info.scs.score}}</span><i class="cat-score-right-icon fa fa-trophy"></i><span class="cat-score-right-rating">Excellent</span></span> 
+      <!-- Good -------><span ng-if="queryService.sc.info.scs.score >= 75 && queryService.sc.info.scs.score < 85"><span class="cat-score-right">{{queryService.sc.info.scs.score}}</span><i class="cat-score-right-icon fa fa-bookmark"></i><span class="cat-score-right-rating">Good</span></span> 
+      <!-- Fair -------><span ng-if="queryService.sc.info.scs.score >= 65 && queryService.sc.info.scs.score < 75"><span class="cat-score-right">{{queryService.sc.info.scs.score}}</span><i class="cat-score-right-icon fa fa-adjust"></i><span class="cat-score-right-rating">Fair</span></span> 
+      <!-- Poor -------><span ng-if="queryService.sc.info.scs.score >= 55 && queryService.sc.info.scs.score < 65"><span class="cat-score-right">{{queryService.sc.info.scs.score}}</span><i class="cat-score-right-icon fa fa-flag"></i><span class="cat-score-right-rating">Poor</span></span> 
+      <!-- Terrible ---><span ng-if="queryService.sc.info.scs.score < 55"><span class="cat-score-right">{{queryService.sc.info.scs.score}}</span><i class="cat-score-right-icon fa fa-warning"></i><span class="cat-score-right-rating">Terrible</span></span> </div>
+  </div>
+  <!-- End col --> 
+  
+</div>
+<!-- End sub row 1 -->
+
+<div class="row container-fluid m-top-40"> 
+  <!-- Sub row 2 --> 
+  
+  <!-- Close needs attention/doing well --> 
+  
+  <!-- TABS DIRECTIVE: <sw-tabstrip><sw-pane>Summary</sw-pane><sw-pane>Service</sw-pane><sw-pane>Price</sw-pane></sw-tabstrip> -->
+  <tabs> 
+    <!-- SUMMARY TAB -->
+    <pane title="Summary"> <br/>
+      
+      <!-- Needs Attention - Doing Well ng-include -->
+      <div ng-include src="'views/scorecard/needsattn-doingwell.html'"></div>
+      <!-- End needsattn-doingwell -->
+      <div ng-include src="'views/scorecard/tab-summary.html'"></div>
+    </pane>
+    <!-- End Sumary tab pane -->
+    
+    <pane title="Service"><!-- Service tab --> 
+      <br/>
+      <div ng-include src="'views/scorecard/subtab-service.html'"></div>
+      
+      <!-- End Switch Controller --> 
+    </pane>
+    <!-- End Sumary tab pane --> 
+    
+    <!-- Begin Pricing Pane -->
+    <pane title="Pricing"> <br/>
+      <div ng-include src="'views/scorecard/subtab-pricing.html'"></div>
+    </pane>
+    <!-- End pane --> 
+    <!-- KPI Percent Pane -->
+    <pane title="Target"> <br/>
+      <div ng-include src="'views/scorecard/subtab-other.html'"></div>
+    </pane>
+    <!-- End pane --> 
+  </tabs>
+  <!-- End Tab Strip --> 
+  <br/>
+  <br/>
+</div>
+</div>
+</div>
+</div>
+<script> 
+$(document).ready(function(){
+	
+$("#supp-score-filter").change(function(){
+            $( "#supp-score-filter option:selected").each(function(){
+				 $('#deselect-supp').click(function() {
+				$('.disabled').prop('disabled',false);
+   				 $('#supp-score-filter').selectpicker('deselectAll');
+				 })
+				/* When interacting with supplier - the code below resets the sidebar filter to the default - spend desc */
+				 $('#sidebar-filter').selectpicker('val', 'spenddesc');
+				 $('#table-sidebar-spend-desc').show();
+			     $('#table-sidebar-spend-asc').hide();
+				 $('#table-sidebar-score-desc').hide();
+			     $('#table-sidebar-score-asc').hide();
+			     $('#table-sidebar-category-desc').hide();
+			     $('#table-sidebar-category-asc').hide();
+			     $( "table tbody tr#tr-sidebar-spend-desc:nth-child(0)" ).trigger( "click" );
+				
+				if($(this).attr("value")=="deselect"){
+				
+				 $( "#deselect-supp" ).trigger( "click" ); // trigger click event on hidden deselect button
+				 
+                }
+				
+			
+            });
+        })
+/* When interacting with date - the code below resets the sidebar filter to the default - spend desc */
+$("#dt-range-score-filter").change(function(){
+            $( "#dt-range-score-filter option:selected").each(function(){	
+			$('#sidebar-filter').selectpicker('val', 'spenddesc');
+				 $('#table-sidebar-spend-desc').show();
+			     $('#table-sidebar-spend-asc').hide();
+				 $('#table-sidebar-score-desc').hide();
+			     $('#table-sidebar-score-asc').hide();
+			     $('#table-sidebar-category-desc').hide();
+			     $('#table-sidebar-category-asc').hide();
+			     $( "table tbody tr#tr-sidebar-spend-desc:nth-child(1)" ).trigger( "click" );
+			
+})
+})
+		
+/* CAT Filter - currently not being used */		
+$("#cat-score-filter").change(function(){
+            $( "#cat-score-filter option:selected").each(function(){
+				 $('#deselect-cat').click(function() {
+				 $('.disabled').prop('disabled',false);
+   				 $('#cat-score-filter').selectpicker('deselectAll');
+				 })
+				
+				if($(this).attr("value")=="deselect"){
+				 $( "#deselect-cat" ).trigger( "click" ); // trigger click event on hidden deselect button
+                }
+            });
+        })
+/* SIDEBAR Filter */
+$("#sidebar-filter").change(function(){
+            $( "#sidebar-filter option:selected").each(function(){
+				
+				if($(this).attr("value")=="spenddesc"){
+					$('#table-sidebar-spend-desc').show();
+					$('#table-sidebar-spend-asc').hide();
+					$('#table-sidebar-score-desc').hide();
+					$('#table-sidebar-score-asc').hide();
+	   				$('#table-sidebar-category-asc').hide();
+					$( "table tbody tr#tr-sidebar-spend-desc:nth-child(1)" ).trigger( "click" );
+                }
+				
+				if($(this).attr("value")=="spendasc"){
+					$('#table-sidebar-spend-asc').show();
+					$('#table-sidebar-spend-desc').hide();
+					$('#table-sidebar-score-desc').hide();
+					$('#table-sidebar-score-asc').hide();
+	   				$('#table-sidebar-category-asc').hide();
+					$( "table tbody tr#tr-sidebar-spend-asc:nth-child(1)" ).trigger( "click" );
+                }
+				
+				if($(this).attr("value")=="scoredesc"){
+					$('#table-sidebar-score-desc').show();
+					$('#table-sidebar-score-asc').hide();
+					$('#table-sidebar-spend-desc').hide();
+					$('#table-sidebar-spend-asc').hide();
+	   				$('#table-sidebar-category-asc').hide();
+					$( "table tbody tr#tr-sidebar-score-desc:nth-child(1)" ).trigger( "click" );
+                }
+				
+				if($(this).attr("value")=="scoreasc"){
+					$('#table-sidebar-score-asc').show();
+					$('#table-sidebar-score-desc').hide();
+					$('#table-sidebar-spend-desc').hide();
+					$('#table-sidebar-spend-asc').hide();
+	   				$('#table-sidebar-category-asc').hide();
+					$( "table tbody tr#tr-sidebar-score-asc:nth-child(1)" ).trigger( "click" );
+                }
+				
+				if($(this).attr("value")=="catasc"){
+					$('#table-sidebar-category-asc').show();
+					$('#table-sidebar-score-desc').hide();
+					$('#table-sidebar-score-asc').hide();
+					$('#table-sidebar-spend-desc').hide();
+					$('#table-sidebar-spend-asc').hide();
+					$( "table tbody tr#tr-sidebar-category-asc:nth-child(1)" ).trigger( "click" );
+                }
+            });
+        })
+				
+$('#reset-scorecards').click(function(){
+	//window.location.reload(); 
+	  // $('#supp-score-filter').selectpicker('deselectAll');
+	   $('#supp-score-filter').selectpicker('val', '25668').trigger('change');
+	   //$('#sidebar-filter').selectpicker('deselectAll');
+	   $('#table-sidebar-spend-desc').show();
+	   $('#table-sidebar-spend-asc').hide();
+	   $('#table-sidebar-score-desc').hide();
+	   $('#table-sidebar-score-asc').hide();
+	   $('#table-sidebar-category-desc').hide();
+	   $('#table-sidebar-category-asc').hide();
+	  // $( "#table-sidebar-spend-desc tbody tr#tr-sidebar-spend-desc:nth-child(0)" ).trigger( "click" );
+	   $( "#table-sidebar-spend-desc tbody tr#tr-sidebar-spend-desc:nth-child(1)" ).trigger( "click" );
+
+	   
+})
+
+// Reset timeframe filter to 12 when toggle from detail to summary		
+/*$('#reset-timeframe').click(function() {
+   				 $('#dt-range-score-filter').selectpicker('val', '12').trigger('change');
+				 $('#sidebar-filter').selectpicker('val', 'spenddesc');
+				 $('#table-sidebar-spend-desc').show();
+			     $('#table-sidebar-spend-asc').hide();
+				 $('#table-sidebar-score-desc').hide();
+			     $('#table-sidebar-score-asc').hide();
+			     $('#table-sidebar-category-desc').hide();
+			     $('#table-sidebar-category-asc').hide();
+			     $( "table tbody tr#tr-sidebar-spend-desc:nth-child(1)" ).trigger( "click" );
+		
+ })*/
+	
+
+$('#show-timeframe').click(function(){
+	$("#timeframe").show();
+/*	   			 $('#dt-range-score-filter').selectpicker('val', '12').trigger('change');
+				 $('#sidebar-filter').selectpicker('val', 'spenddesc');
+				 $('#table-sidebar-spend-desc').show();
+			     $('#table-sidebar-spend-asc').hide();
+				 $('#table-sidebar-score-desc').hide();
+			     $('#table-sidebar-score-asc').hide();
+			     $('#table-sidebar-category-desc').hide();
+			     $('#table-sidebar-category-asc').hide();*/
+			     $( "table tbody tr#tr-sidebar-spend-desc:nth-child(1)" ).trigger( "click" );
+				 
+
+})
+$('#hide-timeframe').click(function(){
+	$("#timeframe").hide();
+	  	   			 $('#dt-range-score-filter').selectpicker('val', '12').trigger('change');
+				 $('#sidebar-filter').selectpicker('val', 'spenddesc');
+				 $('#table-sidebar-spend-desc').show();
+			     $('#table-sidebar-spend-asc').hide();
+				 $('#table-sidebar-score-desc').hide();
+			     $('#table-sidebar-score-asc').hide();
+			     $('#table-sidebar-category-desc').hide();
+			     $('#table-sidebar-category-asc').hide();
+			     $( "table tbody tr#tr-sidebar-spend-desc:nth-child(1)" ).trigger( "click" );
+
+})	
+
+
+$('#toggle-biz-insights').click(function(){
+	$('.biz-insights-sec-content').slideToggle();
+	$('.iconToggleDown').toggle();
+	$('.iconToggleUp').toggle();
+})
+
+
+})
+</script> 

@@ -1,0 +1,167 @@
+<!-- In page style neede dto override ng-table styling -->
+<style>
+.ng-table th.text-right {
+	text-align: right;
+}
+.ng-table th.text-left {
+	text-align: left;
+	background: #f3f3f3;
+}
+.ng-table th.sortable.sort-asc {
+	background-color: #dcdcdc !important;
+	text-shadow: 0 1px 1px rgba(255,255,255,.75);
+}
+.ng-table th.sortable.sort-desc {
+	background-color: #dcdcdc !important;
+	text-shadow: 0 1px 1px rgba(255,255,255,.75);
+}
+.input-group-addon {
+	padding: 0px 3px;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 1;
+	color: #555;
+	text-align: center;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	border-radius: 0px;
+}
+.input-group-addon, .input-group-btn {
+	width: 1%;
+	white-space: nowrap;
+	vertical-align: middle;
+}
+.modal-header {
+	background: #E5F3FF;
+	font-size: 18px;
+	color: #4A7295;
+	border: 1px solid #E5F3FF;
+}
+.modal-footer {
+	background: white;
+}
+.field-name {
+	font-size: 14px;
+	color: #333333;
+}
+.img-user-add-modal {
+	position: relative;
+	bottom: 20px;
+	cursor: pointer;
+}
+.icon-user-manage {
+	padding-right: 10px;
+	font-size: 24px;
+}
+.span-alert-title {
+	padding-right: 10px;
+}
+.span-alert-content {
+	padding-right: 10px;
+}
+</style>
+<div class="container-fluid" ng-controller="AdminUserController">
+  <div class="row container-fluid navbar navbar-fixed-top navbar-bizoverview-fixed" style="z-index:99;">
+    <div class="col-md-4"> <span class="navTitileText">Manage Users</span> &nbsp; &nbsp; </div>
+    <div class="col-md-8 container-fluid">
+      <div class="pull-right p-right-15" ng-controller="ModalCtrl"> <img class="img-user-add-modal" src="images/icon-add-user.png" width="97" height="76" alt="Add New User" ng-click="showUserAddModal()" /> </div>
+    </div>
+  </div>
+  <br style="clear:both;"/>
+  <br/>
+  <div class="row m-top-25">
+    <div class="col-md-4">
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="searchText" style="font-weight:normal;">Find</label>
+          <input style="width:350px;" type="text" class="form-control" ng-model="searchText" placeholder="Enter first or last name, or email..."/>
+        </div>
+      </form>
+      <br/>
+    </div>
+    <div class="col-md-8"> <span class="pull-right p-top-10"><strong>{{ tableParams.total() }} Users</strong></span> </div>
+  </div>
+  <table ng-table="tableParams" class="table ng-table-responsive table-condensed" ng-controller="ModalCtrl">
+    <tr ng-repeat="user in $data | filter:searchText">
+      <td data-title="'#'" header-class="'text-left'">{{$index + 1}}</td>
+      <td data-title="'Edit'" header-class="'text-left'"><button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#editUserModal{{$index}}"><i class="fa fa-pencil"></i></button>
+        <div id="editUserModal{{$index}}" class="modal" role="dialog">
+          <div class="modal-dialog">
+            <form novalidate name="editUserForm" ng-submit="addUser(false, user.id);myAlert()" class="css-form">
+              
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+                  <h4 class="modal-title">Edit User Account</h4>
+                </div>
+                <div class="modal-body text-info">
+                  <div class="pull-right">
+                    <div style="border-left:6px solid #FF8C00;">&nbsp;<span class="modal-required-field-descrip"> = Required Field</span></div>
+                  </div>
+                  <br class="clear"/>
+                  <div class="m-btm-20">
+                    <p class="field-name">Last Name</p>
+                    <div class="input-group">
+                      <div ng-hide="editUserForm.userLastName.$error.required" class="input-group-addon" style="background-color:#FF8C00;"></div>
+                      <div ng-show="editUserForm.userLastName.$error.required" class="input-group-addon" style="background-color:#B22222;"></div>
+                      <input name="userLastName" id="ln{{user.id}}" class="form-control" type="text" ng-model="user.lastname" required />
+                    </div>
+                    <span ng-show="editUserForm.$submitted || editUserForm.userLastName.$touched"> <span class="form-validate-text" ng-show="editUserForm.userLastName.$error.required">Required field</span> </span> </div>
+                  <div class="m-btm-20">
+                    <p class="field-name">First Name</p>
+                    <div class="input-group">
+                      <div ng-hide="editUserForm.userFirstName.$error.required" class="input-group-addon" style="background-color:#FF8C00;"></div>
+                      <div ng-show="editUserForm.userFirstName.$error.required" class="input-group-addon" style="background-color:#B22222;"></div>
+                      <input name="userFirstName" id="fn{{user.id}}" class="form-control" type="text" ng-model="user.firstname" required />
+                    </div>
+                    <span ng-show="editUserForm.$submitted || editUserForm.userFirstName.$touched"> <span class="form-validate-text" ng-show="editUserForm.userFirstName.$error.required">Required field</span> </span> </div>
+                  <div class="m-btm-20">
+                    <p class="field-name">User Role</p>
+                    <div class="input-group">
+                      <div ng-hide="editUserForm.userRole.$error.required" class="input-group-addon" style="background-color:#FF8C00;"></div>
+                      <div ng-show="editUserForm.userRole.$error.required" class="input-group-addon" style="background-color:#B22222;"></div>
+                      <select name="userRole" id="role{{user.id}}" class="form-control" ng-model="user.userrole" required>
+                        <option value="Admin">Admin</option>
+                        <option value="Standard">Standard</option>
+						<option value="Presentation">Presentation</option>
+                      </select>
+                    </div>
+                    <span ng-show="editUserForm.$submitted || editUserForm.userRole.$touched"> <span class="form-validate-text" ng-show="editUserForm.userRole.$error.required">Required field</span> </span> </div>
+                  <div class="m-btm-20">
+                    <p class="field-name">Email</p>
+                    <div class="input-group">
+                      <div ng-hide="editUserForm.userEmail.$error.required || editUserForm.userEmail.$error.email" class="input-group-addon" style="background-color:#FF8C00;"></div>
+                      <div ng-show="editUserForm.userEmail.$error.required || editUserForm.userEmail.$error.email" class="input-group-addon" style="background-color:#B22222;"></div>
+                      <input class="form-control" name="userEmail" id="email{{user.id}}" type="email" ng-model="user.email" required />
+                    </div>
+                    <span ng-show="editUserForm.$submitted || editUserForm.userEmail.$touched"> <span class="form-validate-text" ng-show="editUserForm.userEmail.$error.required">Required field</span> <span class="form-validate-text" ng-show="editUserForm.userEmail.$error.email">This is not a valid email</span> </span> </div>
+                  <div class="m-btm-20">
+                    <p class="field-name">Status</p>
+                    <div class="input-group">
+                      <div ng-hide="editUserForm.userStatus.$error.required" class="input-group-addon" style="background-color:#FF8C00;"></div>
+                      <div ng-show="editUserForm.userStatus.$error.required" class="input-group-addon" style="background-color:#B22222;"></div>
+                      <select name="userStatus" id="status{{user.id}}" class="form-control" ng-model="user.status" required>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                      </select>
+                    </div>
+                    <span ng-show="editUserForm.$submitted || editUserForm.userStatus.$touched"> <span class="form-validate-text" ng-show="editUserForm.userStatus.$error.required">Required field</span> </span> </div>
+                </div>
+                <div class="modal-footer"> <a class="p-right-20" href="javascript:void(0);" data-dismiss="modal">Cancel</a>
+                <!--  <input data-dismiss="modal" type="submit" value="Save" class="btn btn-primary" ng-disabled="editUserForm.$invalid" ng-click="showSuccessAlertUserUpdated()"/> -->
+                  <input type="submit" value="Save" class="btn btn-primary" ng-disabled="editUserForm.$invalid" ng-click="showSuccessAlertUserUpdated()"/>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div></td>
+      <td data-title="'Last Name'" header-class="'text-left'" sortable="'lastname'">{{user.lastname}}</td>
+      <td data-title="'First Name'" header-class="'text-left'" sortable="'firstname'">{{user.firstname}}</td>
+      <td data-title="'User Role'" header-class="'text-left'" sortable="'userrole'">{{user.userrole}}</td>
+      <td data-title="'Email'" header-class="'text-left'" sortable="'email'">{{user.email}}</td>
+      <td data-title="'Password Reset'" header-class="'text-left'"><a ng-click="resetPwd(user.id, user.email, user.firstname, user.lastname)" >Reset</a></td>
+      <td data-title="'Status'"  header-class="'text-left'" sortable="'status'">{{user.status}}</td>
+    </tr>
+  </table>
+</div>

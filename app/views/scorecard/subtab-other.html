@@ -1,0 +1,156 @@
+<!-- Include for scorecard target tab -->
+<!-- In page styling to override tab bootstrap globals -->
+<style>
+.kpi-table-hdr-value-range {
+	font-size: 14px;
+	color: #333333;
+	font-weight: 400;
+}
+.kpi-table-hdr-value-weighting {
+	font-size: 14px;
+	font-weight: 400;
+}
+.icon-kpi-table-status {
+	color: #999999;
+}
+.nav-tabs.secondary > li.active > a, .nav-tabs.secondary > li.active > a:hover, .nav-tabs.secondary > li.active > a:focus {
+	color: #666666;
+	font-weight: 400;
+	cursor: default;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-bottom-color: transparent;
+}
+</style>
+<subtabs>
+<subpane ng-if="showPercentTarget" title="On Target">
+<div class="row">
+  <div class="col-md-12"> <span class="pull-right" data-placement="top" title="On Target" data-content="The percent of active KPIs reaching their targeted performance goals within the selected time period" data-trigger="hover" bs-popover><i class="btn fa fa-question-circle fa-1x"/><small class="text-muted" style="position:relative;right:5px;">About this KPI</small></span> </div>
+ </div>
+<table width="100%" border="1"  bordercolor="#E4E4E4">
+  <tr style="height:40px;">
+    <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.scores.percenttarget_score}}</td>
+    <td class="kpi-table-hdr-value-range" align="center"><span>{{queryService.sc.info.scs.status.percenttarget}}</span> <span ng-if="queryService.sc.info.scs.status.percenttarget=='Excellent'"><i class="fa fa-trophy icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.percenttarget=='Good'"><i class="fa fa-bookmark icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.percenttarget=='Fair'"><i class="fa fa-adjust icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.percenttarget=='Poor'"><i class="fa fa-flag icon-kpi-table-status"/></span> <span ng-if="queryService.sc.info.scs.status.percenttarget=='Terrible'"><i class="fa fa-warning icon-kpi-table-status"/></span></td>
+    <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.kpis.percenttarget}}%</td>
+    <td class="kpi-table-hdr-value" align="center">N/A</td>
+    <td class="kpi-table-hdr-value" align="center">{{queryService.sc.info.scs.kpis.percenttarget_avg}}%</td>
+    <td class="kpi-table-hdr-value-weighting" align="center">{{queryService.sc.info.scs.weights.percenttarget}}</td>
+  </tr>
+  <tr style="height:20px;" bgcolor="#4a7295"> 
+    <!-- <td class="kpi-table-hdr-descrip" width="20%" align="center" ><i class="fa fa-user" style="color:#ffffff;"/>&nbsp;&nbsp;Supplier Performance</td>-->
+    <td class="kpi-table-hdr-descrip" width="17%" align="center" >KPI Score</td>
+    <td class="kpi-table-hdr-descrip" width="17%" align="center">Score Range</td>
+    <td class="kpi-table-hdr-descrip" width="17%" align="center" >Supplier Performance</td>
+    <td class="kpi-table-hdr-descrip" width="17%" align="center">Target</td>
+    <td class="kpi-table-hdr-descrip" width="16%" align="center">Category Average</td>
+    <td class="kpi-table-hdr-descrip" width="16%" align="center">Weighting</td>
+  </tr>
+</table>
+<br/>
+<div ng-controller="ScorecardPerfTrendControllerDual" ng-init="init('#container-other-percenttarget-trend', '#button-other-percenttarget')" >
+  <div class="row" style="margin-bottom:10px;">
+    <div class="col-md-4 container-fluid"> <!-- <span style="font-size:16px;font-weight:600;">12-Month On Target Trend</span> --> </div>
+    <div class="col-md-8 container-fluid">
+      <div class="pull-right">
+        <input type="checkbox" checked class="autocompare" id="button-other-percenttarget"/>
+        <span style="padding-right:20px;padding-left:10px;" class="text-muted"><small>Show performance average for category</small></span></div>
+    </div>
+  </div>
+  <div class="row container-fluid">
+    <div class="col-md-12 container-fluid">
+      <div id="container-other-percenttarget-trend" style="min-width: 70%; height: 275px; margin: 0 auto"></div>
+    </div>
+  </div>
+</div>
+<!-- End performance trend --> 
+<br/>
+
+<!-- Spend chart -->
+<div class="row container-fluid">
+  <div class="col-md-12 container-fluid">
+    <div ng-controller="ScorecardSpendTrendController" ng-init="init('#container-other-percenttarget-spend-trend')" style="position:relative;bottom:57px;z-index:">
+      <div id="container-other-percenttarget-spend-trend" style="min-width:70%; height: 125px; margin: 0 auto"></div>
+    </div>
+  </div>
+</div>
+<!-- End spend chart --> 
+
+<!-- ************************************** --> 
+<!-- Heading -->
+<div class="row">
+  <div class="col-md-12 container-fluid">
+    <div style="font-size:16px;font-weight:600;margin-bottom:10px;margin-left:30px;"> Supplier Comparison </div>
+  </div>
+</div>
+<!-- Controller - in on-finish-chart directive -->
+<div class="row" ng-controller="PercentTargetComparisonController" style="position:relative;left:30px;"> 
+  <!-- Left side of bar chart: 12 month data -->
+  <div class="col-md-6 container-fluid"> 
+    <!-- 12 month header -->
+    
+    <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">On Target Performance Ranking (12 Months)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp12m.percenttarget.length}}</span></span></div>
+    <br style="clear:both;"/>
+    <!-- Surrounding div to apply scroll Hide if no data -->
+    <div ng-hide="!queryService.sc.info.cmp12m.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+      <div id="container-other-percenttarget-12"></div>
+      <!-- Bar chart --> 
+    </div>
+    <!-- Display if no data -->
+    <div ng-show="!queryService.sc.info.cmp12m.score" class="container-fluid text-danger">No Data</div>
+    
+    <!-- Hidden data table -->
+    <table id="datatable-other-percenttarget-12" class="table-sparkline" style="display:none;">
+      <tbody class="tbody-sparkline">
+        <tr><!-- Blank row to align with count -->
+          <th></th>
+          <td></td>
+        </tr>
+        <tr ng-repeat="data in queryService.sc.info.cmp12m.percenttarget" on-finish-chart="callHighchartPercentTargetRendering12()"><!-- directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+          <td>{{data.kpi}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Right side of bar chart: 30 day data -->
+  <div class="col-md-6 container-fluid"> 
+    <!-- 30 day header -->
+    
+    <div style="background:#EEEEEE;padding:5px;height:30px;"><span class="pull-left sparkline-perfheading">On Target Performance Ranking (30 Days)</span><span class="pull-right"><i class="fa fa-group" style="color:#666666;font-size:12px;font-weight:400;position:relative;bottom:1px;"/><span class="sparkline-perfheading-nosuppliers" style="font-size:13px;">&nbsp;&nbsp;{{queryService.sc.info.cmp30d.percenttarget.length}}</span></span></div>
+    <br style="clear:both;"/>
+    <!-- Surrounding div to apply scroll Hide if no data -->
+    <div ng-hide="!queryService.sc.info.cmp30d.score" style="max-height:510px;overflow-x:hidden;overflow-y:auto;">
+      <div id="container-other-percenttarget-30"></div>
+      <!-- Bar chart --> 
+    </div>
+    <!-- Display if no data -->
+    <div ng-show="!queryService.sc.info.cmp30d.score" class="container-fluid text-danger">No Data</div>
+    <!-- Hidden data table -->
+    <table id="datatable-other-percenttarget-30" class="table-sparkline" style="display:none;">
+      <tbody class="tbody-sparkline">
+        <tr><!-- Blank row to align with count -->
+          <th></th>
+          <td></td>
+        </tr>
+        <tr ng-repeat="data in queryService.sc.info.cmp30d.percenttarget" on-finish-chart="callHighchartPercentTargetRendering30()"><!-- Directive -->
+          <th><span ng-if="data.sellerName === scorecardSupplierName" style="font-size:14px;;color:#F93;">&#10148;</span>
+          <!--{{presentation && data.sellerName != scorecardSupplierName? 'Supplier ' : data.sellerName}} {{data.sellerName == scorecardSupplierName ? '' : $index +1}}-->
+          <span ng-if="!presentation">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName == scorecardSupplierName">{{data.sellerName}}</span>
+          <span ng-if="presentation && data.sellerName != scorecardSupplierName">Supplier:{{$index + 1}}</span>
+          </th>
+          <td>{{data.kpi}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- End column --> 
+</div>
+<!-- End Row -->
+</subpane>
+</subtabs>
